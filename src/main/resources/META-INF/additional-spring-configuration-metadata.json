@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "api.url",
+      "type": "java.lang.String",
+      "description": "Description for api.url."
+    },
+    {
+      "name": "ok",
+      "type": "java.lang.String",
+      "description": "Description for ok."
+    },
+    {
+      "name": "kinopoiskapiunofficial.api.host",
+      "type": "java.lang.String",
+      "description": "Description for kinopoiskapiunofficial.api.host."
+    },
+    {
+      "name": "kinopoiskapiunofficial.api.key",
+      "type": "java.lang.String",
+      "description": "Description for kinopoiskapiunofficial.api.key."
+    },
+    {
+      "name": "kinopoiskapiunofficial.api.value",
+      "type": "java.lang.String",
+      "description": "Description for kinopoiskapiunofficial.api.value."
+    },
+    {
+      "name": "spring.ok",
+      "type": "java.lang.String",
+      "description": "Description for spring.ok."
+    }
+  ] }

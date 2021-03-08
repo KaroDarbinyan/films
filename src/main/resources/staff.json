@@ -1,0 +1,965 @@
+[
+  {
+    "staffId": 276805,
+    "nameRu": "Адриан Грюнберг",
+    "nameEn": "Adrian Grunberg",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/276805.jpg",
+    "professionText": "Режиссеры",
+    "professionKey": "DIRECTOR"
+  },
+  {
+    "staffId": 8816,
+    "nameRu": "Сильвестр Сталлоне",
+    "nameEn": "Sylvester Stallone",
+    "description": "John Rambo",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/8816.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1158,
+    "nameRu": "Пас Вега",
+    "nameEn": "Paz Vega",
+    "description": "Carmen Delgado",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1158.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 226237,
+    "nameRu": "Серхио Перис-Менчета",
+    "nameEn": "Sergio Peris-Mencheta",
+    "description": "Hugo Martinez",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/226237.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1959603,
+    "nameRu": "Адриана Барраса",
+    "nameEn": "Adriana Barraza",
+    "description": "Maria Beltran",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1959603.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3503545,
+    "nameRu": "Ивет Монреаль",
+    "nameEn": "Yvette Monreal",
+    "description": "Gabriela",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3503545.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1031422,
+    "nameRu": "Джени Ким",
+    "nameEn": "Genie Kim",
+    "description": "Bar Patron (в титрах: Genie Kim aka Yenah Han)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1031422.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 395980,
+    "nameRu": "Хоакин Косио",
+    "nameEn": "Joaquín Cosio",
+    "description": "Don Manuel",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/395980.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1075414,
+    "nameRu": "Паскасио Лопес",
+    "nameEn": "Pascacio López",
+    "description": "El Flaco (в титрах: Pascacio Lopez)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1075414.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 232432,
+    "nameRu": "Оскар Хаэнада",
+    "nameEn": "Óscar Jaenada",
+    "description": "Victor Martinez (в титрах: Oscar Jaenada)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/232432.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5807101,
+    "nameRu": "",
+    "nameEn": "Alexander Dimitrov",
+    "description": "Heli Pilot",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5807101.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1962674,
+    "nameRu": "Аарон Коэн",
+    "nameEn": "Aaron Cohen",
+    "description": "State Police Captain",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1962674.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3890244,
+    "nameRu": "Николас Уиттман",
+    "nameEn": "Nick Wittman",
+    "description": "Male Hiker",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3890244.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4030385,
+    "nameRu": "Джессика Мэдсен",
+    "nameEn": "Jessica Madsen",
+    "description": "Becky",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4030385.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 41408,
+    "nameRu": "Луис Мэндилор",
+    "nameEn": "Louis Mandylor",
+    "description": "Sheriff",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/41408.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1952713,
+    "nameRu": "Оуэн Дэвис",
+    "nameEn": "Owen Davis",
+    "description": "Rescue Worker",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1952713.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4789556,
+    "nameRu": "",
+    "nameEn": "Jamieson Urquhart",
+    "description": "Young Man (Party)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4789556.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5807102,
+    "nameRu": "",
+    "nameEn": "Brayden Pindur",
+    "description": "Young Man (Party)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5807102.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1108511,
+    "nameRu": "Финесса Пинеда",
+    "nameEn": "Fenessa Pineda",
+    "description": "Gizelle",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1108511.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 970151,
+    "nameRu": "Марко Де Ла О",
+    "nameEn": "Marco de la O",
+    "description": "Manuel",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/970151.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 2387589,
+    "nameRu": "Альваро Флорес",
+    "nameEn": "Alvaro Flores",
+    "description": "Cartel Man",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2387589.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 584439,
+    "nameRu": "Урсула Мураяма",
+    "nameEn": "Úrsula Murayama",
+    "description": "Manuel's Wife",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/584439.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4369281,
+    "nameRu": "",
+    "nameEn": "Cathy Pulido",
+    "description": "El Flaco Bar Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4369281.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 235567,
+    "nameRu": "Атанас Сребрев",
+    "nameEn": "Atanas Srebrev",
+    "description": "American Merc",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/235567.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3871015,
+    "nameRu": "Рик Зингейл",
+    "nameEn": "Rick Zingale",
+    "description": "Don Miguel",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3871015.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1079326,
+    "nameRu": "Мануэль Уриса",
+    "nameEn": "Manuel Uriza",
+    "description": "Dr. Sergio",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1079326.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3634460,
+    "nameRu": "",
+    "nameEn": "Georgi Manchev",
+    "description": "Deputy #1",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3634460.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 2886252,
+    "nameRu": "Георгий Дмитров",
+    "nameEn": "Georgi Dimitrov",
+    "description": "Deputy #2 (в титрах: Georgi Dimitrov-Bomba)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2886252.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5613952,
+    "nameRu": "",
+    "nameEn": "Mirka Prieto",
+    "description": "Lola / Laura",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5613952.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3900020,
+    "nameRu": "",
+    "nameEn": "David Aguirre Firth",
+    "description": "Padrote",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3900020.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 3804154,
+    "nameRu": "Диана Бермудес",
+    "nameEn": "Díana Bermudez",
+    "description": "Experienced Girl (в титрах: Diana Bermudez)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3804154.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1493437,
+    "nameRu": "Куко Усин",
+    "nameEn": "Cuco Usín",
+    "description": "Fat Policeman (в титрах: Cuco Usin)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1493437.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 675539,
+    "nameRu": "Любомир Нейков",
+    "nameEn": "Lyubomir Neikov",
+    "description": "White Man Brothel (в титрах: Lyubomir Neykov)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/675539.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5817834,
+    "nameRu": "",
+    "nameEn": "Domenic Charles Vargas",
+    "description": "Mex Sicario #07",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5817834.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 6038214,
+    "nameRu": "",
+    "nameEn": "Sergio Hernandez",
+    "description": "Mex Sicario #08",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/6038214.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5817835,
+    "nameRu": "",
+    "nameEn": "Victor Baioco",
+    "description": "Mex Sicario #10",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5817835.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 1631399,
+    "nameRu": "Шила Шах",
+    "nameEn": "Sheila Shah",
+    "description": "Alejandra",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1631399.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4393414,
+    "nameRu": "Димитри Тивайос",
+    "nameEn": "Dimitri «Vegas» Thivaios",
+    "description": "Bouncer",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4393414.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810781,
+    "nameRu": "",
+    "nameEn": "Simona Zdravkova",
+    "description": "Brothel Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810781.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810782,
+    "nameRu": "",
+    "nameEn": "Tanya Stefanova",
+    "description": "Brothel Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810782.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 916001,
+    "nameRu": "Величка Георгиева",
+    "nameEn": "Velichka Georgieva",
+    "description": "Brothel Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/916001.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810783,
+    "nameRu": "",
+    "nameEn": "Dobrinka Georgieva",
+    "description": "Brothel Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810783.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810784,
+    "nameRu": "",
+    "nameEn": "Ashli Dolat",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810784.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810785,
+    "nameRu": "",
+    "nameEn": "Gloria Georgieva",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810785.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810786,
+    "nameRu": "",
+    "nameEn": "Melani Petrova",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810786.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810787,
+    "nameRu": "",
+    "nameEn": "Nadejda Koleva",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810787.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810788,
+    "nameRu": "",
+    "nameEn": "Simona Yanusheva",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810788.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810789,
+    "nameRu": "",
+    "nameEn": "Jaklin",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810789.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810790,
+    "nameRu": "",
+    "nameEn": "Melin Edrinch",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810790.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810791,
+    "nameRu": "",
+    "nameEn": "Roza Georgieva",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810791.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810792,
+    "nameRu": "",
+    "nameEn": "Madlen Kovacheva",
+    "description": "Security House Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810792.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810793,
+    "nameRu": "",
+    "nameEn": "Evelina Igova",
+    "description": "Experienced Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810793.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5810794,
+    "nameRu": "",
+    "nameEn": "Daniel Mora",
+    "description": "Helicopter Pilot",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5810794.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5425754,
+    "nameRu": "",
+    "nameEn": "Daria Mitusheva",
+    "description": "Brothel Girl",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5425754.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5552650,
+    "nameRu": "Рики дель Кастильо",
+    "nameEn": "Ricky del Castillo",
+    "description": "Martinez Gang Member, в титрах не указан",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5552650.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4733918,
+    "nameRu": "",
+    "nameEn": "Nelly Chunchukova",
+    "description": "Kidnapped Woman, в титрах не указан",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4733918.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 5761041,
+    "nameRu": "Карлос Лисеа",
+    "nameEn": "Carlos Licea",
+    "description": "Martinez Gang Member, в титрах не указан",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5761041.jpg",
+    "professionText": "Актеры",
+    "professionKey": "ACTOR"
+  },
+  {
+    "staffId": 4400358,
+    "nameRu": "",
+    "nameEn": "Louis Arriola",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4400358.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 8495,
+    "nameRu": "Криста Кэмпбелл",
+    "nameEn": "Christa Campbell",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/8495.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 580970,
+    "nameRu": "Аллен Ван Дам",
+    "nameEn": "Allen Dam",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/580970.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 279,
+    "nameRu": "Боаз Дэвидсон",
+    "nameEn": "Boaz Davidson",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/279.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 3702090,
+    "nameRu": "Валентин Димитров",
+    "nameEn": "Valentin Dimitrov",
+    "description": "линейный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3702090.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 3932126,
+    "nameRu": "Клейтон Фернандес",
+    "nameEn": "Claiton Fernandes",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3932126.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 858218,
+    "nameRu": "Владимир Фернандес",
+    "nameEn": "Vladimir Fernandes",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/858218.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 4848804,
+    "nameRu": "Андрей Георгиев",
+    "nameEn": "Andrey Georgiev",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4848804.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 2612907,
+    "nameRu": "Джеффри Гринштейн",
+    "nameEn": "Jeffrey Greenstein",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2612907.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 42562,
+    "nameRu": "Лати Гробман",
+    "nameEn": "Lati Grobman",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/42562.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1602058,
+    "nameRu": "Джефф Гам",
+    "nameEn": "Jeff Gum",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1602058.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 22947,
+    "nameRu": "Сэмюэл Хадида",
+    "nameEn": "Samuel Hadida",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/22947.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 38181,
+    "nameRu": "Виктор Хадида",
+    "nameEn": "Victor Hadida",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/38181.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 159305,
+    "nameRu": "Ави Лернер",
+    "nameEn": "Avi Lerner",
+    "description": "продюсер (produced by)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/159305.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 3128204,
+    "nameRu": "Ярив Лернер",
+    "nameEn": "Yariv Lerner",
+    "description": "продюсер (produced by)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3128204.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 5220488,
+    "nameRu": "Лю Жун",
+    "nameEn": "Liu Rong",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5220488.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 235151,
+    "nameRu": "Юджин Лонг",
+    "nameEn": "Elijah Long",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/235151.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1575368,
+    "nameRu": "Елена Меламед",
+    "nameEn": "Elena Melamed",
+    "description": "линейный продюсер: повторные съемки",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1575368.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 3932124,
+    "nameRu": "Балан Меларкоде",
+    "nameEn": "Balan Melarkode",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3932124.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 4744096,
+    "nameRu": "Энтони Мьюир",
+    "nameEn": "Anthony Muir",
+    "description": "сопродюсер / кинопродюсер i väst",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4744096.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 4146951,
+    "nameRu": "Эусебио Мунхос мл.",
+    "nameEn": "Euzebio Munhoz Jr.",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4146951.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1134373,
+    "nameRu": "Мэттью О’Тул",
+    "nameEn": "Matthew O'Toole",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1134373.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 244170,
+    "nameRu": "Петер Поссне",
+    "nameEn": "Peter Possne",
+    "description": "сопродюсер / кинопродюсер i väst",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/244170.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 582080,
+    "nameRu": "Дэмейн Рэдклифф",
+    "nameEn": "Damaine Radcliff",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/582080.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1783512,
+    "nameRu": "Лонни Рамати",
+    "nameEn": "Lonnie Ramati",
+    "description": "исполнительный сопродюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1783512.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 6038215,
+    "nameRu": "",
+    "nameEn": "Jiewen Tam",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/6038215.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1176673,
+    "nameRu": "Кевин Кинг Темплтон",
+    "nameEn": "Kevin King Templeton",
+    "description": "продюсер (в титрах: kevin king-templeton) (produced by)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1176673.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 2733046,
+    "nameRu": "Роберт Ван Норден",
+    "nameEn": "Robert Van Norden",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2733046.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 223768,
+    "nameRu": "Ариэль Вромен",
+    "nameEn": "Ariel Vromen",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/223768.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 3219,
+    "nameRu": "Лес Уэлдон",
+    "nameEn": "Les Weldon",
+    "description": "продюсер (produced by)",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/3219.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 5264018,
+    "nameRu": "Шон Уилан",
+    "nameEn": "Sean Wheelan",
+    "description": "сопродюсер / кинопродюсерgate",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/5264018.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 1839135,
+    "nameRu": "Джонатан Юнгер",
+    "nameEn": "Jonathan Yunger",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1839135.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 6134736,
+    "nameRu": "",
+    "nameEn": "Qun Zhang",
+    "description": "исполнительный продюсер",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/6134736.jpg",
+    "professionText": "Продюсеры",
+    "professionKey": "PRODUCER"
+  },
+  {
+    "staffId": 4538262,
+    "nameRu": "Андрей Петров",
+    "nameEn": "",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4538262.jpg",
+    "professionText": "Режиссеры дубляжа",
+    "professionKey": "VOICE_DIRECTOR"
+  },
+  {
+    "staffId": 4482462,
+    "nameRu": "Марина Турабелидзе",
+    "nameEn": "",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/4482462.jpg",
+    "professionText": "Режиссеры дубляжа",
+    "professionKey": "VOICE_DIRECTOR"
+  },
+  {
+    "staffId": 40055,
+    "nameRu": "Мэттью Сирюльник",
+    "nameEn": "Matthew Cirulnick",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/40055.jpg",
+    "professionText": "Сценаристы",
+    "professionKey": "WRITER"
+  },
+  {
+    "staffId": 8816,
+    "nameRu": "Сильвестр Сталлоне",
+    "nameEn": "Sylvester Stallone",
+    "description": "и сюжет",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/8816.jpg",
+    "professionText": "Сценаристы",
+    "professionKey": "WRITER"
+  },
+  {
+    "staffId": 20801,
+    "nameRu": "Дэн Гордон",
+    "nameEn": "Dan Gordon",
+    "description": "рассказ",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/20801.jpg",
+    "professionText": "Сценаристы",
+    "professionKey": "WRITER"
+  },
+  {
+    "staffId": 139063,
+    "nameRu": "Дэвид Морелл",
+    "nameEn": "David Morrell",
+    "description": "персонаж",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/139063.jpg",
+    "professionText": "Сценаристы",
+    "professionKey": "WRITER"
+  },
+  {
+    "staffId": 291540,
+    "nameRu": "Брендан Гэлвин",
+    "nameEn": "Brendan Galvin",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/291540.jpg",
+    "professionText": "Операторы",
+    "professionKey": "OPERATOR"
+  },
+  {
+    "staffId": 610752,
+    "nameRu": "Брайан Тайлер",
+    "nameEn": "Brian Tyler",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/610752.jpg",
+    "professionText": "Композиторы",
+    "professionKey": "COMPOSER"
+  },
+  {
+    "staffId": 1987287,
+    "nameRu": "Франко-Джакомо Карбоне",
+    "nameEn": "Franco-Giacomo Carbone",
+    "description": "постановщик",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1987287.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 1987260,
+    "nameRu": "Кес Бонне",
+    "nameEn": "Kes Bonnet",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1987260.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 1987778,
+    "nameRu": "Эдуардо Идальго мл.",
+    "nameEn": "Eduardo Hidalgo hijo",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1987778.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 2101632,
+    "nameRu": "Давид Темпрано",
+    "nameEn": "David Temprano",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2101632.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 2025456,
+    "nameRu": "Кристина Сопенья",
+    "nameEn": "Cristina Sopeña",
+    "description": "по костюмам",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2025456.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 1996334,
+    "nameRu": "Валентина Младенова",
+    "nameEn": "Valentina Mladenova",
+    "description": "по декорациям",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1996334.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 2004304,
+    "nameRu": "Ниевес Монтерде",
+    "nameEn": "Nieves Monterde",
+    "description": "по декорациям",
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/2004304.jpg",
+    "professionText": "Художники",
+    "professionKey": "DESIGN"
+  },
+  {
+    "staffId": 1329969,
+    "nameRu": "Карстен Курпанек",
+    "nameEn": "Carsten Kurpanek",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1329969.jpg",
+    "professionText": "Монтажеры",
+    "professionKey": "EDITOR"
+  },
+  {
+    "staffId": 1989085,
+    "nameRu": "Тодд Е. Миллер",
+    "nameEn": "Todd E. Miller",
+    "description": null,
+    "posterUrl": "https://kinopoiskapiunofficial.tech/images/actor_posters/kp/1989085.jpg",
+    "professionText": "Монтажеры",
+    "professionKey": "EDITOR"
+  }
+]
