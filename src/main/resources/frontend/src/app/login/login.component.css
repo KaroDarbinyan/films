@@ -1,0 +1,20 @@
+
+
+.container-fluid{
+  background-image: url("../../assets/images/126168261.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 93vh;
+}
+
+input{
+  width:90%;
+  float: right;
+  background-color: #465767;
+  border: medium;
+  color: white
+}
+input::placeholder{
+  color: white;
+}

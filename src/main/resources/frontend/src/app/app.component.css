@@ -1,0 +1,63 @@
+.active{
+  display: block;
+}
+
+
+
+.navbar-scroll{
+  background-color: white;
+}
+
+
+.navbar-scroll .nav-link {
+  color: #0078ff;
+}
+
+.container > .navbar-brand {
+  font-size: 1.5rem;
+  color: white;
+}
+
+
+
+
+.navbar-toggler > .fa-bars {
+  font-size: 1.5rem;
+  color: white;
+}
+.navbar-toggler > .fa-times {
+  font-size: 1.5rem;
+  color: white;
+  display: none;
+}
+
+
+
+.navbar-scroll  .fa-bars {
+  color: #0078ff;
+  font-size: 1.5rem;
+}
+
+.navbar-scroll .fa-times{
+  color: #0078ff;
+  font-size: 1.5rem;
+}
+
+
+.navbar-scroll .navbar-brand {
+  color: #0078ff;
+}
+
+
+
+
+.nav-link{
+  color: white;
+}
+
+.offset:before {
+  display: block;
+  content: "";
+  height: 3rem;
+  margin-top: -3rem;
+}
