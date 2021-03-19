@@ -28,7 +28,10 @@ public class LanguageDto {
     }
 
     public static LanguageEntity toEntity(LanguageDto dto) {
-        return new LanguageEntity(dto.getId(), dto.getName());
+        LanguageEntity languageEntity = new LanguageEntity();
+        languageEntity.setId(dto.getId());
+        languageEntity.setName(dto.getName());
+        return languageEntity;
     }
 
     public static List<LanguageDto> toDto(Collection<LanguageEntity> entityCollection) {

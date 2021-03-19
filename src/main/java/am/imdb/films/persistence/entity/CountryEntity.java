@@ -20,13 +20,10 @@ public class CountryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "iso_code")
-//    private String isoCode;
-
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "country", targetEntity = ProductionCountryEntity.class)
-//    private List<ProductionCountryEntity> listOfProductionCountries;
+    @OneToMany(mappedBy = "country", targetEntity = MovieCountryEntity.class)
+    private List<MovieCountryEntity> listOfMovieCountries;
 }
 

@@ -2,8 +2,6 @@ package am.imdb.films.persistence.entity;
 
 
 
-import am.imdb.films.persistence.entity.LanguageEntity;
-import am.imdb.films.persistence.entity.MovieEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

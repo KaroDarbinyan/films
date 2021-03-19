@@ -82,6 +82,18 @@ public class MovieEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+
     @ManyToMany
     @JoinTable(
             name = "movie_language",
@@ -103,19 +115,16 @@ public class MovieEntity {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<GenreEntity> genres;
 
-    @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class, fetch = FetchType.LAZY)
-    private List<MovieGenreEntity> movieGenreEntityList;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
+//    @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
+//    private List<MovieGenreEntity> listOfMovieGenres;
+//
+//    @OneToMany(mappedBy = "movie", targetEntity = MovieCountryEntity.class)
+//    private List<MovieCountryEntity> listOfMovieCountries;
+//
+//    @OneToMany(mappedBy = "movie", targetEntity = MovieLanguageEntity.class)
+//    private List<MovieLanguageEntity> listOfMovieLanguages;
+//
+//    @OneToMany(mappedBy = "movie", targetEntity = MoviePersonEntity.class)
+//    private List<MoviePersonEntity> listOfMoviePersons;
 }
 

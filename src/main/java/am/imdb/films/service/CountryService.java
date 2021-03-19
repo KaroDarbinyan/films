@@ -37,8 +37,11 @@ public class CountryService {
         return CountryDto.toDto(country);
     }
 
-    public CountryEntity getLanguageByName(String name) {
-        return countryRepository.findLanguageByName(name);
+    public CountryEntity getByName(String name) {
+        return countryRepository.findByName(name);
+    }
+    public List<CountryEntity> getByNameIn(Set<String> names) {
+        return countryRepository.findByNameIn(names);
     }
 
     public CountryDto createCountry(CountryDto countryDto) {

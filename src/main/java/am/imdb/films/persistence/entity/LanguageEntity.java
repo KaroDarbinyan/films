@@ -19,12 +19,11 @@ public class LanguageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "code")
-//    private String code;
-
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "language", targetEntity = MovieLanguageEntity.class)
+    private List<MovieLanguageEntity> listOfMovieLanguages;
 //
 //    @ManyToMany
 //    @JoinTable(

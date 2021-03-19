@@ -77,7 +77,7 @@ public class MovieDto {
     private String reviewsFromCritics;
 
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "actors")
-    private List<String> personNames;
+    private Set<String> personNames;
 
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "genre")
     private Set<String> genreNames;
@@ -141,9 +141,12 @@ public class MovieDto {
         entity.setMetasCore(dto.getMetasCore());
         entity.setReviewsFromUsers(dto.getReviewsFromUsers());
         entity.setReviewsFromCritics(dto.getReviewsFromCritics());
-        entity.setGenres(GenreDto.toEntity(dto.getGenres()));
-        entity.setCountries(CountryDto.toEntity(dto.getCountries()));
-        entity.setLanguages(LanguageDto.toEntity(dto.getLanguages()));
+        if (dto.getLanguages() != null)
+            entity.setLanguages(LanguageDto.toEntity(dto.getLanguages()));
+        if (dto.getCountries() != null)
+            entity.setCountries(CountryDto.toEntity(dto.getCountries()));
+        if (dto.getGenres() != null)
+            entity.setGenres(GenreDto.toEntity(dto.getGenres()));
         return entity;
     }
 

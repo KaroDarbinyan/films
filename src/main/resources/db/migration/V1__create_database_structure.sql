@@ -70,15 +70,15 @@ drop table if exists movie_person;
 create table movie_person
 (
     id         bigserial,
-    movie_id   varchar not null,
+    movie_id   bigint not null,
     ordering   int     not null,
-    person_id  varchar not null,
+    person_id  bigint not null,
     category   varchar default null,
     job        varchar default null,
     characters varchar default null,
     primary key (id, movie_id, person_id),
-    foreign key (movie_id) references movie (imdb_id) on update cascade on delete cascade,
-    foreign key (person_id) references person (imdb_id) on update cascade on delete cascade
+    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
+    foreign key (person_id) references person (id) on update cascade on delete cascade
 );
 
 drop table if exists genre;
@@ -101,10 +101,10 @@ drop table if exists rating;
 create table rating
 (
     id             bigserial,
-    movie_id       varchar(255) unique not null,
+    movie_id       bigint unique not null,
     average_rating varchar(255) default null,
     num_votes      varchar(255) default null,
-    foreign key (movie_id) references movie (imdb_id) on update cascade on delete cascade,
+    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     primary key (id)
 );
 

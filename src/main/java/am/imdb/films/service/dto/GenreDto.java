@@ -29,7 +29,10 @@ public class GenreDto {
     }
 
     public static GenreEntity toEntity(GenreDto dto) {
-        return new GenreEntity(dto.getId(), dto.getName());
+        GenreEntity genreEntity = new GenreEntity();
+        genreEntity.setId(dto.getId());
+        genreEntity.setName(dto.getName());
+        return genreEntity;
     }
 
     public static List<GenreDto> toDto(Collection<GenreEntity> entityCollection) {

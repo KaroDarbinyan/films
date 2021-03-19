@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -80,7 +81,6 @@ public class PersonEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
@@ -92,6 +92,9 @@ public class PersonEntity {
         updatedAt = LocalDateTime.now();
     }
 
+
+//    @OneToMany(mappedBy = "person", targetEntity = MoviePersonEntity.class)
+//    private List<MoviePersonEntity> listOfMoviePersons;
 
 //    @OneToMany(mappedBy = "person", targetEntity = MovieCastEntity.class, fetch = FetchType.LAZY)
 //    private List<MovieCastEntity> listOfMovieCasts;

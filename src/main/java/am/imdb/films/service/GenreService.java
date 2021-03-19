@@ -30,10 +30,12 @@ public class GenreService {
         return GenreDto.toDto(genreEntityList);
     }
 
-    public GenreEntity getLanguageByName(String name) {
-        return genreRepository.findLanguageByName(name);
+    public GenreEntity getByName(String name) {
+        return genreRepository.findByName(name);
     }
-
+    public List<GenreEntity> getByNameIn(Set<String> names) {
+        return genreRepository.findByNameIn(names);
+    }
 
     public GenreDto createGenre(GenreDto genreDto) {
         GenreEntity genreEntity = GenreDto.toEntity(genreDto);

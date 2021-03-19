@@ -22,7 +22,7 @@ public class GenreEntity {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "genre", targetEntity = MovieGenreEntity.class, fetch = FetchType.LAZY)
-//    private List<MovieGenreEntity> movieGenreEntityList;
+    @OneToMany(mappedBy = "genre", targetEntity = MovieGenreEntity.class)
+    private List<MovieGenreEntity> listOfMovieGenres;
 }
 

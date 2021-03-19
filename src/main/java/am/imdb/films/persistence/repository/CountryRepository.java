@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CountryRepository extends JpaRepository<CountryEntity, Long> {
-    CountryEntity findLanguageByName(String name);
+
+    CountryEntity findByName(String name);
+    List<CountryEntity> findByNameIn(Set<String> names);
 
 //    @Query("SELECT u FROM CountryEntity u LEFT JOIN u.listOfProductionCountries")
 //    List<CountryEntity> findAllCountries();

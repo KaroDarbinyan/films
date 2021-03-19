@@ -120,6 +120,29 @@ public class PersonDto {
         return entity;
     }
 
+    public static PersonEntity toEntity(PersonDto dto, PersonEntity entity) {
+        if (entity.getId() != null)
+            entity.setId(dto.getId());
+        entity.setImdbId(dto.getImdbId());
+        entity.setName(dto.getName());
+        entity.setBirthName(dto.getBirthName());
+        entity.setHeight(dto.getHeight());
+        entity.setBio(dto.getBio());
+        entity.setBirthDetails(dto.getBirthDetails());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+        entity.setPlaceOfBirth(dto.getPlaceOfBirth());
+        entity.setDeathDetails(dto.getDeathDetails());
+        entity.setDateOfDeath(dto.getDateOfDeath());
+        entity.setPlaceOfDeath(dto.getPlaceOfDeath());
+        entity.setReasonOfDeath(dto.getReasonOfDeath());
+        entity.setSpousesString(dto.getSpousesString());
+        entity.setSpouses(dto.getSpouses());
+        entity.setDivorces(dto.getDivorces());
+        entity.setSpousesWithChildren(dto.getSpousesWithChildren());
+        entity.setChildren(dto.getChildren());
+        return entity;
+    }
+
 
     public static List<PersonDto> toDto(Collection<PersonEntity> entityCollection) {
         return entityCollection.stream()

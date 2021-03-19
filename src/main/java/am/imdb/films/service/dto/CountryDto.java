@@ -31,7 +31,10 @@ public class CountryDto {
     }
 
     public static CountryEntity toEntity(CountryDto dto) {
-        return new CountryEntity(dto.getId(), dto.getName());
+        CountryEntity countryEntity = new CountryEntity();
+        countryEntity.setId(dto.getId());
+        countryEntity.setName(dto.getName());
+        return countryEntity;
     }
 
     public static List<CountryDto> toDto(Collection<CountryEntity> entityCollection) {

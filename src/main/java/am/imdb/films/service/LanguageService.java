@@ -1,5 +1,6 @@
 package am.imdb.films.service;
 
+import am.imdb.films.persistence.entity.CountryEntity;
 import am.imdb.films.persistence.entity.LanguageEntity;
 import am.imdb.films.persistence.entity.MovieEntity;
 import am.imdb.films.persistence.repository.LanguageRepository;
@@ -36,7 +37,9 @@ public class LanguageService {
         return LanguageDto.toDto(languageEntityList);
     }
 
-    public LanguageEntity getLanguageByName(String name) {
-        return languageRepository.findLanguageByName(name);
+    public LanguageEntity getByName(String name) {
+        return languageRepository.findByName(name);
     }
-}
+    public List<LanguageEntity> getByNameIn(Set<String> names) {
+        return languageRepository.findByNameIn(names);
+    }}

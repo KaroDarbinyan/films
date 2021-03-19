@@ -1,6 +1,7 @@
 package am.imdb.films.service;
 
 import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.persistence.entity.PersonEntity;
 import am.imdb.films.persistence.entity.RatingEntity;
 import am.imdb.films.persistence.repository.RatingRepository;
 import am.imdb.films.service.dto.RatingDto;
@@ -8,10 +9,12 @@ import am.imdb.films.util.parser.RatingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +25,16 @@ public class RatingService {
     private final RatingParser ratingParser;
     private final MovieService movieService;
     private final RatingRepository ratingRepository;
+    private final JdbcTemplate jdbcTemplate;
     private final Logger logger = LoggerFactory.getLogger(RatingService.class);
 
 
     @Autowired
-    public RatingService(RatingRepository ratingRepository, RatingParser ratingParser, MovieService movieService) {
+    public RatingService(RatingRepository ratingRepository, RatingParser ratingParser, MovieService movieService, JdbcTemplate jdbcTemplate) {
         this.ratingRepository = ratingRepository;
         this.ratingParser = ratingParser;
         this.movieService = movieService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<RatingDto> getRatings() {
@@ -43,37 +48,62 @@ public class RatingService {
         return RatingDto.toDto(rating);
     }
 
-    public Map<String, Long> parseCSV(MultipartFile csvFile) throws IOException {
+    public Map<String, Integer> parseCSV(MultipartFile csvFile) throws IOException {
         List<RatingDto> ratingDtoList = ratingParser.csvParser(csvFile);
-        long saved = 0;
-        long existed = 0;
-        long notPreserved = 0;
-        long size = Integer.toUnsignedLong(ratingDtoList.size());
-        for (RatingDto ratingDto : ratingDtoList) {
-            MovieEntity movieEntity = movieService.findMovieByImdbId(ratingDto.getMovieId());
-            try {
-                if (movieEntity != null) {
-                    if (ratingRepository.findRatingByMovieId(ratingDto.getMovieId()) == null) {
-                        ratingRepository.save(RatingDto.toEntity(ratingDto));
-                        ++saved;
-                    } else {
-                        ++existed;
-                    }
-                } else {
-                    logger.error(String.format("There is no movie with this imdbID (%s)", ratingDto.getMovieId()));
-                }
-            } catch (Exception e) {
-                logger.error(String.format("%s not preserved object -> %s", ++notPreserved, ratingDto.getId()));
-            }
-            logger.info(String.format("In progress, [saved -> %s], [existed -> %s], [not preserved -> %s] of %s", saved, existed, notPreserved, size));
 
+        return batchInsert(ratingDtoList);
+    }
+
+    public Map<String, Integer> batchInsert(List<RatingDto> ratingDtoList) {
+        String insertQuery = "INSERT INTO rating (movie_id, average_rating, num_votes) VALUES %s;";
+        int existed = (int) ratingRepository.count();
+        int size = ratingDtoList.size();
+        int counter = 0;
+        int error = 0;
+        int saved = 0;
+
+        List<String> list = new ArrayList<>();
+        Map<String, RatingDto> tempRatings = new HashMap<>();
+
+        for (RatingDto ratingDto : ratingDtoList) {
+            list.add(ratingDto.getMovieId());
+            tempRatings.put(ratingDto.getMovieId(), ratingDto);
+
+            if ((counter + 1) % 1000 == 0 || (counter + 1) == size) {
+
+                try {
+                    List<MovieEntity> idAndImdbIdByImdbIdIn = movieService.getByImdbIdIn(list);
+                    list.clear();
+                    for (MovieEntity movieEntity : idAndImdbIdByImdbIdIn) {
+                        list.add(String.format("(%s, '%s', '%s')",
+                                movieEntity.getId(),
+                                tempRatings.get(movieEntity.getImdbId()).getAverageRating(),
+                                tempRatings.get(movieEntity.getImdbId()).getNumVotes()));
+                    }
+                    String sql = String.format(insertQuery, String.join(",", list));
+                    jdbcTemplate.execute(sql);
+
+                    saved += list.size();
+                } catch (Exception e) {
+                    error += list.size();
+                    logger.error(String.format("%s not preserved", error));
+                }
+                list.clear();
+                tempRatings.clear();
+                logger.info(String.format("In progress, [saved -> %s], [existed -> %s], [not preserved -> %s] of %s",
+                        saved, existed, error, size));
+            }
+
+            counter++;
         }
 
-        Map<String, Long> result = new HashMap<>();
-        result.put("size", size);
-        result.put("saved", saved);
-        result.put("existed", existed);
-        result.put("not_preserved", notPreserved);
-        return result;
+        return Map.of(
+                "size", size,
+                "saved", saved,
+                "error", error,
+                "existed", existed,
+                "not_preserved", size - saved
+        );
     }
+
 }
