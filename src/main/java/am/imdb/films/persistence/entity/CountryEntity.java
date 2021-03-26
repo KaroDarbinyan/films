@@ -1,6 +1,7 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,6 @@ public class CountryEntity {
     private String name;
 
     @OneToMany(mappedBy = "country", targetEntity = MovieCountryEntity.class)
-    private List<MovieCountryEntity> listOfMovieCountries;
+    private List<MovieCountryEntity> listOfMovieCountry;
 }
 

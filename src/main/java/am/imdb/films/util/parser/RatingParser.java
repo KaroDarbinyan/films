@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 public class RatingParser {
 
+    //todo rename to parseCSV
     public List<RatingDto> csvParser(MultipartFile csvFile) throws IOException {
 
         try (Reader reader = new BufferedReader(new InputStreamReader(csvFile.getInputStream()))) {

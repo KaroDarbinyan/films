@@ -2,15 +2,19 @@ package am.imdb.films.service.dto;
 
 
 import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.service.model.validation.Create;
+import am.imdb.films.service.model.validation.Update;
 import com.opencsv.bean.CsvBindAndSplitByName;
-import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,60 +24,27 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MovieDto {
 
+    @Null(groups = Create.class)
+    @NotNull(groups = Update.class)
     private Long id;
-
-    @CsvBindByName(column = "imdb_title_id")
+    @NotNull(groups = {Create.class, Update.class})
     private String imdbId;
-
-    @CsvBindByName(column = "title")
     private String title;
-
-    @CsvBindByName(column = "original_title")
     private String originalTitle;
-
-    @CsvBindByName(column = "year")
     private String year;
-
-    @CsvBindByName(column = "date_published")
     private String datePublished;
-
-    @CsvBindByName(column = "duration")
     private String duration;
-
-    @CsvBindByName(column = "director")
     private String director;
-
-    @CsvBindByName(column = "writer")
     private String writer;
-
-    @CsvBindByName(column = "production_company")
     private String productionCompany;
-
-    @CsvBindByName(column = "actors")
     private String actors;
-
-    @CsvBindByName(column = "description")
     private String description;
-
-    @CsvBindByName(column = "avg_vote")
     private String avgVote;
-
-    @CsvBindByName(column = "budget")
     private String budget;
-
-    @CsvBindByName(column = "usa_gross_income")
     private String usaGrossIncome;
-
-    @CsvBindByName(column = "worldwide_gross_income")
     private String worldWideGrossIncome;
-
-    @CsvBindByName(column = "metas_core")
     private String metasCore;
-
-    @CsvBindByName(column = "reviews_from_users")
     private String reviewsFromUsers;
-
-    @CsvBindByName(column = "reviews_from_critics")
     private String reviewsFromCritics;
 
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "actors")
@@ -115,15 +86,14 @@ public class MovieDto {
                 .metasCore(entity.getMetasCore())
                 .reviewsFromUsers(entity.getReviewsFromUsers())
                 .reviewsFromCritics(entity.getReviewsFromCritics())
-                .genres(GenreDto.toDto(entity.getGenres()))
-                .countries(CountryDto.toDto(entity.getCountries()))
-                .languages(LanguageDto.toDto(entity.getLanguages()))
+//                .genres(GenreDto.toDto(entity.getGenres()))
+//                .countries(CountryDto.toDto(entity.getCountries()))
+//                .languages(LanguageDto.toDto(entity.getLanguages()))
                 .build();
     }
 
-    public static MovieEntity toEntity(MovieDto dto) {
-        MovieEntity entity = new MovieEntity();
-        entity.setId(dto.getId());
+    public static MovieEntity toEntity(MovieDto dto, MovieEntity entity) {
+        if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
         entity.setImdbId(dto.getImdbId());
         entity.setTitle(dto.getTitle());
         entity.setOriginalTitle(dto.getOriginalTitle());
@@ -141,12 +111,12 @@ public class MovieDto {
         entity.setMetasCore(dto.getMetasCore());
         entity.setReviewsFromUsers(dto.getReviewsFromUsers());
         entity.setReviewsFromCritics(dto.getReviewsFromCritics());
-        if (dto.getLanguages() != null)
-            entity.setLanguages(LanguageDto.toEntity(dto.getLanguages()));
-        if (dto.getCountries() != null)
-            entity.setCountries(CountryDto.toEntity(dto.getCountries()));
-        if (dto.getGenres() != null)
-            entity.setGenres(GenreDto.toEntity(dto.getGenres()));
+//        if (dto.getLanguages() != null)
+//            entity.setLanguages(LanguageDto.toEntity(dto.getLanguages()));
+//        if (dto.getCountries() != null)
+//            entity.setCountries(CountryDto.toEntity(dto.getCountries()));
+//        if (dto.getGenres() != null)
+//            entity.setGenres(GenreDto.toEntity(dto.getGenres()));
         return entity;
     }
 
@@ -159,9 +129,10 @@ public class MovieDto {
 
     public static List<MovieEntity> toEntity(Collection<MovieDto> dtoCollection) {
         return dtoCollection.stream()
-                .map(MovieDto::toEntity)
+                .map(movieDto -> MovieDto.toEntity(movieDto, new MovieEntity()))
                 .collect(Collectors.toList());
     }
+
 
 //    private static List<GenreDto> getGenreList(MovieEntity entity) {
 //        List<MovieGenreEntity> movieGenreEntityList = entity.getMovieGenreEntityList();

@@ -1,17 +1,14 @@
 package am.imdb.films.service;
 
-import am.imdb.films.persistence.entity.CountryEntity;
+import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.GenreEntity;
-import am.imdb.films.persistence.entity.LanguageEntity;
 import am.imdb.films.persistence.repository.GenreRepository;
-import am.imdb.films.service.dto.CountryDto;
+import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.GenreDto;
-import am.imdb.films.service.dto.LanguageDto;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class GenreService {
@@ -24,22 +21,34 @@ public class GenreService {
     }
 
 
-    public List<GenreDto> createGenres(Set<GenreDto> genreDtoSet) {
-        List<GenreEntity> genreEntityList = GenreDto.toEntity(genreDtoSet);
-        genreRepository.saveAll(genreEntityList);
-        return GenreDto.toDto(genreEntityList);
-    }
-
-    public GenreEntity getByName(String name) {
-        return genreRepository.findByName(name);
-    }
-    public List<GenreEntity> getByNameIn(Set<String> names) {
-        return genreRepository.findByNameIn(names);
-    }
-
     public GenreDto createGenre(GenreDto genreDto) {
-        GenreEntity genreEntity = GenreDto.toEntity(genreDto);
-        genreRepository.save(genreEntity);
-        return GenreDto.toDto(genreEntity);
+        GenreEntity genreEntity = GenreDto.toEntity(genreDto, new GenreEntity());
+        GenreEntity entity = genreRepository.save(genreEntity);
+        return GenreDto.toDto(entity);
     }
+
+    public GenreDto getGenre(Long id) throws EntityNotFoundException {
+        GenreEntity genre = genreRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        return GenreDto.toDto(genre);
+    }
+
+    public GenreDto updateGenre(Long id, GenreDto genreDto) throws EntityNotFoundException {
+        GenreEntity genreEntity = genreRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        GenreDto.toEntity(genreDto, genreEntity);
+        return GenreDto.toDto(genreRepository.save(genreEntity));
+    }
+
+    public QueryResponseWrapper<GenreDto> getGenres(SearchCriteria criteria) {
+        Page<GenreDto> content = genreRepository.findAllWithPagination(criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content);
+    }
+
+    public void deleteGenre(Long id) throws EntityNotFoundException {
+        genreRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        genreRepository.deleteById(id);
+    }
+
 }

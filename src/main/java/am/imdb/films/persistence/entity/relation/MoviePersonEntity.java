@@ -1,6 +1,8 @@
-package am.imdb.films.persistence.entity;
+package am.imdb.films.persistence.entity.relation;
 
 
+import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.persistence.entity.PersonEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,14 +21,8 @@ public class MoviePersonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "movie_id")
-    private Long movieId;
-
     @Column(name = "ordering")
     private String ordering;
-
-    @Column(name = "person_id")
-    private Long personId;
 
     @Column(name = "category")
     private String category;
@@ -37,12 +33,12 @@ public class MoviePersonEntity {
     @Column(name = "characters")
     private String characters;
 
-//    @ManyToOne
-//    @JoinColumn(name = "movie_id", referencedColumnName = "id")
-//    private MovieEntity movie;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "person_id", referencedColumnName = "id")
-//    private PersonEntity person;
+    @ManyToOne
+    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    private MovieEntity movie;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private PersonEntity person;
 }
 

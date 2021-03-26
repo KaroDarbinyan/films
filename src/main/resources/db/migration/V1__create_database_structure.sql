@@ -71,7 +71,7 @@ create table movie_person
 (
     id         bigserial,
     movie_id   bigint not null,
-    ordering   int     not null,
+    ordering   int    not null,
     person_id  bigint not null,
     category   varchar default null,
     job        varchar default null,
@@ -84,9 +84,8 @@ create table movie_person
 drop table if exists genre;
 create table genre
 (
-    id   bigserial,
-    name varchar(255) unique not null,
-    primary key (id)
+    id   bigserial not null primary key,
+    name varchar(255) unique not null
 );
 
 drop table if exists lanfuage;
@@ -145,3 +144,23 @@ create table movie_country
     foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     foreign key (country_id) references country (id) on update cascade on delete cascade
 );
+
+drop table if exists "storage";
+create table "storage"
+(
+    id           bigserial,
+    path         varchar(255),
+    file_name    varchar(255),
+    extension    varchar(255),
+    content_type varchar(255),
+    general      boolean            default false,
+    user_id      bigint,
+    person_id    bigint,
+    movie_id     bigint,
+    created_at   timestamp not null default current_timestamp,
+    foreign key (user_id) references "user" (id) on update cascade on delete cascade,
+    foreign key (person_id) references person (id) on update cascade on delete cascade,
+    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
+    primary key (id)
+)
+

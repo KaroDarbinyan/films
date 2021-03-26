@@ -1,21 +1,30 @@
 package am.imdb.films.service.dto;
 
 
-import am.imdb.films.persistence.entity.GenreEntity;
 import am.imdb.films.persistence.entity.LanguageEntity;
+import am.imdb.films.service.model.validation.Create;
+import am.imdb.films.service.model.validation.Update;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LanguageDto {
 
 
+    @Null(groups = Create.class)
+    @NotNull(groups = Update.class)
     private Long id;
     private String name;
 
@@ -27,11 +36,10 @@ public class LanguageDto {
                 .build();
     }
 
-    public static LanguageEntity toEntity(LanguageDto dto) {
-        LanguageEntity languageEntity = new LanguageEntity();
-        languageEntity.setId(dto.getId());
-        languageEntity.setName(dto.getName());
-        return languageEntity;
+    public static LanguageEntity toEntity(LanguageDto dto, LanguageEntity entity) {
+        if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        return entity;
     }
 
     public static List<LanguageDto> toDto(Collection<LanguageEntity> entityCollection) {
@@ -42,9 +50,8 @@ public class LanguageDto {
 
     public static List<LanguageEntity> toEntity(Collection<LanguageDto> dtoCollection) {
         return dtoCollection.stream()
-                .map(LanguageDto::toEntity)
+                .map(languageDto -> LanguageDto.toEntity(languageDto, new LanguageEntity()))
                 .collect(Collectors.toList());
     }
-
 
 }

@@ -1,6 +1,7 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,15 +24,7 @@ public class LanguageEntity {
     private String name;
 
     @OneToMany(mappedBy = "language", targetEntity = MovieLanguageEntity.class)
-    private List<MovieLanguageEntity> listOfMovieLanguages;
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "lang_gen",
-//            joinColumns = @JoinColumn(name = "lang_id"),
-//            inverseJoinColumns = @JoinColumn(name = "gen_id"))
-//    private List<GenreEntity> genderEntities;
-//    @OneToMany(mappedBy = "language", targetEntity = LangGenEntity.class)
-//    private List<LangGenEntity> list;
+    private List<MovieLanguageEntity> listOfMovieLanguage;
+
 }
 

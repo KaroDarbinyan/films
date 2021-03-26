@@ -1,44 +1,92 @@
 package am.imdb.films.controller;
 
 
-import am.imdb.films.persistence.entity.MovieEntity;
-import am.imdb.films.persistence.repository.GenreRepository;
+import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.persistence.entity.StorageEntity;
+import am.imdb.films.service.StorageService;
 import am.imdb.films.service.MovieService;
+import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
+import am.imdb.films.service.model.validation.Create;
+import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.model.wrapper.MoviesWrapper;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("movies")
 public class MovieController {
 
     private final MovieService movieService;
-    private final GenreRepository genreRepository;
+    private final StorageService storageService;
 
     @Autowired
-    public MovieController(MovieService movieService, GenreRepository genreRepository) {
+    public MovieController(MovieService movieService, StorageService storageService) {
         this.movieService = movieService;
-        this.genreRepository = genreRepository;
+        this.storageService = storageService;
     }
 
-
-    @GetMapping()
-    public List<MovieDto> getMovies() {
-        return movieService.getMovies();
+    @PostMapping
+    public ResponseEntity<MovieDto> addMovie(@RequestBody @Validated(Create.class) MovieDto movieDto) {
+        MovieDto movie = movieService.createMovie(movieDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movie);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDto> getMovie(@PathVariable() Long id) throws Exception {
+    public ResponseEntity<MovieDto> getMovie(@PathVariable() Long id) throws EntityNotFoundException {
         return ResponseEntity.ok(movieService.getMovie(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieDto> updateMovie(
+            @PathVariable("id") Long id,
+            @Validated(Update.class)
+            @RequestBody MovieDto movieDto) throws EntityNotFoundException {
+        MovieDto movie = movieService.updateMovie(id, movieDto);
+
+        return ResponseEntity.ok(movie);
+    }
+
+    @GetMapping
+    public QueryResponseWrapper<MoviesWrapper> getMovies(SearchCriteria criteria) {
+        return movieService.getMovies(criteria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMovie(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
+        movieService.deleteMovie(id);
+    }
+
+    @PostMapping("/upload-file")
+    public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
+                                                @RequestParam("movieId") Long movieId) {
+        StorageEntity entity = new StorageEntity();
+        entity.setPath(String.format("/movie/%s/", movieId));
+        entity.setMovieId(movieId);
+
+        entity = storageService.storeFile(file, entity);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/files/")
+                .path(entity.getId().toString())
+                .toUriString();
+
+        return UploadFileResponseWrapper.builder()
+                .fileName(entity.getFileName())
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(file.getContentType())
+                .size(file.getSize())
+                .build();
     }
 
 
@@ -52,7 +100,7 @@ public class MovieController {
             ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
         }
 
-        Map<String, Integer> result = movieService.parseCSV(csvFile);
+        Map<String, Integer> result = movieService.parseCsv(csvFile);
         return ResponseEntity.ok().body(result);
     }
 

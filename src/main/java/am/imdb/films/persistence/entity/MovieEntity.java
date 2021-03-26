@@ -1,6 +1,10 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
+import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
+import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
+import am.imdb.films.persistence.entity.relation.MoviePersonEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -93,38 +97,19 @@ public class MovieEntity {
         updatedAt = LocalDateTime.now();
     }
 
+    @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
+    private List<MovieGenreEntity> listOfMovieGenre;
 
-    @ManyToMany
-    @JoinTable(
-            name = "movie_language",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "language_id"))
-    private List<LanguageEntity> languages;
+    @OneToMany(mappedBy = "movie", targetEntity = MovieCountryEntity.class)
+    private List<MovieCountryEntity> listOfMovieCountry;
 
-    @ManyToMany
-    @JoinTable(
-            name = "movie_country",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "country_id"))
-    private List<CountryEntity> countries;
+    @OneToMany(mappedBy = "movie", targetEntity = MovieLanguageEntity.class)
+    private List<MovieLanguageEntity> listOfMovieLanguage;
 
-    @ManyToMany
-    @JoinTable(
-            name = "movie_genre",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<GenreEntity> genres;
+    @OneToMany(mappedBy = "movie", targetEntity = MoviePersonEntity.class)
+    private List<MoviePersonEntity> listOfMoviePerson;
 
-//    @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
-//    private List<MovieGenreEntity> listOfMovieGenres;
-//
-//    @OneToMany(mappedBy = "movie", targetEntity = MovieCountryEntity.class)
-//    private List<MovieCountryEntity> listOfMovieCountries;
-//
-//    @OneToMany(mappedBy = "movie", targetEntity = MovieLanguageEntity.class)
-//    private List<MovieLanguageEntity> listOfMovieLanguages;
-//
-//    @OneToMany(mappedBy = "movie", targetEntity = MoviePersonEntity.class)
-//    private List<MoviePersonEntity> listOfMoviePersons;
+    @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class, fetch = FetchType.LAZY, optional = false)
+    private RatingEntity rating;
 }
 

@@ -1,7 +1,7 @@
-package am.imdb.films.persistence.entity;
+package am.imdb.films.persistence.entity.relation;
 
-
-
+import am.imdb.films.persistence.entity.GenreEntity;
+import am.imdb.films.persistence.entity.MovieEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "movie_language")
-public class MovieLanguageEntity {
+@Table(name = "movie_genre")
+public class MovieGenreEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,9 @@ public class MovieLanguageEntity {
     private MovieEntity movie;
 
     @ManyToOne
-    @JoinColumn(name = "language_id", referencedColumnName = "id")
-    private LanguageEntity language;
+    @JoinColumn(name = "genre_id", referencedColumnName = "id")
+    private GenreEntity genre;
+
 
 }
 

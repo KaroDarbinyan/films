@@ -1,17 +1,13 @@
 package am.imdb.films.service.dto;
 
 
-import am.imdb.films.persistence.entity.LanguageEntity;
-import am.imdb.films.persistence.entity.MovieEntity;
-import am.imdb.films.persistence.entity.MoviePersonEntity;
-import am.imdb.films.persistence.entity.PersonEntity;
+import am.imdb.films.persistence.entity.relation.MoviePersonEntity;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,9 +46,9 @@ public class MoviePersonDto {
         return MoviePersonDto
                 .builder()
                 .id(entity.getId())
-                .movieId(entity.getMovieId())
+//                .movieId(entity.getMovieId())
                 .ordering(entity.getOrdering())
-                .personId(entity.getPersonId())
+//                .personId(entity.getPersonId())
                 .category(entity.getCategory())
                 .job(entity.getJob())
                 .characters(entity.getCharacters())
@@ -62,9 +58,9 @@ public class MoviePersonDto {
     public static MoviePersonEntity toEntity(MoviePersonDto dto) {
         MoviePersonEntity entity = new MoviePersonEntity();
         entity.setId(dto.getId());
-        entity.setMovieId(dto.getMovieId());
+//        entity.setMovieId(dto.getMovieId());
         entity.setOrdering(dto.getOrdering());
-        entity.setPersonId(dto.getPersonId());
+//        entity.setPersonId(dto.getPersonId());
         entity.setCategory(dto.getCategory());
         entity.setJob(dto.getJob());
         entity.setCharacters(dto.getCharacters());

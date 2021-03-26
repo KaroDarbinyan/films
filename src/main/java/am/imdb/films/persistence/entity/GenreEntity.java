@@ -1,6 +1,7 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,6 @@ public class GenreEntity {
     private String name;
 
     @OneToMany(mappedBy = "genre", targetEntity = MovieGenreEntity.class)
-    private List<MovieGenreEntity> listOfMovieGenres;
+    private List<MovieGenreEntity> listOfMovieGenre;
 }
 

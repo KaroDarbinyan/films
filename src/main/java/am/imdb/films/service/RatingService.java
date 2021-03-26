@@ -1,14 +1,17 @@
 package am.imdb.films.service;
 
+import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.MovieEntity;
-import am.imdb.films.persistence.entity.PersonEntity;
 import am.imdb.films.persistence.entity.RatingEntity;
 import am.imdb.films.persistence.repository.RatingRepository;
+import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.RatingDto;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.util.parser.RatingParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,15 +40,34 @@ public class RatingService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<RatingDto> getRatings() {
-        List<RatingEntity> ratings = ratingRepository.findAll();
-        return RatingDto.toDto(ratings);
+    public RatingDto createRating(RatingDto ratingDto) {
+        RatingEntity ratingEntity = RatingDto.toEntity(ratingDto, new RatingEntity());
+        RatingEntity entity = ratingRepository.save(ratingEntity);
+        return RatingDto.toDto(entity);
     }
 
-    public RatingDto getRating(Long id) throws Exception {
-        RatingEntity rating = ratingRepository.findById(id).orElseThrow(() -> new Exception("person not found"));
+    public RatingDto getRating(Long id) throws EntityNotFoundException {
+        RatingEntity rating = ratingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         return RatingDto.toDto(rating);
+    }
+
+    public RatingDto updateRating(Long id, RatingDto ratingDto) throws EntityNotFoundException {
+        RatingEntity ratingEntity = ratingRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        RatingDto.toEntity(ratingDto, ratingEntity);
+        return RatingDto.toDto(ratingRepository.save(ratingEntity));
+    }
+
+    public QueryResponseWrapper<RatingDto> getRatings(SearchCriteria criteria) {
+        Page<RatingDto> content = ratingRepository.findAllWithPagination(criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content);
+    }
+
+    public void deleteRating(Long id) throws EntityNotFoundException {
+        ratingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        ratingRepository.deleteById(id);
     }
 
     public Map<String, Integer> parseCSV(MultipartFile csvFile) throws IOException {

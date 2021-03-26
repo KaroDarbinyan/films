@@ -1,6 +1,7 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MoviePersonEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -92,13 +93,8 @@ public class PersonEntity {
         updatedAt = LocalDateTime.now();
     }
 
-
-//    @OneToMany(mappedBy = "person", targetEntity = MoviePersonEntity.class)
-//    private List<MoviePersonEntity> listOfMoviePersons;
-
-//    @OneToMany(mappedBy = "person", targetEntity = MovieCastEntity.class, fetch = FetchType.LAZY)
-//    private List<MovieCastEntity> listOfMovieCasts;
-//    imdb_name_id,name,birth_name,height,bio,birth_details,date_of_birth,place_of_birth,death_details,date_of_death,place_of_death,reason_of_death,spouses_string,spouses,divorces,spouses_with_children,children
+    @OneToMany(mappedBy = "person", targetEntity = MoviePersonEntity.class)
+    private List<MoviePersonEntity> listOfMoviePerson;
 
 }
 

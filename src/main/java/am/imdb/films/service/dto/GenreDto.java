@@ -3,22 +3,32 @@ package am.imdb.films.service.dto;
 
 import am.imdb.films.persistence.entity.GenreEntity;
 import am.imdb.films.persistence.entity.GenreEntity;
+import am.imdb.films.service.model.validation.Create;
+import am.imdb.films.service.model.validation.Update;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GenreDto {
 
 
+    @Null(groups = Create.class)
+    @NotNull(groups = Update.class)
     private Long id;
     private String name;
-    private List<String> movies;
 
     public static GenreDto toDto(GenreEntity entity) {
         return GenreDto
@@ -28,11 +38,10 @@ public class GenreDto {
                 .build();
     }
 
-    public static GenreEntity toEntity(GenreDto dto) {
-        GenreEntity genreEntity = new GenreEntity();
-        genreEntity.setId(dto.getId());
-        genreEntity.setName(dto.getName());
-        return genreEntity;
+    public static GenreEntity toEntity(GenreDto dto, GenreEntity entity) {
+        if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        return entity;
     }
 
     public static List<GenreDto> toDto(Collection<GenreEntity> entityCollection) {
@@ -43,9 +52,7 @@ public class GenreDto {
 
     public static List<GenreEntity> toEntity(Collection<GenreDto> dtoCollection) {
         return dtoCollection.stream()
-                .map(GenreDto::toEntity)
+                .map(genreDto -> GenreDto.toEntity(genreDto, new GenreEntity()))
                 .collect(Collectors.toList());
     }
-
-
 }

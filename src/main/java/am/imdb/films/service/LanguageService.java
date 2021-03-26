@@ -1,18 +1,14 @@
 package am.imdb.films.service;
 
-import am.imdb.films.persistence.entity.CountryEntity;
+import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.LanguageEntity;
-import am.imdb.films.persistence.entity.MovieEntity;
 import am.imdb.films.persistence.repository.LanguageRepository;
+import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.LanguageDto;
-import am.imdb.films.service.dto.MovieDto;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 @Service
 public class LanguageService {
@@ -24,22 +20,34 @@ public class LanguageService {
         this.languageRepository = languageRepository;
     }
 
-
     public LanguageDto createLanguage(LanguageDto languageDto) {
-        LanguageEntity languageEntity = LanguageDto.toEntity(languageDto);
-        languageRepository.save(languageEntity);
-        return LanguageDto.toDto(languageEntity);
+        LanguageEntity languageEntity = LanguageDto.toEntity(languageDto, new LanguageEntity());
+        LanguageEntity entity = languageRepository.save(languageEntity);
+        return LanguageDto.toDto(entity);
     }
 
-    public List<LanguageDto> createLanguages(Set<LanguageDto> languageDtoSet) {
-        List<LanguageEntity> languageEntityList = LanguageDto.toEntity(languageDtoSet);
-        languageRepository.saveAll(languageEntityList);
-        return LanguageDto.toDto(languageEntityList);
+    public LanguageDto getLanguage(Long id) throws EntityNotFoundException {
+        LanguageEntity language = languageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        return LanguageDto.toDto(language);
     }
 
-    public LanguageEntity getByName(String name) {
-        return languageRepository.findByName(name);
+    public LanguageDto updateLanguage(Long id, LanguageDto languageDto) throws EntityNotFoundException {
+        LanguageEntity languageEntity = languageRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        LanguageDto.toEntity(languageDto, languageEntity);
+        return LanguageDto.toDto(languageRepository.save(languageEntity));
     }
-    public List<LanguageEntity> getByNameIn(Set<String> names) {
-        return languageRepository.findByNameIn(names);
-    }}
+
+    public QueryResponseWrapper<LanguageDto> getLanguages(SearchCriteria criteria) {
+        Page<LanguageDto> content = languageRepository.findAllWithPagination(criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content);
+    }
+
+    public void deleteLanguage(Long id) throws EntityNotFoundException {
+        languageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        languageRepository.deleteById(id);
+    }
+
+}
