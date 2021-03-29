@@ -2,8 +2,8 @@ package am.imdb.films.controller;
 
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.exception.FileNotExistException;
-import am.imdb.films.persistence.entity.StorageEntity;
-import am.imdb.films.service.StorageService;
+import am.imdb.films.persistence.entity.FileEntity;
+import am.imdb.films.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,19 +21,19 @@ import java.io.IOException;
 @RequestMapping("files")
 public class FileController {
 
-    private final StorageService storageService;
+    private final FileService fileService;
 
     @Autowired
-    public FileController(StorageService storageService) {
-        this.storageService = storageService;
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("id") Long id, HttpServletRequest request) throws EntityNotFoundException, FileNotExistException {
 
-        StorageEntity entity = storageService.getMerchantDocument(id);
-        Resource resource = storageService.loadFileAsResource(entity.getPath(), entity.getFileName());
+        FileEntity entity = fileService.getMerchantDocument(id);
+        Resource resource = fileService.loadFileAsResource(entity.getPath(), entity.getFileName());
 
         try {
             String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());

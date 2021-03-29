@@ -2,14 +2,13 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
-import am.imdb.films.persistence.entity.StorageEntity;
-import am.imdb.films.service.StorageService;
 import am.imdb.films.service.PersonService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
+import am.imdb.films.service.dto.base.BaseFileDto;
+import am.imdb.films.service.dto.base.BasePersonDto;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
-import am.imdb.films.service.model.wrapper.PersonsWrapper;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,37 +28,35 @@ import java.util.Objects;
 public class PersonController {
 
     private final PersonService personService;
-    private final StorageService storageService;
 
     @Autowired
-    public PersonController(PersonService personService, StorageService storageService) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
-        this.storageService = storageService;
     }
 
     @PostMapping
-    public ResponseEntity<PersonDto> addPerson(@RequestBody @Validated(Create.class) PersonDto personDto) {
-        PersonDto person = personService.createPerson(personDto);
+    public ResponseEntity<BasePersonDto> addPerson(@RequestBody @Validated(Create.class) BasePersonDto basePersonDto) {
+        BasePersonDto person = personService.createPerson(basePersonDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(person);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonDto> getPerson(@PathVariable("id") Long id) throws EntityNotFoundException {
+    public ResponseEntity<BasePersonDto> getPerson(@PathVariable("id") Long id) throws EntityNotFoundException {
         return ResponseEntity.ok(personService.getPerson(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PersonDto> updatePerson(
+    public ResponseEntity<BasePersonDto> updatePerson(
             @PathVariable("id") Long id,
             @Validated(Update.class)
-            @RequestBody PersonDto personDto) throws EntityNotFoundException {
-        PersonDto person = personService.updatePerson(id, personDto);
+            @RequestBody BasePersonDto basePersonDto) throws EntityNotFoundException {
+        BasePersonDto person = personService.updatePerson(id, basePersonDto);
 
         return ResponseEntity.ok(person);
     }
 
     @GetMapping
-    public QueryResponseWrapper<PersonsWrapper> getPersons(SearchCriteria criteria) {
+    public QueryResponseWrapper<BasePersonDto> getPersons(SearchCriteria criteria) {
         return personService.getPersons(criteria);
     }
 
@@ -71,19 +68,16 @@ public class PersonController {
     @PostMapping("/upload-file")
     public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("personId") Long personId) {
-        StorageEntity entity = new StorageEntity();
-        entity.setPath(String.format("/person/%s/", personId));
-        entity.setPersonId(personId);
 
-        entity = storageService.storeFile(file, entity);
+        BaseFileDto fileDto = personService.addFile(file, personId);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/files/")
-                .path(entity.getId().toString())
+                .path(fileDto.getId().toString())
                 .toUriString();
 
         return UploadFileResponseWrapper.builder()
-                .fileName(entity.getFileName())
+                .fileName(fileDto.getFileName())
                 .fileDownloadUri(fileDownloadUri)
                 .fileType(file.getContentType())
                 .size(file.getSize())
@@ -96,10 +90,10 @@ public class PersonController {
 
 
         if (csvFile.isEmpty()) {
-           return ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
+            return ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
         }
         if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
-           return ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
+            return ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
         }
 
         Map<String, Integer> result = personService.parseCsv(csvFile);

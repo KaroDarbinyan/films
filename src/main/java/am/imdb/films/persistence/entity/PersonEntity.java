@@ -1,27 +1,30 @@
 package am.imdb.films.persistence.entity;
 
 
+import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
 import am.imdb.films.persistence.entity.relation.MoviePersonEntity;
+import am.imdb.films.persistence.entity.relation.PersonFileEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "person")
-public class PersonEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class PersonEntity extends BaseEntity{
 
     @Column(name = "imdb_id")
     private String imdbId;
@@ -74,27 +77,9 @@ public class PersonEntity {
     @Column(name = "children")
     private String children;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "person", targetEntity = PersonFileEntity.class)
+    private List<PersonFileEntity> listOfPersonFile;
 
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    @OneToMany(mappedBy = "person", targetEntity = MoviePersonEntity.class)
-    private List<MoviePersonEntity> listOfMoviePerson;
 
 }
 

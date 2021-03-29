@@ -1,21 +1,15 @@
 package am.imdb.films.persistence.repository;
 
 
-import am.imdb.films.persistence.entity.MovieEntity;
 import am.imdb.films.persistence.entity.PersonEntity;
-import am.imdb.films.service.model.wrapper.MoviesWrapper;
-import am.imdb.films.service.model.wrapper.PersonsWrapper;
+import am.imdb.films.service.dto.base.BasePersonDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Repository
@@ -28,8 +22,8 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
     @Query(value = "SELECT imdb_id FROM person", nativeQuery = true)
     Set<String> findAllPersonsImdbId();
 
-    @Query("SELECT new am.imdb.films.service.model.wrapper.PersonsWrapper(p.id,p.name,p.bio,p.birthDetails, p.dateOfBirth, p.dateOfDeath) FROM PersonEntity p")
-    Page<PersonsWrapper> findAllWithPagination(Pageable composePageRequest);
+    @Query("SELECT new am.imdb.films.service.dto.base.BasePersonDto(p.id,p.name,p.bio,p.birthDetails, p.dateOfBirth, p.dateOfDeath) FROM PersonEntity p")
+    Page<BasePersonDto> findAllWithPagination(Pageable composePageRequest);
 
 //    @Modifying
 //    @Transactional

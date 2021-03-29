@@ -2,14 +2,13 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
-import am.imdb.films.persistence.entity.StorageEntity;
-import am.imdb.films.service.StorageService;
 import am.imdb.films.service.MovieService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
+import am.imdb.films.service.dto.base.BaseFileDto;
+import am.imdb.films.service.dto.base.BaseMovieDto;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
-import am.imdb.films.service.model.wrapper.MoviesWrapper;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,10 @@ import java.util.Objects;
 public class MovieController {
 
     private final MovieService movieService;
-    private final StorageService storageService;
 
     @Autowired
-    public MovieController(MovieService movieService, StorageService storageService) {
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        this.storageService = storageService;
     }
 
     @PostMapping
@@ -58,7 +55,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public QueryResponseWrapper<MoviesWrapper> getMovies(SearchCriteria criteria) {
+    public QueryResponseWrapper<BaseMovieDto> getMovies(SearchCriteria criteria) {
         return movieService.getMovies(criteria);
     }
 
@@ -70,19 +67,16 @@ public class MovieController {
     @PostMapping("/upload-file")
     public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("movieId") Long movieId) {
-        StorageEntity entity = new StorageEntity();
-        entity.setPath(String.format("/movie/%s/", movieId));
-        entity.setMovieId(movieId);
 
-        entity = storageService.storeFile(file, entity);
+        BaseFileDto fileDto = movieService.addFile(file, movieId);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/files/")
-                .path(entity.getId().toString())
+                .path(fileDto.getId().toString())
                 .toUriString();
 
         return UploadFileResponseWrapper.builder()
-                .fileName(entity.getFileName())
+                .fileName(fileDto.getFileName())
                 .fileDownloadUri(fileDownloadUri)
                 .fileType(file.getContentType())
                 .size(file.getSize())

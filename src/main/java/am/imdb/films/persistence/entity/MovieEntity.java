@@ -1,11 +1,11 @@
 package am.imdb.films.persistence.entity;
 
 
-import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
-import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
-import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
-import am.imdb.films.persistence.entity.relation.MoviePersonEntity;
-import lombok.*;
+import am.imdb.films.persistence.entity.relation.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,11 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "movie")
-public class MovieEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class MovieEntity extends BaseEntity{
 
     @Column(name = "imdb_id")
     private String imdbId;
@@ -78,25 +75,6 @@ public class MovieEntity {
     @Column(name = "reviews_from_critics")
     private String reviewsFromCritics;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
     @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
     private List<MovieGenreEntity> listOfMovieGenre;
 
@@ -108,6 +86,9 @@ public class MovieEntity {
 
     @OneToMany(mappedBy = "movie", targetEntity = MoviePersonEntity.class)
     private List<MoviePersonEntity> listOfMoviePerson;
+
+    @OneToMany(mappedBy = "movie", targetEntity = MovieFileEntity.class)
+    private List<MovieFileEntity> listOfMovieFile;
 
     @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class, fetch = FetchType.LAZY, optional = false)
     private RatingEntity rating;

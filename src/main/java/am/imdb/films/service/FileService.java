@@ -2,8 +2,8 @@ package am.imdb.films.service;
 
 import am.imdb.films.exception.FileNotExistException;
 import am.imdb.films.exception.EntityNotFoundException;
-import am.imdb.films.persistence.entity.StorageEntity;
-import am.imdb.films.persistence.repository.StorageRepository;
+import am.imdb.films.persistence.entity.FileEntity;
+import am.imdb.films.persistence.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,16 +20,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class StorageService {
+public class FileService {
 
     private final String uploadDir;
     private final Path fileStorageLocation;
-    private final StorageRepository storageRepository;
+    private final FileRepository fileRepository;
 
     @Autowired
-    public StorageService(@Value("${file.upload-dir}") String uploadDir, StorageRepository storageRepository) {
+    public FileService(@Value("${file.upload-dir}") String uploadDir, FileRepository fileRepository) {
         this.uploadDir = uploadDir;
-        this.storageRepository = storageRepository;
+        this.fileRepository = fileRepository;
         this.fileStorageLocation = Paths.get(uploadDir)
                 .toAbsolutePath().normalize();
         try {
@@ -39,7 +39,13 @@ public class StorageService {
         }
     }
 
-    public StorageEntity storeFile(MultipartFile file, StorageEntity entity) {
+
+    public FileEntity save(FileEntity entity) {
+        return fileRepository.save(entity);
+    }
+
+
+    public FileEntity storeFile(MultipartFile file, FileEntity entity) {
         try {
             entity.setContentType(file.getContentType());
             entity.setExtension(FilenameUtils.getExtension(file.getOriginalFilename()));
@@ -53,7 +59,7 @@ public class StorageService {
             }
 
             file.transferTo(newFile);
-            return storageRepository.save(entity);
+            return fileRepository.save(entity);
         } catch (IOException ex) {
             throw new FileNotExistException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
         }
@@ -61,7 +67,8 @@ public class StorageService {
 
     public Resource loadFileAsResource(String path, String fileName) throws FileNotExistException {
         try {
-            Path filePath = this.fileStorageLocation.resolve(uploadDir + path + fileName).normalize();
+            path = String.join(File.separator, uploadDir, path, fileName);
+            Path filePath = this.fileStorageLocation.resolve(path).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if (!resource.exists()) throw new MalformedURLException();
 
@@ -71,8 +78,8 @@ public class StorageService {
         }
     }
 
-    public StorageEntity getMerchantDocument(Long id) throws EntityNotFoundException {
-        return storageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public FileEntity getMerchantDocument(Long id) throws EntityNotFoundException {
+        return fileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
     }
 }

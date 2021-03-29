@@ -90,10 +90,6 @@ public class Movie{
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "language")
     private Set<String> languageNames;
 
-    private List<String> genres;
-    private List<String> countries;
-    private List<String> languages;
-
     public static MovieEntity toEntity(Movie movie) {
         MovieEntity entity = new MovieEntity();
 
@@ -115,12 +111,7 @@ public class Movie{
         entity.setMetasCore(movie.getMetasCore());
         entity.setReviewsFromUsers(movie.getReviewsFromUsers());
         entity.setReviewsFromCritics(movie.getReviewsFromCritics());
-//        if (Objects.nonNull(movie.getLanguages()))
-//            entity.setListOfMovieLanguage(entity.getListOfMovieLanguage());
-//        if (movie.getCountries() != null)
-//            entity.setCountries(Countrymovie.toEntity(movie.getCountries()));
-//        if (movie.getGenres() != null)
-//            entity.setGenres(Genremovie.toEntity(movie.getGenres()));
+
         return entity;
     }
 

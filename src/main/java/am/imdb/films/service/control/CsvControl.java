@@ -40,7 +40,7 @@ public class CsvControl<T> {
                         .map(file -> csvParser.parse(file, type))
                         .filter(ts -> !ts.isEmpty())
                         .collect(Collectors.toList());
-//                FileUtils.deleteDirectory(parentCsv.getParentFile());
+                FileUtils.deleteDirectory(parentCsv.getParentFile());
             } catch (Exception e) {
                 throw new FileNotExistException(String.format("Could not create the file %s", csvFile.getOriginalFilename()));
             }

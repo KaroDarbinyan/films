@@ -84,7 +84,7 @@ create table movie_person
 drop table if exists genre;
 create table genre
 (
-    id   bigserial not null primary key,
+    id   bigserial           not null primary key,
     name varchar(255) unique not null
 );
 
@@ -118,9 +118,10 @@ create table country
 drop table if exists movie_genre;
 create table movie_genre
 (
+    id       bigserial,
     movie_id bigint not null,
     genre_id bigint not null,
-    primary key (movie_id, genre_id),
+    primary key (id, movie_id, genre_id),
     foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     foreign key (genre_id) references genre (id) on update cascade on delete cascade
 );
@@ -128,9 +129,10 @@ create table movie_genre
 drop table if exists movie_language;
 create table movie_language
 (
+    id          bigserial,
     movie_id    bigint not null,
     language_id bigint not null,
-    primary key (movie_id, language_id),
+    primary key (id, movie_id, language_id),
     foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     foreign key (language_id) references language (id) on update cascade on delete cascade
 );
@@ -138,29 +140,60 @@ create table movie_language
 drop table if exists movie_country;
 create table movie_country
 (
+    id         bigserial,
     movie_id   bigint not null,
     country_id bigint not null,
-    primary key (movie_id, country_id),
+    primary key (id, movie_id, country_id),
     foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     foreign key (country_id) references country (id) on update cascade on delete cascade
 );
 
-drop table if exists "storage";
-create table "storage"
+drop table if exists filee;
+create table file
 (
     id           bigserial,
     path         varchar(255),
     file_name    varchar(255),
     extension    varchar(255),
     content_type varchar(255),
-    general      boolean            default false,
-    user_id      bigint,
-    person_id    bigint,
-    movie_id     bigint,
     created_at   timestamp not null default current_timestamp,
-    foreign key (user_id) references "user" (id) on update cascade on delete cascade,
-    foreign key (person_id) references person (id) on update cascade on delete cascade,
-    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
+    updated_at   timestamp not null default current_timestamp,
     primary key (id)
-)
+);
+
+drop table if exists user_file;
+create table user_file
+(
+    id      bigserial,
+    user_id bigint not null,
+    file_id bigint not null,
+    general boolean default false,
+    primary key (id, user_id, file_id),
+    foreign key (user_id) references "user" (id) on update cascade on delete cascade,
+    foreign key (file_id) references file (id) on update cascade on delete cascade
+);
+
+drop table if exists person_file;
+create table person_file
+(
+    id        bigserial,
+    person_id bigint not null,
+    file_id   bigint not null,
+    general   boolean default false,
+    primary key (id, person_id, file_id),
+    foreign key (person_id) references person (id) on update cascade on delete cascade,
+    foreign key (file_id) references file (id) on update cascade on delete cascade
+);
+
+drop table if exists movie_file;
+create table movie_file
+(
+    id       bigserial,
+    movie_id bigint not null,
+    file_id  bigint not null,
+    general  boolean default false,
+    primary key (id, movie_id, file_id),
+    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
+    foreign key (file_id) references file (id) on update cascade on delete cascade
+);
 

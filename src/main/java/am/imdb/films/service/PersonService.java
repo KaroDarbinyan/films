@@ -1,23 +1,25 @@
 package am.imdb.films.service;
 
 import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.persistence.entity.FileEntity;
 import am.imdb.films.persistence.entity.PersonEntity;
+import am.imdb.films.persistence.entity.relation.PersonFileEntity;
+import am.imdb.films.persistence.repository.PersonFileRepository;
 import am.imdb.films.persistence.repository.PersonRepository;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
+import am.imdb.films.service.dto.base.BaseFileDto;
+import am.imdb.films.service.dto.base.BasePersonDto;
 import am.imdb.films.service.model.csv.Person;
-import am.imdb.films.service.model.wrapper.PersonsWrapper;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,36 +31,40 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final CsvControl<Person> csvControl;
+    private final FileService fileService;
+    private final PersonFileRepository personFileRepository;
     private final Logger logger = LoggerFactory.getLogger(PersonService.class);
 
     @Autowired
-    public PersonService(PersonRepository personRepository, CsvControl<Person> csvControl) {
+    public PersonService(PersonRepository personRepository, CsvControl<Person> csvControl, FileService fileService, PersonFileRepository personFileRepository) {
         this.personRepository = personRepository;
         this.csvControl = csvControl;
+        this.fileService = fileService;
+        this.personFileRepository = personFileRepository;
     }
 
-    public PersonDto createPerson(PersonDto personDto) {
-        PersonEntity personEntity = PersonDto.toEntity(personDto, new PersonEntity());
+    public BasePersonDto createPerson(BasePersonDto basePersonDto) {
+        PersonEntity personEntity = PersonDto.toEntity(basePersonDto, new PersonEntity());
         PersonEntity entity = personRepository.save(personEntity);
-        return PersonDto.toDto(entity);
+        return BasePersonDto.toBaseDto(entity);
     }
 
-    public PersonDto getPerson(Long id) throws EntityNotFoundException {
+    public BasePersonDto getPerson(Long id) throws EntityNotFoundException {
         PersonEntity person = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        return PersonDto.toDto(person);
+        return BasePersonDto.toBaseDto(person);
     }
 
-    public PersonDto updatePerson(Long id, PersonDto personDto) throws EntityNotFoundException {
+    public BasePersonDto updatePerson(Long id, BasePersonDto basePersonDto) throws EntityNotFoundException {
         PersonEntity personEntity = personRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        PersonDto.toEntity(personDto, personEntity);
-        return PersonDto.toDto(personRepository.save(personEntity));
+        BasePersonDto.toEntity(basePersonDto, personEntity);
+        return BasePersonDto.toBaseDto(personRepository.save(personEntity));
     }
 
-    public QueryResponseWrapper<PersonsWrapper> getPersons(SearchCriteria criteria) {
-        Page<PersonsWrapper> content = personRepository.findAllWithPagination(criteria.composePageRequest());
+    public QueryResponseWrapper<BasePersonDto> getPersons(SearchCriteria criteria) {
+        Page<BasePersonDto> content = personRepository.findAllWithPagination(criteria.composePageRequest());
         return new QueryResponseWrapper<>(content);
     }
 
@@ -96,4 +102,16 @@ public class PersonService {
         return personRepository.findByImdbIdIn(imdbIds);
     }
 
+    public BaseFileDto addFile(MultipartFile file, Long id) {
+        PersonEntity personEntity = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setPath(String.format("person/%s", id));
+        fileEntity = fileService.storeFile(file, fileEntity);
+        PersonFileEntity personFileEntity = new PersonFileEntity();
+        personFileEntity.setFile(fileEntity);
+        personFileEntity.setPerson(personEntity);
+        personFileRepository.save(personFileEntity);
+
+        return BaseFileDto.toBaseDto(fileEntity);
+    }
 }
