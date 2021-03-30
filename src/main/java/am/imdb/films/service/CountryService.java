@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class CountryService {
 
@@ -50,5 +53,9 @@ public class CountryService {
     public void deleteCountry(Long id) throws EntityNotFoundException {
         countryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         countryRepository.deleteById(id);
+    }
+
+    public Set<CountryEntity> saveAll(Set<CountryEntity> countries) {
+        return Set.copyOf(countryRepository.saveAll(countries));
     }
 }

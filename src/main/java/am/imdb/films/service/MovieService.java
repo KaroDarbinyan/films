@@ -2,11 +2,12 @@ package am.imdb.films.service;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
-import am.imdb.films.persistence.entity.FileEntity;
-import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.persistence.entity.*;
+import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
 import am.imdb.films.persistence.entity.relation.MovieFileEntity;
-import am.imdb.films.persistence.repository.MovieFileRepository;
-import am.imdb.films.persistence.repository.MovieRepository;
+import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
+import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
+import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
@@ -14,6 +15,7 @@ import am.imdb.films.service.dto.base.BaseFileDto;
 import am.imdb.films.service.dto.base.BaseMovieDto;
 import am.imdb.films.service.model.csv.Movie;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MovieService {
 
@@ -32,15 +35,36 @@ public class MovieService {
     private final CsvControl<Movie> csvControl;
     private final FileService fileService;
     private final MovieFileRepository movieFileRepository;
-    private final Logger logger = LoggerFactory.getLogger(PersonService.class);
+    private final LanguageRepository languageRepository;
+    private final CountryRepository countryRepository;
+    private final GenreRepository genreRepository;
+    private final MovieGenreRepository movieGenreRepository;
+    private final MovieLanguageRepository movieLanguageRepository;
+    private final MovieCountryRepository movieCountryRepository;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, CsvControl<Movie> csvControl, FileService fileService, MovieFileRepository movieFileRepository) {
+    public MovieService(MovieRepository movieRepository,
+                        CsvControl<Movie> csvControl,
+                        FileService fileService,
+                        MovieFileRepository movieFileRepository,
+                        LanguageRepository languageRepository,
+                        CountryRepository countryRepository,
+                        GenreRepository genreRepository,
+                        MovieGenreRepository movieGenreRepository,
+                        MovieLanguageRepository movieLanguageRepository,
+                        MovieCountryRepository movieCountryRepository) {
         this.movieRepository = movieRepository;
         this.csvControl = csvControl;
         this.fileService = fileService;
         this.movieFileRepository = movieFileRepository;
+        this.languageRepository = languageRepository;
+        this.countryRepository = countryRepository;
+        this.genreRepository = genreRepository;
+        this.movieGenreRepository = movieGenreRepository;
+        this.movieLanguageRepository = movieLanguageRepository;
+        this.movieCountryRepository = movieCountryRepository;
     }
+
 
     public MovieDto createMovie(MovieDto movieDto) {
         MovieEntity movieEntity = MovieDto.toEntity(movieDto, new MovieEntity());
@@ -72,9 +96,25 @@ public class MovieService {
     }
 
     public Map<String, Integer> parseCsv(MultipartFile csvFile) {
+        AtomicInteger existed = new AtomicInteger();
         Set<String> allMoviesImdbId = movieRepository.findAllMoviesImdbId();
         List<List<Movie>> movies = csvControl.getEntitiesFromCsv(csvFile, Movie.class);
-        AtomicInteger existed = new AtomicInteger();
+        Set<LanguageEntity> languages = new HashSet<>(languageRepository.findAll());
+        Set<GenreEntity> genres = new HashSet<>(genreRepository.findAll());
+        Set<CountryEntity> countries = new HashSet<>(countryRepository.findAll());
+
+        movies.forEach(movieList -> movieList.forEach(movie -> {
+            movie.setLanguageNames(normalizeList(movie.getLanguageNames()));
+            movie.setGenreNames(normalizeList(movie.getGenreNames()));
+            movie.setCountryNames(normalizeList(movie.getCountryNames()));
+            languages.addAll(movie.getLanguageNames().stream().map(LanguageEntity::new).collect(Collectors.toSet()));
+            genres.addAll(movie.getGenreNames().stream().map(GenreEntity::new).collect(Collectors.toSet()));
+            countries.addAll(movie.getCountryNames().stream().map(CountryEntity::new).collect(Collectors.toSet()));
+        }));
+
+        List<LanguageEntity> languageEntities = languageRepository.saveAll(languages);
+        List<GenreEntity> genreEntities = genreRepository.saveAll(genres);
+        List<CountryEntity> countryEntities = countryRepository.saveAll(countries);
 
         List<List<MovieEntity>> movieEntitiesList = movies.stream()
                 .map(movieList -> movieList.stream()
@@ -83,16 +123,49 @@ public class MovieService {
                             if (contains) existed.getAndIncrement();
                             return !contains;
                         })
-                        .map(Movie::toEntity)
+                        .map(movie -> {
+                            MovieEntity movieEntity = Movie.toEntity(movie);
+                            List<MovieLanguageEntity> movieLanguageEntityList = languageEntities.stream().filter(entity -> movie.getLanguageNames().contains(entity.getName()))
+                                    .map(languageEntity -> new MovieLanguageEntity(movieEntity, languageEntity)).collect(Collectors.toList());
+                            List<MovieGenreEntity> movieGenreEntityList = genreEntities.stream().filter(entity -> movie.getGenreNames().contains(entity.getName()))
+                                    .map(genreEntity -> new MovieGenreEntity(movieEntity, genreEntity)).collect(Collectors.toList());
+                            List<MovieCountryEntity> movieCountryEntityList = countryEntities.stream().filter(entity -> movie.getCountryNames().contains(entity.getName()))
+                                    .map(countryEntity -> new MovieCountryEntity(movieEntity, countryEntity)).collect(Collectors.toList());
+
+                            movieEntity.setListOfMovieLanguage(movieLanguageEntityList);
+                            movieEntity.setListOfMovieGenre(movieGenreEntityList);
+                            movieEntity.setListOfMovieCountry(movieCountryEntityList);
+
+                            return movieEntity;
+                        })
                         .collect(Collectors.toList()))
                 .collect(Collectors.toList());
 
         int saved = 0;
+
         for (List<MovieEntity> movieEntities : movieEntitiesList) {
-            saved += movieRepository.saveAll(movieEntities).size();
+            List<MovieEntity> movieEntityList = movieRepository.saveAll(movieEntities);
+            saveRelations(movieEntityList);
+            saved += movieEntityList.size();
         }
 
         return Map.of("saved", saved, "existed", existed.intValue());
+    }
+
+    private void saveRelations(List<MovieEntity> movieEntities) {
+        List<MovieGenreEntity> movieGenreEntityList = new ArrayList<>();
+        List<MovieLanguageEntity> movieLanguageEntityList = new ArrayList<>();
+        List<MovieCountryEntity> movieCountryEntityList = new ArrayList<>();
+        movieEntities.forEach(entity -> {
+            movieGenreEntityList.addAll(entity.getListOfMovieGenre().stream().peek(movieGenreEntity -> movieGenreEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
+            movieLanguageEntityList.addAll(entity.getListOfMovieLanguage().stream().peek(movieLanguageEntity -> movieLanguageEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
+            movieCountryEntityList.addAll(entity.getListOfMovieCountry().stream().peek(movieCountryEntity -> movieCountryEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
+        });
+
+        movieGenreRepository.saveAll(movieGenreEntityList);
+        movieCountryRepository.saveAll(movieCountryEntityList);
+        movieLanguageRepository.saveAll(movieLanguageEntityList);
+
     }
 
     public BaseFileDto addFile(MultipartFile file, Long id) {

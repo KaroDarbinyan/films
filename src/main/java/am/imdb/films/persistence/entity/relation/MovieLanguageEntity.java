@@ -30,5 +30,9 @@ public class MovieLanguageEntity {
     @JoinColumn(name = "language_id", referencedColumnName = "id")
     private LanguageEntity language;
 
+    public MovieLanguageEntity(MovieEntity movie, LanguageEntity language) {
+        this.movie = movie;
+        this.language = language;
+    }
 }
 

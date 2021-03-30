@@ -1,8 +1,7 @@
 package am.imdb.films.service.model.csv;
 
 
-import am.imdb.films.persistence.entity.MovieEntity;
-import am.imdb.films.persistence.entity.PersonEntity;
+import am.imdb.films.persistence.entity.*;
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;

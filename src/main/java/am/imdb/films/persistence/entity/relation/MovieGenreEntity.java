@@ -29,5 +29,9 @@ public class MovieGenreEntity {
     private GenreEntity genre;
 
 
+    public MovieGenreEntity(MovieEntity movie, GenreEntity genre) {
+        this.movie = movie;
+        this.genre = genre;
+    }
 }
 

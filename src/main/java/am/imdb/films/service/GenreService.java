@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class GenreService {
 
@@ -51,4 +55,7 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 
+    public Set<GenreEntity> saveAll(Set<GenreEntity> genres) {
+        return Set.copyOf(genreRepository.saveAll(genres));
+    }
 }

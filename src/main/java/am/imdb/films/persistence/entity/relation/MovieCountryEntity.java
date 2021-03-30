@@ -28,6 +28,9 @@ public class MovieCountryEntity {
     @JoinColumn(name = "country_id", referencedColumnName = "id")
     private CountryEntity country;
 
-
+    public MovieCountryEntity(MovieEntity movie, CountryEntity country) {
+        this.movie = movie;
+        this.country = country;
+    }
 }
 
