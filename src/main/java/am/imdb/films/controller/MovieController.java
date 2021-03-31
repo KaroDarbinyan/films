@@ -2,6 +2,7 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.MovieService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
@@ -27,29 +28,32 @@ import java.util.Objects;
 public class MovieController {
 
     private final MovieService movieService;
+    private final MoviePersonService moviePersonService;
 
     @Autowired
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, MoviePersonService moviePersonService) {
         this.movieService = movieService;
+        this.moviePersonService = moviePersonService;
     }
 
     @PostMapping
-    public ResponseEntity<MovieDto> addMovie(@RequestBody @Validated(Create.class) MovieDto movieDto) {
-        MovieDto movie = movieService.createMovie(movieDto);
+    public ResponseEntity<BaseMovieDto> addMovie(@RequestBody @Validated(Create.class) BaseMovieDto baseMovieDto) {
+        BaseMovieDto movie = movieService.createMovie(baseMovieDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(movie);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDto> getMovie(@PathVariable() Long id) throws EntityNotFoundException {
+    public ResponseEntity<BaseMovieDto> getMovie(@PathVariable() Long id) throws EntityNotFoundException {
+        Map<String, Long> moviesImdbIdsAndIds = movieService.getMoviesImdbIdsAndIds();
         return ResponseEntity.ok(movieService.getMovie(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovieDto> updateMovie(
+    public ResponseEntity<BaseMovieDto> updateMovie(
             @PathVariable("id") Long id,
             @Validated(Update.class)
-            @RequestBody MovieDto movieDto) throws EntityNotFoundException {
-        MovieDto movie = movieService.updateMovie(id, movieDto);
+            @RequestBody BaseMovieDto baseMovieDto) throws EntityNotFoundException {
+        BaseMovieDto movie = movieService.updateMovie(id, baseMovieDto);
 
         return ResponseEntity.ok(movie);
     }
@@ -95,6 +99,20 @@ public class MovieController {
         }
 
         Map<String, Integer> result = movieService.parseCsv(csvFile);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/persons/import-from-csv-file")
+    public ResponseEntity<Map<String, Integer>> uploadCSVFiles(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
+
+        if (csvFile.isEmpty()) {
+            ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
+        }
+        if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
+            ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
+        }
+
+        Map<String, Integer> result = moviePersonService.parseCsv(csvFile);
         return ResponseEntity.ok().body(result);
     }
 

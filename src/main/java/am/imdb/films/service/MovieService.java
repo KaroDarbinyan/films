@@ -10,14 +10,12 @@ import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
 import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.dto.base.BaseFileDto;
 import am.imdb.films.service.dto.base.BaseMovieDto;
 import am.imdb.films.service.model.csv.Movie;
+import am.imdb.films.service.model.map.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -66,23 +64,23 @@ public class MovieService {
     }
 
 
-    public MovieDto createMovie(MovieDto movieDto) {
-        MovieEntity movieEntity = MovieDto.toEntity(movieDto, new MovieEntity());
+    public BaseMovieDto createMovie(BaseMovieDto baseMovieDto) {
+        MovieEntity movieEntity = BaseMovieDto.toEntity(baseMovieDto, new MovieEntity());
         movieEntity = movieRepository.save(movieEntity);
-        return MovieDto.toDto(movieEntity);
+        return BaseMovieDto.toBaseDto(movieEntity);
     }
 
-    public MovieDto getMovie(Long id) throws EntityNotFoundException {
+    public BaseMovieDto getMovie(Long id) throws EntityNotFoundException {
         MovieEntity movie = movieRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return MovieDto.toDto(movie);
+        return BaseMovieDto.toBaseDto(movie);
     }
 
-    public MovieDto updateMovie(Long id, MovieDto movieDto) throws EntityNotFoundException {
+    public BaseMovieDto updateMovie(Long id, BaseMovieDto baseMovieDto) throws EntityNotFoundException {
         MovieEntity movieEntity = movieRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        MovieDto.toEntity(movieDto, movieEntity);
-        return MovieDto.toDto(movieRepository.save(movieEntity));
+        BaseMovieDto.toEntity(baseMovieDto, movieEntity);
+        return BaseMovieDto.toBaseDto(movieRepository.save(movieEntity));
     }
 
     public QueryResponseWrapper<BaseMovieDto> getMovies(SearchCriteria criteria) {
@@ -192,4 +190,9 @@ public class MovieService {
         return movieRepository.findByImdbIdIn(imdbIds);
     }
 
+    public Map<String, Long> getMoviesImdbIdsAndIds() {
+        List<MapEntityKeys<Long, String>> list = movieRepository.findAllMovieImdbIdsAndIds();
+
+        return new MapEntityKeys<Long, String>().toReverseMap(list);
+    }
 }

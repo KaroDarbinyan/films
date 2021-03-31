@@ -21,7 +21,6 @@ public class CsvParser<T> {
             return new CsvToBeanBuilder<T>(reader)
                     .withType(type)
                     .withIgnoreEmptyLine(true)
-//                    .withIgnoreQuotations(true)
                     .withThrowExceptions(false)
                     .build()
                     .parse();
@@ -29,6 +28,8 @@ public class CsvParser<T> {
             logger.warn(e.getMessage(), type.getName());
         } catch (IllegalStateException ex) {
             logger.warn(ex.getMessage());
+        }catch (Exception exx) {
+            System.out.println(exx.getMessage());
         }
         return List.of();
     }

@@ -1,7 +1,6 @@
 package am.imdb.films.service.model.csv;
 
 
-import am.imdb.films.persistence.entity.PersonEntity;
 import am.imdb.films.persistence.entity.RatingEntity;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
@@ -24,9 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class Rating {
 
-
-    @Null(groups = Create.class)
-    @NotNull(groups = Update.class)
     private Long id;
     @CsvBindByName(column = "movie_id")
     private String movieId;
@@ -35,11 +31,6 @@ public class Rating {
     @CsvBindByName(column = "num_votes")
     private String numVotes;
 
-    public Rating(Long id, String averageRating, String numVotes) {
-        this.id = id;
-        this.averageRating = averageRating;
-        this.numVotes = numVotes;
-    }
 
     public static RatingEntity toEntity(Rating rating) {
         RatingEntity entity = new RatingEntity();

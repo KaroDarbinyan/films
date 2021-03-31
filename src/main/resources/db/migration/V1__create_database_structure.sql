@@ -2,13 +2,13 @@ drop table if exists "user";
 create table "user"
 (
     id         bigserial,
-    first_name varchar(255) not null,
-    last_name  varchar(255) not null,
-    email      varchar(255) not null,
-    password   varchar(255) not null,
-    status     varchar(255) not null,
-    created_at timestamp    not null default current_timestamp,
-    updated_at timestamp    not null default current_timestamp,
+    first_name varchar   not null,
+    last_name  varchar   not null,
+    email      varchar   not null,
+    password   varchar   not null,
+    status     varchar   not null,
+    created_at timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     primary key (id),
     unique (email)
 );
@@ -17,26 +17,26 @@ drop table if exists movie;
 create table movie
 (
     id                     bigserial,
-    imdb_id                varchar(255) unique not null,
-    title                  varchar(255)                 default null,
-    original_title         varchar(255)                 default null,
-    year                   varchar(255)                 default null,
-    date_published         varchar(255)                 default null,
-    duration               varchar(255)                 default null,
-    director               varchar(255)                 default null,
-    writer                 varchar(255)                 default null,
-    production_company     varchar(255)                 default null,
-    actors                 text                         default null,
-    description            text                         default null,
-    avg_vote               varchar(255)                 default null,
-    budget                 varchar(255)                 default null,
-    usa_gross_income       varchar(255)                 default null,
-    worldwide_gross_income varchar(255)                 default null,
-    metas_core             varchar(255)                 default null,
-    reviews_from_users     varchar(255)                 default null,
-    reviews_from_critics   varchar(255)                 default null,
-    created_at             timestamp           not null default current_timestamp,
-    updated_at             timestamp           not null default current_timestamp,
+    imdb_id                varchar unique not null,
+    title                  varchar                 default null,
+    original_title         varchar                 default null,
+    year                   varchar                 default null,
+    date_published         varchar                 default null,
+    duration               varchar                 default null,
+    director               varchar                 default null,
+    writer                 varchar                 default null,
+    production_company     varchar                 default null,
+    actors                 text                    default null,
+    description            text                    default null,
+    avg_vote               varchar                 default null,
+    budget                 varchar                 default null,
+    usa_gross_income       varchar                 default null,
+    worldwide_gross_income varchar                 default null,
+    metas_core             varchar                 default null,
+    reviews_from_users     varchar                 default null,
+    reviews_from_critics   varchar                 default null,
+    created_at             timestamp      not null default current_timestamp,
+    updated_at             timestamp      not null default current_timestamp,
     primary key (id)
 );
 
@@ -44,25 +44,25 @@ drop table if exists person;
 create table person
 (
     id                    bigserial,
-    imdb_id               varchar(239) unique not null,
-    name                  varchar(240)                 default null,
-    birth_name            varchar(241)                 default null,
-    height                varchar(242)                 default null,
-    bio                   text                         default null,
-    birth_details         varchar(244)                 default null,
-    date_of_birth         varchar(245)                 default null,
-    place_of_birth        varchar(246)                 default null,
-    death_details         varchar(247)                 default null,
-    date_of_death         varchar(248)                 default null,
-    place_of_death        varchar(249)                 default null,
-    reason_of_death       varchar(250)                 default null,
-    spouses_string        text                         default null,
-    spouses               varchar(252)                 default null,
-    divorces              varchar(253)                 default null,
-    spouses_with_children varchar(254)                 default null,
-    children              varchar(255)                 default null,
-    created_at            timestamp           not null default current_timestamp,
-    updated_at            timestamp           not null default current_timestamp,
+    imdb_id               varchar unique not null,
+    name                  varchar                 default null,
+    birth_name            varchar                 default null,
+    height                varchar                 default null,
+    bio                   text                    default null,
+    birth_details         varchar                 default null,
+    date_of_birth         varchar                 default null,
+    place_of_birth        varchar                 default null,
+    death_details         varchar                 default null,
+    date_of_death         varchar                 default null,
+    place_of_death        varchar                 default null,
+    reason_of_death       varchar                 default null,
+    spouses_string        text                    default null,
+    spouses               varchar                 default null,
+    divorces              varchar                 default null,
+    spouses_with_children varchar                 default null,
+    children              varchar                 default null,
+    created_at            timestamp      not null default current_timestamp,
+    updated_at            timestamp      not null default current_timestamp,
     primary key (id)
 );
 
@@ -84,15 +84,20 @@ create table movie_person
 drop table if exists genre;
 create table genre
 (
-    id   bigserial           not null primary key,
-    name varchar(255) unique not null
+    id         bigserial,
+    name       varchar unique not null,
+    created_at timestamp      not null default current_timestamp,
+    updated_at timestamp      not null default current_timestamp,
+    primary key (id)
 );
 
 drop table if exists lanfuage;
 create table language
 (
-    id   bigserial,
-    name varchar(255) unique not null,
+    id         bigserial,
+    name       varchar unique not null,
+    created_at timestamp      not null default current_timestamp,
+    updated_at timestamp      not null default current_timestamp,
     primary key (id)
 );
 
@@ -101,8 +106,10 @@ create table rating
 (
     id             bigserial,
     movie_id       bigint unique not null,
-    average_rating varchar(255) default null,
-    num_votes      varchar(255) default null,
+    average_rating varchar                default null,
+    num_votes      varchar                default null,
+    created_at     timestamp     not null default current_timestamp,
+    updated_at     timestamp     not null default current_timestamp,
     foreign key (movie_id) references movie (id) on update cascade on delete cascade,
     primary key (id)
 );
@@ -110,8 +117,10 @@ create table rating
 drop table if exists country;
 create table country
 (
-    id   bigserial,
-    name varchar(255) unique not null,
+    id         bigserial,
+    name       varchar unique not null,
+    created_at timestamp      not null default current_timestamp,
+    updated_at timestamp      not null default current_timestamp,
     primary key (id)
 );
 
@@ -152,10 +161,10 @@ drop table if exists filee;
 create table file
 (
     id           bigserial,
-    path         varchar(255),
-    file_name    varchar(255),
-    extension    varchar(255),
-    content_type varchar(255),
+    path         varchar,
+    file_name    varchar,
+    extension    varchar,
+    content_type varchar,
     created_at   timestamp not null default current_timestamp,
     updated_at   timestamp not null default current_timestamp,
     primary key (id)

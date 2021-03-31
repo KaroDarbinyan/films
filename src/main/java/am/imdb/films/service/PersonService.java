@@ -12,6 +12,7 @@ import am.imdb.films.service.dto.PersonDto;
 import am.imdb.films.service.dto.base.BaseFileDto;
 import am.imdb.films.service.dto.base.BasePersonDto;
 import am.imdb.films.service.model.csv.Person;
+import am.imdb.films.service.model.map.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,6 @@ public class PersonService {
     private final CsvControl<Person> csvControl;
     private final FileService fileService;
     private final PersonFileRepository personFileRepository;
-    private final Logger logger = LoggerFactory.getLogger(PersonService.class);
 
     @Autowired
     public PersonService(PersonRepository personRepository, CsvControl<Person> csvControl, FileService fileService, PersonFileRepository personFileRepository) {
@@ -98,10 +98,6 @@ public class PersonService {
         return Map.of("saved", saved, "existed", existed.intValue());
     }
 
-    public List<PersonEntity> getByImdbIdIn(List<String> imdbIds) {
-        return personRepository.findByImdbIdIn(imdbIds);
-    }
-
     public BaseFileDto addFile(MultipartFile file, Long id) {
         PersonEntity personEntity = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         FileEntity fileEntity = new FileEntity();
@@ -113,5 +109,11 @@ public class PersonService {
         personFileRepository.save(personFileEntity);
 
         return BaseFileDto.toBaseDto(fileEntity);
+    }
+
+    public Map<String, Long> getPersonsImdbIdsAndIds() {
+        List<MapEntityKeys<Long, String>> list = personRepository.findAllPersonImdbIdsAndIds();
+
+        return new MapEntityKeys<Long, String>().toReverseMap(list);
     }
 }

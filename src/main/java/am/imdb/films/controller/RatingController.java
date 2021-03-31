@@ -62,16 +62,17 @@ public class RatingController {
 
 
     @PostMapping("/import-from-csv-file")
-    public ResponseEntity<Map<String, Integer>> uploadCSVFile(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
+    public ResponseEntity<?> uploadCSVFile(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
+
 
         if (csvFile.isEmpty()) {
-            ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
+            return ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
         }
         if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
-            ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
+            return ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
         }
 
-        Map<String, Integer> result = ratingService.parseCSV(csvFile);
+        Map<String, Integer> result = ratingService.parseCsv(csvFile);
         return ResponseEntity.ok().body(result);
     }
 

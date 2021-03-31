@@ -2,11 +2,13 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.PersonService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
 import am.imdb.films.service.dto.base.BaseFileDto;
 import am.imdb.films.service.dto.base.BasePersonDto;
+import am.imdb.films.service.model.csv.MoviePerson;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
@@ -28,10 +30,12 @@ import java.util.Objects;
 public class PersonController {
 
     private final PersonService personService;
+    private final MoviePersonService moviePersonService;
 
     @Autowired
-    public PersonController(PersonService personService) {
+    public PersonController(PersonService personService, MoviePersonService moviePersonService) {
         this.personService = personService;
+        this.moviePersonService = moviePersonService;
     }
 
     @PostMapping
@@ -97,6 +101,20 @@ public class PersonController {
         }
 
         Map<String, Integer> result = personService.parseCsv(csvFile);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/movies/import-from-csv-file")
+    public ResponseEntity<Map<String, Integer>> uploadCSVFiles(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
+
+        if (csvFile.isEmpty()) {
+            ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
+        }
+        if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
+            ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
+        }
+
+        Map<String, Integer> result = moviePersonService.parseCsv(csvFile);
         return ResponseEntity.ok().body(result);
     }
 
