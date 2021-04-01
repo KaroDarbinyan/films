@@ -5,10 +5,8 @@ import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.PersonService;
 import am.imdb.films.service.criteria.SearchCriteria;
+import am.imdb.films.service.dto.FileDto;
 import am.imdb.films.service.dto.PersonDto;
-import am.imdb.films.service.dto.base.BaseFileDto;
-import am.imdb.films.service.dto.base.BasePersonDto;
-import am.imdb.films.service.model.csv.MoviePerson;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
@@ -16,6 +14,7 @@ import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,41 +38,45 @@ public class PersonController {
     }
 
     @PostMapping
-    public ResponseEntity<BasePersonDto> addPerson(@RequestBody @Validated(Create.class) BasePersonDto basePersonDto) {
-        BasePersonDto person = personService.createPerson(basePersonDto);
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<PersonDto> addPerson(@RequestBody @Validated(Create.class) PersonDto personDto) {
+        PersonDto person = personService.createPerson(personDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(person);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BasePersonDto> getPerson(@PathVariable("id") Long id) throws EntityNotFoundException {
+    public ResponseEntity<PersonDto> getPerson(@PathVariable("id") Long id) throws EntityNotFoundException {
         return ResponseEntity.ok(personService.getPerson(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BasePersonDto> updatePerson(
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<PersonDto> updatePerson(
             @PathVariable("id") Long id,
             @Validated(Update.class)
-            @RequestBody BasePersonDto basePersonDto) throws EntityNotFoundException {
-        BasePersonDto person = personService.updatePerson(id, basePersonDto);
+            @RequestBody PersonDto personDto) throws EntityNotFoundException {
+        PersonDto person = personService.updatePerson(id, personDto);
 
         return ResponseEntity.ok(person);
     }
 
     @GetMapping
-    public QueryResponseWrapper<BasePersonDto> getPersons(SearchCriteria criteria) {
+    public QueryResponseWrapper<PersonDto> getPersons(SearchCriteria criteria) {
         return personService.getPersons(criteria);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deletePerson(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         personService.deletePerson(id);
     }
 
     @PostMapping("/upload-file")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("personId") Long personId) {
 
-        BaseFileDto fileDto = personService.addFile(file, personId);
+        FileDto fileDto = personService.addFile(file, personId);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/files/")
@@ -90,6 +93,7 @@ public class PersonController {
 
 
     @PostMapping("/import-from-csv-file")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> uploadCSVFile(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
 
 
@@ -105,6 +109,7 @@ public class PersonController {
     }
 
     @PostMapping("/movies/import-from-csv-file")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Map<String, Integer>> uploadCSVFiles(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
 
         if (csvFile.isEmpty()) {

@@ -9,13 +9,10 @@ import am.imdb.films.persistence.repository.PersonRepository;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
-import am.imdb.films.service.dto.base.BaseFileDto;
-import am.imdb.films.service.dto.base.BasePersonDto;
+import am.imdb.films.service.dto.FileDto;
 import am.imdb.films.service.model.csv.Person;
 import am.imdb.films.service.model.map.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -43,28 +40,28 @@ public class PersonService {
         this.personFileRepository = personFileRepository;
     }
 
-    public BasePersonDto createPerson(BasePersonDto basePersonDto) {
-        PersonEntity personEntity = PersonDto.toEntity(basePersonDto, new PersonEntity());
+    public PersonDto createPerson(PersonDto personDto) {
+        PersonEntity personEntity = PersonDto.toEntity(personDto, new PersonEntity());
         PersonEntity entity = personRepository.save(personEntity);
-        return BasePersonDto.toBaseDto(entity);
+        return PersonDto.toDto(entity);
     }
 
-    public BasePersonDto getPerson(Long id) throws EntityNotFoundException {
+    public PersonDto getPerson(Long id) throws EntityNotFoundException {
         PersonEntity person = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        return BasePersonDto.toBaseDto(person);
+        return PersonDto.toDto(person);
     }
 
-    public BasePersonDto updatePerson(Long id, BasePersonDto basePersonDto) throws EntityNotFoundException {
+    public PersonDto updatePerson(Long id, PersonDto personDto) throws EntityNotFoundException {
         PersonEntity personEntity = personRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        BasePersonDto.toEntity(basePersonDto, personEntity);
-        return BasePersonDto.toBaseDto(personRepository.save(personEntity));
+        PersonDto.toEntity(personDto, personEntity);
+        return PersonDto.toDto(personRepository.save(personEntity));
     }
 
-    public QueryResponseWrapper<BasePersonDto> getPersons(SearchCriteria criteria) {
-        Page<BasePersonDto> content = personRepository.findAllWithPagination(criteria.composePageRequest());
+    public QueryResponseWrapper<PersonDto> getPersons(SearchCriteria criteria) {
+        Page<PersonDto> content = personRepository.findAllWithPagination(criteria.composePageRequest());
         return new QueryResponseWrapper<>(content);
     }
 
@@ -98,7 +95,7 @@ public class PersonService {
         return Map.of("saved", saved, "existed", existed.intValue());
     }
 
-    public BaseFileDto addFile(MultipartFile file, Long id) {
+    public FileDto addFile(MultipartFile file, Long id) {
         PersonEntity personEntity = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         FileEntity fileEntity = new FileEntity();
         fileEntity.setPath(String.format("person/%s", id));
@@ -108,7 +105,7 @@ public class PersonService {
         personFileEntity.setPerson(personEntity);
         personFileRepository.save(personFileEntity);
 
-        return BaseFileDto.toBaseDto(fileEntity);
+        return FileDto.toDto(fileEntity);
     }
 
     public Map<String, Long> getPersonsImdbIdsAndIds() {

@@ -11,6 +11,7 @@ import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class CountryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<CountryDto> addCountry(@RequestBody @Validated(Create.class) CountryDto countryDto) {
         CountryDto country = countryService.createCountry(countryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(country);
@@ -37,6 +39,7 @@ public class CountryController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<CountryDto> updateCountry(
             @PathVariable("id") Long id,
             @Validated(Update.class)
@@ -52,6 +55,7 @@ public class CountryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteCountry(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         countryService.deleteCountry(id);
     }

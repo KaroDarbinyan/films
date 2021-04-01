@@ -2,7 +2,7 @@ package am.imdb.films.persistence.repository;
 
 
 import am.imdb.films.persistence.entity.PersonEntity;
-import am.imdb.films.service.dto.base.BasePersonDto;
+import am.imdb.films.service.dto.PersonDto;
 import am.imdb.films.service.model.map.MapEntityKeys;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +22,8 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
     @Query("SELECT p.imdbId FROM PersonEntity p")
     Set<String> findAllPersonsImdbId();
 
-    @Query("SELECT new am.imdb.films.service.dto.base.BasePersonDto(p.id,p.name,p.bio,p.birthDetails, p.dateOfBirth, p.dateOfDeath) FROM PersonEntity p")
-    Page<BasePersonDto> findAllWithPagination(Pageable composePageRequest);
+    @Query("SELECT new am.imdb.films.service.dto.PersonDto(p.id,p.name,p.bio,p.birthDetails, p.dateOfBirth, p.dateOfDeath) FROM PersonEntity p")
+    Page<PersonDto> findAllWithPagination(Pageable composePageRequest);
 
 }
 

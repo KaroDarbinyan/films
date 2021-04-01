@@ -1,16 +1,16 @@
 drop table if exists "user";
 create table "user"
 (
-    id         bigserial,
-    first_name varchar   not null,
-    last_name  varchar   not null,
-    email      varchar   not null,
-    password   varchar   not null,
-    status     varchar   not null,
-    created_at timestamp not null default current_timestamp,
-    updated_at timestamp not null default current_timestamp,
+    id            bigserial,
+    username      varchar   not null,
+    first_name    varchar   not null,
+    last_name     varchar   not null,
+    password_hash varchar   not null,
+    status        varchar   not null,
+    created_at    timestamp not null default current_timestamp,
+    updated_at    timestamp not null default current_timestamp,
     primary key (id),
-    unique (email)
+    unique (username)
 );
 
 drop table if exists movie;

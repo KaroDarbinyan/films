@@ -4,8 +4,8 @@ package am.imdb.films.controller;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.UserService;
 import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.base.BaseFileDto;
-import am.imdb.films.service.dto.base.BaseUserDto;
+import am.imdb.films.service.dto.FileDto;
+import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.validation.Create;
 import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
@@ -30,29 +30,29 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<BaseUserDto> addUser(@RequestBody @Validated(Create.class) BaseUserDto userDto) {
-        BaseUserDto user = userService.createUser(userDto);
+    @PostMapping("/registration")
+    public ResponseEntity<UserDto> addUser(@RequestBody @Validated(Create.class) UserDto userDto) {
+        UserDto user = userService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseUserDto> getUser(@PathVariable("id") Long id) throws EntityNotFoundException {
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id) throws EntityNotFoundException {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseUserDto> updateUser(
+    public ResponseEntity<UserDto> updateUser(
             @PathVariable("id") Long id,
             @Validated(Update.class)
-            @RequestBody BaseUserDto userDto) throws EntityNotFoundException {
-        BaseUserDto user = userService.updateUser(id, userDto);
+            @RequestBody UserDto userDto) throws EntityNotFoundException {
+        UserDto user = userService.updateUser(id, userDto);
 
         return ResponseEntity.ok(user);
     }
 
     @GetMapping
-    public QueryResponseWrapper<BaseUserDto> getUsers(SearchCriteria criteria) {
+    public QueryResponseWrapper<UserDto> getUsers(SearchCriteria criteria) {
         return userService.getUsers(criteria);
     }
 
@@ -65,7 +65,7 @@ public class UserController {
     public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("userId") Long userId) {
 
-        BaseFileDto fileDto = userService.addFile(file, userId);
+        FileDto fileDto = userService.addFile(file, userId);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/files/")

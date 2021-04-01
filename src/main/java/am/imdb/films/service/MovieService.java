@@ -10,8 +10,8 @@ import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
 import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.base.BaseFileDto;
-import am.imdb.films.service.dto.base.BaseMovieDto;
+import am.imdb.films.service.dto.FileDto;
+import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.model.csv.Movie;
 import am.imdb.films.service.model.map.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
@@ -64,27 +64,27 @@ public class MovieService {
     }
 
 
-    public BaseMovieDto createMovie(BaseMovieDto baseMovieDto) {
-        MovieEntity movieEntity = BaseMovieDto.toEntity(baseMovieDto, new MovieEntity());
+    public MovieDto createMovie(MovieDto movieDto) {
+        MovieEntity movieEntity = MovieDto.toEntity(movieDto, new MovieEntity());
         movieEntity = movieRepository.save(movieEntity);
-        return BaseMovieDto.toBaseDto(movieEntity);
+        return MovieDto.toDto(movieEntity);
     }
 
-    public BaseMovieDto getMovie(Long id) throws EntityNotFoundException {
+    public MovieDto getMovie(Long id) throws EntityNotFoundException {
         MovieEntity movie = movieRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return BaseMovieDto.toBaseDto(movie);
+        return MovieDto.toDto(movie);
     }
 
-    public BaseMovieDto updateMovie(Long id, BaseMovieDto baseMovieDto) throws EntityNotFoundException {
+    public MovieDto updateMovie(Long id, MovieDto movieDto) throws EntityNotFoundException {
         MovieEntity movieEntity = movieRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        BaseMovieDto.toEntity(baseMovieDto, movieEntity);
-        return BaseMovieDto.toBaseDto(movieRepository.save(movieEntity));
+        MovieDto.toEntity(movieDto, movieEntity);
+        return MovieDto.toDto(movieRepository.save(movieEntity));
     }
 
-    public QueryResponseWrapper<BaseMovieDto> getMovies(SearchCriteria criteria) {
-        Page<BaseMovieDto> content = movieRepository.findAllWithPagination(criteria.composePageRequest());
+    public QueryResponseWrapper<MovieDto> getMovies(SearchCriteria criteria) {
+        Page<MovieDto> content = movieRepository.findAllWithPagination(criteria.composePageRequest());
         return new QueryResponseWrapper<>(content);
     }
 
@@ -166,7 +166,7 @@ public class MovieService {
 
     }
 
-    public BaseFileDto addFile(MultipartFile file, Long id) {
+    public FileDto addFile(MultipartFile file, Long id) {
         MovieEntity movieEntity = movieRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         FileEntity fileEntity = new FileEntity();
         fileEntity.setPath(String.format("movie/%s", id));
@@ -176,7 +176,7 @@ public class MovieService {
         movieFileEntity.setMovie(movieEntity);
         movieFileRepository.save(movieFileEntity);
 
-        return BaseFileDto.toBaseDto(fileEntity);
+        return FileDto.toDto(fileEntity);
     }
 
     private Set<String> normalizeList(Set<String> names) {

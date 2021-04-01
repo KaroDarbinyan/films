@@ -11,6 +11,7 @@ import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class LanguageController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<LanguageDto> addLanguage(@RequestBody @Validated(Create.class) LanguageDto languageDto) {
         LanguageDto language = languageService.createLanguage(languageDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(language);
@@ -37,6 +39,7 @@ public class LanguageController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<LanguageDto> updateLanguage(
             @PathVariable("id") Long id,
             @Validated(Update.class)
@@ -52,6 +55,7 @@ public class LanguageController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteLanguage(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         languageService.deleteLanguage(id);
     }

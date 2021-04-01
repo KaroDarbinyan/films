@@ -11,6 +11,7 @@ import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class GenreController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<GenreDto> addGenre(@RequestBody @Validated(Create.class) GenreDto genreDto) {
         GenreDto genre = genreService.createGenre(genreDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(genre);
@@ -37,6 +39,7 @@ public class GenreController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<GenreDto> updateGenre(
             @PathVariable("id") Long id,
             @Validated(Update.class)
@@ -52,6 +55,7 @@ public class GenreController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteGenre(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         genreService.deleteGenre(id);
     }
