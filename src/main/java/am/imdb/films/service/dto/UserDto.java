@@ -1,8 +1,8 @@
 package am.imdb.films.service.dto;
 
 import am.imdb.films.persistence.entity.UserEntity;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

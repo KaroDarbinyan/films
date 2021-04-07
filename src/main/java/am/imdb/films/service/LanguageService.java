@@ -3,15 +3,11 @@ package am.imdb.films.service;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.LanguageEntity;
 import am.imdb.films.persistence.repository.LanguageRepository;
-import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.LanguageDto;
-import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class LanguageService {
@@ -31,29 +27,23 @@ public class LanguageService {
 
     public LanguageDto getLanguage(Long id) throws EntityNotFoundException {
         LanguageEntity language = languageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
         return LanguageDto.toDto(language);
     }
 
     public LanguageDto updateLanguage(Long id, LanguageDto languageDto) throws EntityNotFoundException {
-        LanguageEntity languageEntity = languageRepository.findById(id)
+        LanguageEntity entity = languageRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-
-        LanguageDto.toEntity(languageDto, languageEntity);
+        LanguageEntity languageEntity = LanguageDto.toEntity(languageDto, entity);
         return LanguageDto.toDto(languageRepository.save(languageEntity));
     }
 
-    public QueryResponseWrapper<LanguageDto> getLanguages(SearchCriteria criteria) {
-        Page<LanguageDto> content = languageRepository.findAllWithPagination(criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content);
+    public List<LanguageDto> getLanguages() {
+        List<LanguageEntity> languageEntities = languageRepository.findAll();
+        return LanguageDto.toDtoList(languageEntities);
     }
 
     public void deleteLanguage(Long id) throws EntityNotFoundException {
         languageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         languageRepository.deleteById(id);
-    }
-
-    public Set<LanguageEntity> saveAll(Set<LanguageEntity> languages) {
-        return Set.copyOf(languageRepository.saveAll(languages));
     }
 }

@@ -2,13 +2,14 @@ package am.imdb.films.service.dto;
 
 
 import am.imdb.films.persistence.entity.PersonEntity;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class PersonDto {
     protected String imdbId;
     protected String name;
     protected String birthName;
-    protected String height;
+    protected Integer height;
     protected String bio;
     protected String birthDetails;
     protected String dateOfBirth;
@@ -40,22 +41,13 @@ public class PersonDto {
     protected String placeOfDeath;
     protected String reasonOfDeath;
     protected String spousesString;
-    protected String spouses;
-    protected String divorces;
-    protected String spousesWithChildren;
-    protected String children;
+    protected Integer spouses;
+    protected Integer divorces;
+    protected Integer spousesWithChildren;
+    protected Integer children;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
-    public PersonDto(Long id, String name, String bio, String birthDetails, String dateOfBirth, String dateOfDeath) {
-        this.id = id;
-        this.name = name;
-        this.bio = bio;
-        this.birthDetails = birthDetails;
-        this.dateOfBirth = dateOfBirth;
-        this.dateOfDeath = dateOfDeath;
-    }
 
     public static PersonDto toDto(PersonEntity entity) {
         return PersonDto
@@ -83,7 +75,6 @@ public class PersonDto {
                 .build();
     }
 
-    //todo do not pass dto id as entity id
     public static PersonEntity toEntity(PersonDto dto, PersonEntity entity) {
         if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
         entity.setImdbId(dto.getImdbId());

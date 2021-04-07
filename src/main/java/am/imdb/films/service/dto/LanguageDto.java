@@ -2,8 +2,8 @@ package am.imdb.films.service.dto;
 
 
 import am.imdb.films.persistence.entity.LanguageEntity;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,13 +42,13 @@ public class LanguageDto {
         return entity;
     }
 
-    public static List<LanguageDto> toDto(Collection<LanguageEntity> entityCollection) {
+    public static List<LanguageDto> toDtoList(Collection<LanguageEntity> entityCollection) {
         return entityCollection.stream()
                 .map(LanguageDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<LanguageEntity> toEntity(Collection<LanguageDto> dtoCollection) {
+    public static List<LanguageEntity> toEntityList(Collection<LanguageDto> dtoCollection) {
         return dtoCollection.stream()
                 .map(languageDto -> LanguageDto.toEntity(languageDto, new LanguageEntity()))
                 .collect(Collectors.toList());

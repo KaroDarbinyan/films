@@ -9,18 +9,23 @@ import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
 import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
 import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
-import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.FileDto;
+import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.model.csv.Movie;
-import am.imdb.films.service.model.map.MapEntityKeys;
+import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -28,6 +33,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class MovieService {
+
+    @Value("${file.upload-dir}")
+    String uploadDir;
 
     private final MovieRepository movieRepository;
     private final CsvControl<Movie> csvControl;
@@ -83,9 +91,35 @@ public class MovieService {
         return MovieDto.toDto(movieRepository.save(movieEntity));
     }
 
-    public QueryResponseWrapper<MovieDto> getMovies(SearchCriteria criteria) {
-        Page<MovieDto> content = movieRepository.findAllWithPagination(criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content);
+    public QueryResponseWrapper<MovieDto> getMovies(MovieSearchCriteria criteria) {
+        Page<MovieEntity> content = movieRepository.findAllWithPagination(
+                criteria.getImdbId(),
+                criteria.getTitle(),
+                criteria.getYearMin(),
+                criteria.getYearMax(),
+                criteria.getDurationMin(),
+                criteria.getDurationMax(),
+                criteria.getProductionCompany(),
+                criteria.getDescription(),
+                criteria.getAvgVoteMin(),
+                criteria.getAvgVoteMax(),
+                criteria.getVotesMin(),
+                criteria.getVotesMax(),
+//                criteria.getBudgetMin(),
+//                criteria.getBudgetMax(),
+//                criteria.getUsaGrossIncomeMin(),
+//                criteria.getUsaGrossIncomeMax(),
+//                criteria.getWorldWideGrossIncomeMin(),
+//                criteria.getWorldWideGrossIncomeMax(),
+                criteria.getMetasCoreMin(),
+                criteria.getMetasCoreMax(),
+                criteria.getReviewsFromUsersMin(),
+                criteria.getReviewsFromUsersMax(),
+                criteria.getReviewsFromCriticsMin(),
+                criteria.getReviewsFromCriticsMax(),
+                criteria.composePageRequest());
+
+        return new QueryResponseWrapper<>(content.map(MovieDto::toDto));
     }
 
     public void deleteMovie(Long id) throws EntityNotFoundException {
@@ -166,18 +200,39 @@ public class MovieService {
 
     }
 
-    public FileDto addFile(MultipartFile file, Long id) {
+    public UploadFileResponseWrapper addFile(MultipartFile file, Long id) {
         MovieEntity movieEntity = movieRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setPath(String.format("movie/%s", id));
-        fileEntity = fileService.storeFile(file, fileEntity);
+        FileEntity entity = new FileEntity();
+
+        entity.setPath(String.format("movie/%s", id));
+        entity.setContentType(file.getContentType());
+        entity.setExtension(FilenameUtils.getExtension(file.getOriginalFilename()));
+        entity.setFileName(String.join(".", String.valueOf(System.currentTimeMillis()), entity.getExtension()));
+
+        String uploadPath = Paths.get(String.join(File.separator, uploadDir, entity.getPath(), entity.getFileName()))
+                .normalize().toString();
+
+        fileService.storeFile(file, uploadPath);
+        FileEntity fileEntity = fileService.save(entity);
+
         MovieFileEntity movieFileEntity = new MovieFileEntity();
         movieFileEntity.setFile(fileEntity);
         movieFileEntity.setMovie(movieEntity);
         movieFileRepository.save(movieFileEntity);
 
-        return FileDto.toDto(fileEntity);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/files/")
+                .path(fileEntity.getId().toString())
+                .toUriString();
+
+        return UploadFileResponseWrapper.builder()
+                .fileName(fileEntity.getFileName())
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(fileEntity.getContentType())
+                .size(file.getSize())
+                .build();
     }
+
 
     private Set<String> normalizeList(Set<String> names) {
         return names.stream()

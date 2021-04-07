@@ -5,18 +5,22 @@ import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.RatingService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.RatingDto;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
+import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
-import java.util.Objects;
+
+import static am.imdb.films.service.validation.model.FileExtension.CSV;
 
 @RestController
 @RequestMapping("ratings")
@@ -60,19 +64,14 @@ public class RatingController {
         ratingService.deleteRating(id);
     }
 
-
-    @PostMapping("/import-from-csv-file")
-    public ResponseEntity<?> uploadCSVFile(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
-
-
-        if (csvFile.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
-        }
-        if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
-            return ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
-        }
-
-        Map<String, Integer> result = ratingService.parseCsv(csvFile);
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("/import-from-csv")
+    public ResponseEntity<?> importPersonFromCsv(
+            @RequestParam(value = "file")
+            @NotNull(message = "Required request part 'file' is not present")
+            @UploadFileExtension(extensions = CSV) MultipartFile file
+    ) throws Exception {
+        Map<String, Integer> result = ratingService.parseCsv(file);
         return ResponseEntity.ok().body(result);
     }
 

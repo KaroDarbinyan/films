@@ -19,45 +19,36 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Movie{
+public class Movie {
 
     private Long id;
 
     @CsvBindByName(column = "imdb_title_id")
     private String imdbId;
 
-    @CsvBindByName(column = "title")
+    @CsvBindByName(column = "original_title")
     private String title;
 
-    @CsvBindByName(column = "original_title")
-    private String originalTitle;
-
     @CsvBindByName(column = "year")
-    private String year;
+    private Integer year;
 
     @CsvBindByName(column = "date_published")
     private String datePublished;
 
     @CsvBindByName(column = "duration")
-    private String duration;
-
-    @CsvBindByName(column = "director")
-    private String director;
-
-    @CsvBindByName(column = "writer")
-    private String writer;
+    private Integer duration;
 
     @CsvBindByName(column = "production_company")
     private String productionCompany;
-
-    @CsvBindByName(column = "actors")
-    private String actors;
 
     @CsvBindByName(column = "description")
     private String description;
 
     @CsvBindByName(column = "avg_vote")
-    private String avgVote;
+    private  Double avgVote;
+
+    @CsvBindByName(column = "votes")
+    private  Integer votes;
 
     @CsvBindByName(column = "budget")
     private String budget;
@@ -69,16 +60,13 @@ public class Movie{
     private String worldWideGrossIncome;
 
     @CsvBindByName(column = "metas_core")
-    private String metasCore;
+    private Double metasCore;
 
     @CsvBindByName(column = "reviews_from_users")
-    private String reviewsFromUsers;
+    private Double reviewsFromUsers;
 
     @CsvBindByName(column = "reviews_from_critics")
-    private String reviewsFromCritics;
-
-    @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "actors")
-    private Set<String> personNames;
+    private Double reviewsFromCritics;
 
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "genre")
     private Set<String> genreNames;
@@ -95,15 +83,13 @@ public class Movie{
         if (Objects.nonNull(entity.getId())) entity.setId(movie.getId());
         entity.setImdbId(movie.getImdbId());
         entity.setTitle(movie.getTitle());
-        entity.setOriginalTitle(movie.getOriginalTitle());
         entity.setYear(movie.getYear());
         entity.setDatePublished(movie.getDatePublished());
         entity.setDuration(movie.getDuration());
-        entity.setDirector(movie.getDirector());
-        entity.setWriter(movie.getWriter());
         entity.setProductionCompany(movie.getProductionCompany());
         entity.setDescription(movie.getDescription());
         entity.setAvgVote(movie.getAvgVote());
+        entity.setVotes(movie.getVotes());
         entity.setBudget(movie.getBudget());
         entity.setUsaGrossIncome(movie.getUsaGrossIncome());
         entity.setWorldWideGrossIncome(movie.getWorldWideGrossIncome());

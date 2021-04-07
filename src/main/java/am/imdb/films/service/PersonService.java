@@ -7,17 +7,22 @@ import am.imdb.films.persistence.entity.relation.PersonFileEntity;
 import am.imdb.films.persistence.repository.PersonFileRepository;
 import am.imdb.films.persistence.repository.PersonRepository;
 import am.imdb.films.service.control.CsvControl;
-import am.imdb.films.service.criteria.SearchCriteria;
+import am.imdb.films.service.criteria.PersonSearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
-import am.imdb.films.service.dto.FileDto;
 import am.imdb.films.service.model.csv.Person;
-import am.imdb.films.service.model.map.MapEntityKeys;
+import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +31,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
+
+    @Value("${file.upload-dir}")
+    String uploadDir;
 
     private final PersonRepository personRepository;
     private final CsvControl<Person> csvControl;
@@ -60,9 +68,25 @@ public class PersonService {
         return PersonDto.toDto(personRepository.save(personEntity));
     }
 
-    public QueryResponseWrapper<PersonDto> getPersons(SearchCriteria criteria) {
-        Page<PersonDto> content = personRepository.findAllWithPagination(criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content);
+    public QueryResponseWrapper<PersonDto> getPersons(PersonSearchCriteria criteria) {
+        Page<PersonEntity> content = personRepository.findAllWithPagination(
+                criteria.getImdbId(),
+                criteria.getName(),
+                criteria.getBirthName(),
+                criteria.getBio(),
+                criteria.getPlaceOfBirth(),
+                criteria.getDeathDetails(),
+                criteria.getPlaceOfDeath(),
+                criteria.getSpousesMin(),
+                criteria.getSpousesMax(),
+                criteria.getDivorcesMin(),
+                criteria.getDivorcesMax(),
+                criteria.getSpousesWithChildrenMin(),
+                criteria.getSpousesWithChildrenMax(),
+                criteria.getChildrenMin(),
+                criteria.getChildrenMax(),
+                criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content.map(PersonDto::toDto));
     }
 
     public void deletePerson(Long id) throws EntityNotFoundException {
@@ -95,18 +119,39 @@ public class PersonService {
         return Map.of("saved", saved, "existed", existed.intValue());
     }
 
-    public FileDto addFile(MultipartFile file, Long id) {
+    public UploadFileResponseWrapper addFile(MultipartFile file, Long id) {
         PersonEntity personEntity = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setPath(String.format("person/%s", id));
-        fileEntity = fileService.storeFile(file, fileEntity);
+        FileEntity entity = new FileEntity();
+
+        entity.setPath(String.format("person/%s", id));
+        entity.setContentType(file.getContentType());
+        entity.setExtension(FilenameUtils.getExtension(file.getOriginalFilename()));
+        entity.setFileName(String.join(".", String.valueOf(System.currentTimeMillis()), entity.getExtension()));
+
+        String uploadPath = Paths.get(String.join(File.separator, uploadDir, entity.getPath(), entity.getFileName()))
+                .normalize().toString();
+
+        fileService.storeFile(file, uploadPath);
+        FileEntity fileEntity = fileService.save(entity);
+
         PersonFileEntity personFileEntity = new PersonFileEntity();
         personFileEntity.setFile(fileEntity);
         personFileEntity.setPerson(personEntity);
         personFileRepository.save(personFileEntity);
 
-        return FileDto.toDto(fileEntity);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/files/")
+                .path(fileEntity.getId().toString())
+                .toUriString();
+
+        return UploadFileResponseWrapper.builder()
+                .fileName(fileEntity.getFileName())
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(fileEntity.getContentType())
+                .size(file.getSize())
+                .build();
     }
+
 
     public Map<String, Long> getPersonsImdbIdsAndIds() {
         List<MapEntityKeys<Long, String>> list = personRepository.findAllPersonImdbIdsAndIds();

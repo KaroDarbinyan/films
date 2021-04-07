@@ -8,11 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -20,8 +20,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "file")
-@EqualsAndHashCode(callSuper = true)
-public class FileEntity extends BaseEntity{
+public class FileEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "path")
     private String path;
@@ -34,6 +37,15 @@ public class FileEntity extends BaseEntity{
 
     @Column(name = "content_type")
     private String contentType;
+
+    @CreatedDate
+    @Column(name = "created_at")
+    protected LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
     @OneToMany(mappedBy = "file", targetEntity = UserFileEntity.class)
     private List<UserFileEntity> listOfUserFile;

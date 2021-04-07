@@ -2,9 +2,8 @@ package am.imdb.films.service.dto;
 
 
 import am.imdb.films.persistence.entity.GenreEntity;
-import am.imdb.films.persistence.entity.GenreEntity;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,6 @@ import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -44,13 +42,13 @@ public class GenreDto {
         return entity;
     }
 
-    public static List<GenreDto> toDto(Collection<GenreEntity> entityCollection) {
+    public static List<GenreDto> toDtoList(Collection<GenreEntity> entityCollection) {
         return entityCollection.stream()
                 .map(GenreDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<GenreEntity> toEntity(Collection<GenreDto> dtoCollection) {
+    public static List<GenreEntity> toEntityList(Collection<GenreDto> dtoCollection) {
         return dtoCollection.stream()
                 .map(genreDto -> GenreDto.toEntity(genreDto, new GenreEntity()))
                 .collect(Collectors.toList());

@@ -4,23 +4,27 @@ package am.imdb.films.controller;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.UserService;
 import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.FileDto;
+import am.imdb.films.service.criteria.UserSearchCriteria;
 import am.imdb.films.service.dto.UserDto;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
+import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-//@Validated
+import static am.imdb.films.security.config.session.SessionUser.SESSION_USER_KEY;
+import static am.imdb.films.service.validation.model.FileExtension.*;
+
+@Validated
 @RestController
 @RequestMapping("users")
+@SessionAttributes(SESSION_USER_KEY)
 public class UserController {
 
     private final UserService userService;
@@ -52,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping
-    public QueryResponseWrapper<UserDto> getUsers(SearchCriteria criteria) {
+    public QueryResponseWrapper<UserDto> getUsers(UserSearchCriteria criteria) {
         return userService.getUsers(criteria);
     }
 
@@ -61,22 +65,12 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping("/upload-file")
-    public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
-                                                @RequestParam("userId") Long userId) {
+    @PostMapping("/{id}/image")
+    public UploadFileResponseWrapper uploadImage(
+            @RequestParam(value = "image")
+            @UploadFileExtension(extensions = {JPEG, JPG, PNG, SVG, PNG}) MultipartFile image,
+            @PathVariable("id") Long id) {
 
-        FileDto fileDto = userService.addFile(file, userId);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/files/")
-                .path(fileDto.getId().toString())
-                .toUriString();
-
-        return UploadFileResponseWrapper.builder()
-                .fileName(fileDto.getFileName())
-                .fileDownloadUri(fileDownloadUri)
-                .fileType(file.getContentType())
-                .size(file.getSize())
-                .build();
+        return userService.addFile(image, id);
     }
 }

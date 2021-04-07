@@ -16,16 +16,16 @@ public class CsvParser<T> {
 
     private final Logger logger = LoggerFactory.getLogger(CsvParser.class);
 
-    public List<T> parse(File csvFile, Class<T> type) {
+    public List<T> parse(File csvFile, Class<T> clazz) {
         try (Reader reader = new FileReader(csvFile)) {
             return new CsvToBeanBuilder<T>(reader)
-                    .withType(type)
+                    .withType(clazz)
                     .withIgnoreEmptyLine(true)
                     .withThrowExceptions(false)
                     .build()
                     .parse();
         } catch (IOException e) {
-            logger.warn(e.getMessage(), type.getName());
+            logger.warn(e.getMessage(), clazz.getName());
         } catch (IllegalStateException ex) {
             logger.warn(ex.getMessage());
         }catch (Exception exx) {

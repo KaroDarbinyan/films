@@ -1,5 +1,6 @@
 package am.imdb.films.service;
 
+import am.imdb.films.exception.FileNotCreateException;
 import am.imdb.films.exception.FileNotExistException;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.FileEntity;
@@ -45,23 +46,15 @@ public class FileService {
     }
 
 
-    public FileEntity storeFile(MultipartFile file, FileEntity entity) {
+    public void storeFile(MultipartFile file, String uploadPath) {
         try {
-            entity.setContentType(file.getContentType());
-            entity.setExtension(FilenameUtils.getExtension(file.getOriginalFilename()));
-            entity.setFileName(String.join(".", String.valueOf(System.currentTimeMillis()), entity.getExtension()));
-
-            String filePath = Paths.get(String.join(File.separator, uploadDir, entity.getPath(), entity.getFileName()))
-                    .normalize().toString();
-            File newFile = new File(filePath);
+            File newFile = new File(uploadPath);
             if (!newFile.mkdirs()) {
                 throw new IOException();
             }
-
             file.transferTo(newFile);
-            return fileRepository.save(entity);
         } catch (IOException ex) {
-            throw new FileNotExistException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
+            throw new FileNotCreateException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
         }
     }
 

@@ -3,17 +3,17 @@ package am.imdb.films.controller;
 
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.CountryService;
-import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.CountryDto;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
-import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("countries")
@@ -50,8 +50,8 @@ public class CountryController {
     }
 
     @GetMapping
-    public QueryResponseWrapper<CountryDto> getCountries(SearchCriteria criteria) {
-        return countryService.getCountries(criteria);
+    public List<CountryDto> getCountries() {
+        return countryService.getCountries();
     }
 
     @DeleteMapping("/{id}")

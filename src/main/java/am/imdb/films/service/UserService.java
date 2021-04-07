@@ -6,20 +6,32 @@ import am.imdb.films.persistence.entity.UserEntity;
 import am.imdb.films.persistence.entity.relation.UserFileEntity;
 import am.imdb.films.persistence.repository.UserFileRepository;
 import am.imdb.films.persistence.repository.UserRepository;
-import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.FileDto;
+import am.imdb.films.service.criteria.UserSearchCriteria;
 import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Service
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Slf4j
+@Service
 public class UserService {
+
+    @Value("${file.upload-dir}")
+    String uploadDir;
 
     private final UserRepository userRepository;
     private final FileService fileService;
@@ -58,9 +70,14 @@ public class UserService {
         return UserDto.toDto(userRepository.save(userEntity));
     }
 
-    public QueryResponseWrapper<UserDto> getUsers(SearchCriteria criteria) {
-        Page<UserDto> content = userRepository.findAllWithPagination(criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content);
+    public QueryResponseWrapper<UserDto> getUsers(UserSearchCriteria criteria) {
+        Page<UserEntity> content = userRepository.findAllWithPagination(
+                criteria.getUsername(),
+                criteria.getFirstName(),
+                criteria.getLastName(),
+                criteria.getStatus(),
+                criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content.map(UserDto::toDto));
     }
 
     public void deleteUser(Long id) throws EntityNotFoundException {
@@ -68,16 +85,48 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public FileDto addFile(MultipartFile file, Long id) {
+    public UploadFileResponseWrapper addFile(MultipartFile file, Long id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setPath(String.format("user/%s", id));
-        fileEntity = fileService.storeFile(file, fileEntity);
+        FileEntity entity = new FileEntity();
+
+        entity.setPath(String.format("user/%s", id));
+        entity.setContentType(file.getContentType());
+        entity.setExtension(FilenameUtils.getExtension(file.getOriginalFilename()));
+        entity.setFileName(String.join(".", String.valueOf(System.currentTimeMillis()), entity.getExtension()));
+
+        String uploadPath = Paths.get(String.join(File.separator, uploadDir, entity.getPath(), entity.getFileName()))
+                .normalize().toString();
+
+        fileService.storeFile(file, uploadPath);
+        FileEntity fileEntity = fileService.save(entity);
+
         UserFileEntity userFileEntity = new UserFileEntity();
         userFileEntity.setFile(fileEntity);
         userFileEntity.setUser(userEntity);
         userFileRepository.save(userFileEntity);
 
-        return FileDto.toDto(fileEntity);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/files/")
+                .path(fileEntity.getId().toString())
+                .toUriString();
+
+        return UploadFileResponseWrapper.builder()
+                .fileName(fileEntity.getFileName())
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(fileEntity.getContentType())
+                .size(file.getSize())
+                .build();
+    }
+
+    public UserDto changeProfilePic(Long userId, Long fileId) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        List<UserFileEntity> userFileEntities = userFileRepository.findAllByUser(userEntity);
+        List<UserFileEntity> userFileEntityList = userFileEntities.stream()
+                .peek(entity -> entity.setGeneral(Objects.equals(entity.getId(), fileId)))
+                .collect(Collectors.toList());
+
+        userFileRepository.saveAll(userFileEntityList);
+
+        return UserDto.toDto(userEntity);
     }
 }

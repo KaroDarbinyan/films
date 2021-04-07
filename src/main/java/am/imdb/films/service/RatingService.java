@@ -1,27 +1,22 @@
 package am.imdb.films.service;
 
 import am.imdb.films.exception.EntityNotFoundException;
-import am.imdb.films.persistence.entity.MovieEntity;
-import am.imdb.films.persistence.entity.PersonEntity;
 import am.imdb.films.persistence.entity.RatingEntity;
 import am.imdb.films.persistence.repository.RatingRepository;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.RatingDto;
-import am.imdb.films.service.model.csv.Person;
 import am.imdb.films.service.model.csv.Rating;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.util.parser.RatingParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 

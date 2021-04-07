@@ -33,29 +33,23 @@ public class GenreService {
 
     public GenreDto getGenre(Long id) throws EntityNotFoundException {
         GenreEntity genre = genreRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
         return GenreDto.toDto(genre);
     }
 
     public GenreDto updateGenre(Long id, GenreDto genreDto) throws EntityNotFoundException {
-        GenreEntity genreEntity = genreRepository.findById(id)
+        GenreEntity entity = genreRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-
-        GenreDto.toEntity(genreDto, genreEntity);
+        GenreEntity genreEntity = GenreDto.toEntity(genreDto, entity);
         return GenreDto.toDto(genreRepository.save(genreEntity));
     }
 
-    public QueryResponseWrapper<GenreDto> getGenres(SearchCriteria criteria) {
-        Page<GenreDto> content = genreRepository.findAllWithPagination(criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content);
+    public List<GenreDto> getGenres() {
+        List<GenreEntity> genreEntities = genreRepository.findAll();
+        return GenreDto.toDtoList(genreEntities);
     }
 
     public void deleteGenre(Long id) throws EntityNotFoundException {
         genreRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         genreRepository.deleteById(id);
-    }
-
-    public Set<GenreEntity> saveAll(Set<GenreEntity> genres) {
-        return Set.copyOf(genreRepository.saveAll(genres));
     }
 }

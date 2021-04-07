@@ -1,10 +1,20 @@
 package am.imdb.films.service.criteria;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchCriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,38 +26,6 @@ public class SearchCriteria implements Serializable {
     private String sortDirection;
 
 
-    public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public String getSortField() {
-        return sortField;
-    }
-
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
-    }
-
-    public String getSortDirection() {
-        return sortDirection;
-    }
-
-    public void setSortDirection(String sortDirection) {
-        this.sortDirection = sortDirection;
-    }
-
     public Pageable composePageRequest() {
         if (size != null && size == Integer.MAX_VALUE) {
             return null;
@@ -56,6 +34,17 @@ public class SearchCriteria implements Serializable {
         int page = this.page == null ? 0 : this.page;
         int size = this.size == null ? 20 : this.size;
 
+        if (Objects.nonNull(sortField)) {
+            return PageRequest.of(page, size, Sort.by(getDirection(), sortField));
+        }
+
         return PageRequest.of(page, size);
     }
+
+    private Sort.Direction getDirection() {
+        if (Sort.Direction.ASC.name().equalsIgnoreCase(sortDirection)) return Sort.Direction.ASC;
+        else if (Sort.Direction.DESC.name().equalsIgnoreCase(sortDirection)) return Sort.Direction.DESC;
+        else return Sort.DEFAULT_DIRECTION;
+    }
+
 }

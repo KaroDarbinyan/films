@@ -36,7 +36,7 @@ public class PersonEntity extends BaseEntity{
     private String birthName;
 
     @Column(name = "height")
-    private String height;
+    private Integer height;
 
     @Column(name = "bio")
     private String bio;
@@ -66,16 +66,16 @@ public class PersonEntity extends BaseEntity{
     private String spousesString;
 
     @Column(name = "spouses")
-    private String spouses;
+    private Integer spouses;
 
     @Column(name = "divorces")
-    private String divorces;
+    private Integer divorces;
 
     @Column(name = "spouses_with_children")
-    private String spousesWithChildren;
+    private Integer spousesWithChildren;
 
     @Column(name = "children")
-    private String children;
+    private Integer children;
 
     @OneToMany(mappedBy = "person", targetEntity = PersonFileEntity.class)
     private List<PersonFileEntity> listOfPersonFile;

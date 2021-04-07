@@ -4,13 +4,14 @@ package am.imdb.films.controller;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.MovieService;
+import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.criteria.SearchCriteria;
-import am.imdb.films.service.dto.FileDto;
 import am.imdb.films.service.dto.MovieDto;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
+import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
-import java.util.Objects;
+
+import static am.imdb.films.service.validation.model.FileExtension.*;
 
 @RestController
 @RequestMapping("movies")
@@ -45,7 +47,6 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getMovie(@PathVariable() Long id) throws EntityNotFoundException {
-        Map<String, Long> moviesImdbIdsAndIds = movieService.getMoviesImdbIdsAndIds();
         return ResponseEntity.ok(movieService.getMovie(id));
     }
 
@@ -53,15 +54,14 @@ public class MovieController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<MovieDto> updateMovie(
             @PathVariable("id") Long id,
-            @Validated(Update.class)
-            @RequestBody MovieDto movieDto) throws EntityNotFoundException {
+            @Validated(Update.class) @RequestBody MovieDto movieDto) throws EntityNotFoundException {
         MovieDto movie = movieService.updateMovie(id, movieDto);
 
         return ResponseEntity.ok(movie);
     }
 
     @GetMapping
-    public QueryResponseWrapper<MovieDto> getMovies(SearchCriteria criteria) {
+    public QueryResponseWrapper<MovieDto> getMovies(MovieSearchCriteria criteria) {
         return movieService.getMovies(criteria);
     }
 
@@ -71,56 +71,34 @@ public class MovieController {
         movieService.deleteMovie(id);
     }
 
-    @PostMapping("/upload-file")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public UploadFileResponseWrapper uploadFile(@RequestParam("file") MultipartFile file,
-                                                @RequestParam("movieId") Long movieId) {
+    @PostMapping("/{id}/image")
+    public UploadFileResponseWrapper uploadImage(
+            @RequestParam(value = "image")
+            @UploadFileExtension(extensions = {JPEG, JPG, PNG, SVG, PNG}) MultipartFile image,
+            @PathVariable("id") Long id) {
 
-        FileDto fileDto = movieService.addFile(file, movieId);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/files/")
-                .path(fileDto.getId().toString())
-                .toUriString();
-
-        return UploadFileResponseWrapper.builder()
-                .fileName(fileDto.getFileName())
-                .fileDownloadUri(fileDownloadUri)
-                .fileType(file.getContentType())
-                .size(file.getSize())
-                .build();
+        return movieService.addFile(image, id);
     }
 
-
-    @PostMapping("/import-from-csv-file")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<Map<String, Integer>> uploadCSVFile(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
-
-        if (csvFile.isEmpty()) {
-            ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
-        }
-        if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
-            ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
-        }
-
-        Map<String, Integer> result = movieService.parseCsv(csvFile);
+    @PostMapping("/import-from-csv")
+    public ResponseEntity<?> importPersonFromCsv(
+            @RequestParam(value = "file")
+            @NotNull(message = "Required request part 'file' is not present")
+            @UploadFileExtension(extensions = CSV) MultipartFile file
+    ) throws Exception {
+        Map<String, Integer> result = movieService.parseCsv(file);
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/persons/import-from-csv-file")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<Map<String, Integer>> uploadCSVFiles(@RequestParam(name = "file") MultipartFile csvFile) throws Exception {
-
-        if (csvFile.isEmpty()) {
-            ResponseEntity.badRequest().body(Map.of("message", "Required request part 'file' is not present"));
-        }
-        if (!Objects.equals(csvFile.getContentType(), "text/csv")) {
-            ResponseEntity.badRequest().body(Map.of("message", "The file must be in csv format"));
-        }
-
-        Map<String, Integer> result = moviePersonService.parseCsv(csvFile);
+    @PostMapping("/persons/import-from-csv")
+    public ResponseEntity<Map<String, Integer>> importMovieFromCsv(
+            @RequestParam(value = "file")
+            @NotNull(message = "Required request part 'file' is not present")
+            @UploadFileExtension(extensions = CSV) MultipartFile file
+    ) throws Exception {
+        Map<String, Integer> result = moviePersonService.parseCsv(file);
         return ResponseEntity.ok().body(result);
     }
-
-
 }

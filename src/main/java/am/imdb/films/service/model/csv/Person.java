@@ -31,7 +31,7 @@ public class Person{
     private String birthName;
 
     @CsvBindByName(column = "height")
-    private String height;
+    private Integer height;
 
     @CsvBindByName(column = "bio")
     private String bio;
@@ -61,16 +61,16 @@ public class Person{
     private String spousesString;
 
     @CsvBindByName(column = "spouses")
-    private String spouses;
+    private Integer spouses;
 
     @CsvBindByName(column = "divorces")
-    private String divorces;
+    private Integer divorces;
 
     @CsvBindByName(column = "spouses_with_children")
-    private String spousesWithChildren;
+    private Integer spousesWithChildren;
 
     @CsvBindByName(column = "children")
-    private String children;
+    private Integer children;
 
 
     public static PersonEntity toEntity(Person person) {

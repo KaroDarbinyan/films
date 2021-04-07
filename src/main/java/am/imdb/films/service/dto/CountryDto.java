@@ -2,8 +2,8 @@ package am.imdb.films.service.dto;
 
 
 import am.imdb.films.persistence.entity.CountryEntity;
-import am.imdb.films.service.model.validation.Create;
-import am.imdb.films.service.model.validation.Update;
+import am.imdb.films.service.validation.model.Create;
+import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,13 +41,13 @@ public class CountryDto {
         return entity;
     }
 
-    public static List<CountryDto> toDto(Collection<CountryEntity> entityCollection) {
+    public static List<CountryDto> toDtoList(Collection<CountryEntity> entityCollection) {
         return entityCollection.stream()
                 .map(CountryDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<CountryEntity> toEntity(Collection<CountryDto> dtoCollection) {
+    public static List<CountryEntity> toEntityList(Collection<CountryDto> dtoCollection) {
         return dtoCollection.stream()
                 .map(countryDto -> CountryDto.toEntity(countryDto, new CountryEntity()))
                 .collect(Collectors.toList());

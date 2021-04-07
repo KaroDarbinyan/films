@@ -2,6 +2,7 @@ package am.imdb.films.persistence.entity;
 
 
 import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
+import am.imdb.films.persistence.entity.relation.RolePrivilegeEntity;
 import am.imdb.films.persistence.entity.relation.UserRoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,13 +17,20 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "role")
-public class RoleEntity extends BaseEntity {
+public class RoleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Column(name = "name")
     private String name;
 
     @OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class)
     private List<UserRoleEntity> listOfUserRole;
+
+    @OneToMany(mappedBy = "role", targetEntity = RolePrivilegeEntity.class, fetch = FetchType.EAGER)
+    private List<RolePrivilegeEntity> listOfRolePrivilege;
 
 
     @Override

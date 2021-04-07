@@ -27,35 +27,26 @@ public class MovieEntity extends BaseEntity{
     @Column(name = "title")
     private String title;
 
-    @Column(name = "original_title")
-    private String originalTitle;
-
     @Column(name = "year")
-    private String year;
+    private Integer year;
 
     @Column(name = "date_published")
     private String datePublished;
 
     @Column(name = "duration")
-    private String duration;
-
-    @Column(name = "director")
-    private String director;
-
-    @Column(name = "writer")
-    private String writer;
+    private Integer duration;
 
     @Column(name = "production_company")
     private String productionCompany;
-
-    @Column(name = "actors")
-    private String actors;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "avg_vote")
-    private String avgVote;
+    private Double avgVote;
+
+    @Column(name = "votes")
+    private Integer votes;
 
     @Column(name = "budget")
     private String budget;
@@ -67,13 +58,13 @@ public class MovieEntity extends BaseEntity{
     private String worldWideGrossIncome;
 
     @Column(name = "metas_core")
-    private String metasCore;
+    private Double metasCore;
 
     @Column(name = "reviews_from_users")
-    private String reviewsFromUsers;
+    private Double reviewsFromUsers;
 
     @Column(name = "reviews_from_critics")
-    private String reviewsFromCritics;
+    private Double reviewsFromCritics;
 
     @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
     private List<MovieGenreEntity> listOfMovieGenre;
