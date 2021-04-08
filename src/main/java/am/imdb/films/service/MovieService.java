@@ -3,10 +3,7 @@ package am.imdb.films.service;
 
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.*;
-import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
-import am.imdb.films.persistence.entity.relation.MovieFileEntity;
-import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
-import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
+import am.imdb.films.persistence.entity.relation.*;
 import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
@@ -47,6 +44,8 @@ public class MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final MovieLanguageRepository movieLanguageRepository;
     private final MovieCountryRepository movieCountryRepository;
+    private final UserFavoriteRepository userFavoriteRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public MovieService(MovieRepository movieRepository,
@@ -58,7 +57,7 @@ public class MovieService {
                         GenreRepository genreRepository,
                         MovieGenreRepository movieGenreRepository,
                         MovieLanguageRepository movieLanguageRepository,
-                        MovieCountryRepository movieCountryRepository) {
+                        MovieCountryRepository movieCountryRepository, UserFavoriteRepository userFavoriteRepository, UserRepository userRepository) {
         this.movieRepository = movieRepository;
         this.csvControl = csvControl;
         this.fileService = fileService;
@@ -69,6 +68,8 @@ public class MovieService {
         this.movieGenreRepository = movieGenreRepository;
         this.movieLanguageRepository = movieLanguageRepository;
         this.movieCountryRepository = movieCountryRepository;
+        this.userFavoriteRepository = userFavoriteRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -249,5 +250,15 @@ public class MovieService {
         List<MapEntityKeys<Long, String>> list = movieRepository.findAllMovieImdbIdsAndIds();
 
         return new MapEntityKeys<Long, String>().toReverseMap(list);
+    }
+
+    public void addFavorite(Long userId, Long movieId) {
+        MovieEntity movieEntity = movieRepository.findById(movieId).orElseThrow(EntityNotFoundException::new);
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        UserFavoriteEntity userFavoriteEntity = new UserFavoriteEntity();
+        userFavoriteEntity.setUser(userEntity);
+        userFavoriteEntity.setMovie(movieEntity);
+
+        userFavoriteRepository.save(userFavoriteEntity);
     }
 }

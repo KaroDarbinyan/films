@@ -2,11 +2,15 @@ package am.imdb.films.service;
 
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.FileEntity;
+import am.imdb.films.persistence.entity.MovieEntity;
 import am.imdb.films.persistence.entity.UserEntity;
 import am.imdb.films.persistence.entity.relation.UserFileEntity;
+import am.imdb.films.persistence.repository.MovieRepository;
 import am.imdb.films.persistence.repository.UserFileRepository;
 import am.imdb.films.persistence.repository.UserRepository;
+import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.criteria.UserSearchCriteria;
+import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
@@ -37,13 +41,15 @@ public class UserService {
     private final FileService fileService;
     private final UserFileRepository userFileRepository;
     private final PasswordEncoder bcryptEncoder;
+    private final MovieRepository movieRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, FileService fileService, UserFileRepository userFileRepository, PasswordEncoder bcryptEncoder) {
+    public UserService(UserRepository userRepository, FileService fileService, UserFileRepository userFileRepository, PasswordEncoder bcryptEncoder, MovieRepository movieRepository) {
         this.userRepository = userRepository;
         this.fileService = fileService;
         this.userFileRepository = userFileRepository;
         this.bcryptEncoder = bcryptEncoder;
+        this.movieRepository = movieRepository;
     }
 
 
@@ -126,5 +132,10 @@ public class UserService {
         userFileRepository.saveAll(userFileEntityList);
 
         return UserDto.toDto(userEntity);
+    }
+
+    public QueryResponseWrapper<MovieDto> getFavorites(Long id, SearchCriteria searchCriteria) {
+        Page<MovieEntity> content = movieRepository.findUserFavorites(id, searchCriteria.composePageRequest());
+        return new QueryResponseWrapper<>(content.map(MovieDto::toDto));
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "movie")
 @EqualsAndHashCode(callSuper = true)
-public class MovieEntity extends BaseEntity{
+public class MovieEntity extends BaseEntity {
 
     @Column(name = "imdb_id")
     private String imdbId;
@@ -83,5 +84,8 @@ public class MovieEntity extends BaseEntity{
 
     @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class, fetch = FetchType.LAZY, optional = false)
     private RatingEntity rating;
+
+    @OneToMany(mappedBy = "movie", targetEntity = UserFavoriteEntity.class)
+    private Set<UserFavoriteEntity> listOfUserFavorite;
 }
 

@@ -1,5 +1,6 @@
 package am.imdb.films.persistence.entity;
 
+import am.imdb.films.persistence.entity.relation.UserFavoriteEntity;
 import am.imdb.films.persistence.entity.relation.UserFileEntity;
 import am.imdb.films.persistence.entity.relation.UserRoleEntity;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -42,6 +44,9 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "user", targetEntity = UserFileEntity.class)
     private List<UserFileEntity> listOfUserFile;
+
+    @OneToMany(mappedBy = "user", targetEntity = UserFavoriteEntity.class, fetch = FetchType.LAZY)
+    private Set<UserFavoriteEntity> listOfUserFavorite;
 
 
 }

@@ -2,9 +2,11 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.security.config.session.SessionUser;
 import am.imdb.films.service.UserService;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.criteria.UserSearchCriteria;
+import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
@@ -78,5 +80,10 @@ public class UserController {
     public ResponseEntity<UserDto> changeProfilePic(@PathVariable("id") Long id, @PathVariable("imageId") Long imageId) {
         UserDto userDto = userService.changeProfilePic(id, imageId);
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/movies/favorite-list")
+    public QueryResponseWrapper<MovieDto> getFavorites(@ModelAttribute(SESSION_USER_KEY) SessionUser sessionUser, SearchCriteria searchCriteria) {
+        return userService.getFavorites(sessionUser.getId(), searchCriteria);
     }
 }

@@ -2,10 +2,10 @@ package am.imdb.films.controller;
 
 
 import am.imdb.films.exception.EntityNotFoundException;
+import am.imdb.films.security.config.session.SessionUser;
 import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.MovieService;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
-import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+import static am.imdb.films.security.config.session.SessionUser.SESSION_USER_KEY;
 import static am.imdb.films.service.validation.model.FileExtension.*;
 
 @RestController
@@ -100,5 +101,10 @@ public class MovieController {
     ) throws Exception {
         Map<String, Integer> result = moviePersonService.parseCsv(file);
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/{id}/add-favorite")
+    public void addFavorite(@ModelAttribute(SESSION_USER_KEY) SessionUser sessionUser, @PathVariable() Long id) throws EntityNotFoundException {
+        movieService.addFavorite(sessionUser.getId(), id);
     }
 }

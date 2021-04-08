@@ -70,5 +70,8 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     @Query(value = "SELECT imdb_id FROM movie", nativeQuery = true)
     Set<String> findAllMoviesImdbId();
+
+    @Query("select m from MovieEntity m left join m.listOfUserFavorite louf where louf.user.id = :userId")
+    Page<MovieEntity> findUserFavorites(@Param("userId") Long userId, Pageable pageable);
 }
 
