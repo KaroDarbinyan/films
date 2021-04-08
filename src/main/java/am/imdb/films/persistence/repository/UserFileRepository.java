@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface UserFileRepository extends JpaRepository<UserFileEntity, Long> {
 
-    List<UserFileEntity> findAllByUser(UserEntity userEntity);
+//    List<UserFileEntity> findAllByUser(UserEntity userEntity);
 }

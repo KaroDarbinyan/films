@@ -7,9 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FilmsApplication {
 
 	public static void main(String[] args) {
-//		String s = "[\"\"Zamindar Bhubaneshwar Chaudhary\"\"]";
-//		System.out.println(s.replaceAll("\"\"", "\""));
-
 		SpringApplication.run(FilmsApplication.class, args);
 	}
 

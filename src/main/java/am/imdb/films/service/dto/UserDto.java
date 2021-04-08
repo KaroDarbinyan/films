@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -30,16 +29,10 @@ public class UserDto {
     private String lastName;
     private String password;
     private String status;
+    private List<Map<String, String>> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public UserDto(Long id, String username, String firstName, String lastName, String status) {
-        this.id = id;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.status = status;
-    }
 
     public static UserDto toDto(UserEntity entity) {
         return UserDto
@@ -51,8 +44,10 @@ public class UserDto {
                 .status(entity.getStatus())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .images(getImages(entity))
                 .build();
     }
+
 
     public static UserEntity toEntity(UserDto dto, UserEntity entity) {
         if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
@@ -75,6 +70,23 @@ public class UserDto {
         return dtoCollection.stream()
                 .map(languageDto -> UserDto.toEntity(languageDto, new UserEntity()))
                 .collect(Collectors.toList());
+    }
+
+
+    private static List<Map<String, String>> getImages(UserEntity entity) {
+        return entity.getListOfUserFile().stream()
+                .map(userFileEntity -> {
+                    String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/files/")
+                            .path(userFileEntity.getFile().getId().toString())
+                            .toUriString();
+                    return Map.of(
+                            "id", userFileEntity.getFile().getId().toString(),
+                            "url", url,
+                            "fileType", userFileEntity.getFile().getContentType(),
+                            "general", Boolean.toString(userFileEntity.getGeneral())
+                    );
+                }).collect(Collectors.toList());
     }
 
 }

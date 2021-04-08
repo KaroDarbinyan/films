@@ -120,11 +120,9 @@ public class UserService {
 
     public UserDto changeProfilePic(Long userId, Long fileId) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        List<UserFileEntity> userFileEntities = userFileRepository.findAllByUser(userEntity);
-        List<UserFileEntity> userFileEntityList = userFileEntities.stream()
+        List<UserFileEntity> userFileEntityList = userEntity.getListOfUserFile().stream()
                 .peek(entity -> entity.setGeneral(Objects.equals(entity.getId(), fileId)))
                 .collect(Collectors.toList());
-
         userFileRepository.saveAll(userFileEntityList);
 
         return UserDto.toDto(userEntity);

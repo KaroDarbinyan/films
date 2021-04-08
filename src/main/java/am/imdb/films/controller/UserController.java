@@ -65,12 +65,18 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping("/{id}/image")
+    @PostMapping("/{id}/images")
     public UploadFileResponseWrapper uploadImage(
             @RequestParam(value = "image")
             @UploadFileExtension(extensions = {JPEG, JPG, PNG, SVG, PNG}) MultipartFile image,
             @PathVariable("id") Long id) {
 
         return userService.addFile(image, id);
+    }
+
+    @PutMapping("/{id}/images/{imageId}/profile-pic")
+    public ResponseEntity<UserDto> changeProfilePic(@PathVariable("id") Long id, @PathVariable("imageId") Long imageId) {
+        UserDto userDto = userService.changeProfilePic(id, imageId);
+        return ResponseEntity.ok(userDto);
     }
 }

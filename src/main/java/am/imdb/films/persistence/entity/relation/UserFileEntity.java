@@ -31,6 +31,6 @@ public class UserFileEntity {
     private FileEntity file;
 
     @Column(name = "general")
-    private boolean general;
+    private Boolean general;
 }
 
