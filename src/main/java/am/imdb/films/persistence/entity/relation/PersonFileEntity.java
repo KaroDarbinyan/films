@@ -34,5 +34,10 @@ public class PersonFileEntity {
 
     @Column(name = "general")
     private boolean general;
+
+    @PrePersist
+    public void onCreate() {
+        general = false;
+    }
 }
 

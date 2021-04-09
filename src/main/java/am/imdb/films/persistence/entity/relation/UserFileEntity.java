@@ -32,5 +32,10 @@ public class UserFileEntity {
 
     @Column(name = "general")
     private Boolean general;
+
+    @PrePersist
+    public void onCreate() {
+        general = false;
+    }
 }
 

@@ -21,12 +21,12 @@ public class PersonSearchCriteria extends SearchCriteria {
     private String placeOfBirth;
     private String deathDetails;
     private String placeOfDeath;
-    private Integer spousesMin = 0;
-    private Integer spousesMax = Integer.MAX_VALUE;
-    private Integer divorcesMin = 0;
-    private Integer divorcesMax = Integer.MAX_VALUE;
-    private Integer spousesWithChildrenMin = 0;
-    private Integer spousesWithChildrenMax = Integer.MAX_VALUE;
-    private Integer childrenMin = 0;
-    private Integer childrenMax = Integer.MAX_VALUE;
+    private Integer spousesMin;
+    private Integer spousesMax;
+    private Integer divorcesMin;
+    private Integer divorcesMax;
+    private Integer spousesWithChildrenMin;
+    private Integer spousesWithChildrenMax;
+    private Integer childrenMin;
+    private Integer childrenMax;
 }

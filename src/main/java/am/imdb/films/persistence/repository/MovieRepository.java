@@ -25,46 +25,34 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     @Query("SELECT new am.imdb.films.service.model.resultset.MapEntityKeys(m.id, m.imdbId) FROM MovieEntity m")
     List<MapEntityKeys<Long, String>> findAllMovieImdbIdsAndIds();
 
-    @Query("select m from MovieEntity m where " +
-            "((:imdbId is null) or (:imdbId like concat('%', :imdbId, '%'))) and " +
-            "((:title is null) or (:title like concat('%', :title, '%'))) and " +
-            "((m.year is null) or (m.year BETWEEN :yearMin AND :yearMax)) and " +
-            "((m.duration is null) or (m.duration BETWEEN :durationMin AND :durationMax)) and " +
-            "((:productionCompany is null) or (:productionCompany like concat('%', :productionCompany, '%'))) and " +
-            "((:description is null) or (:description like concat('%', :description, '%'))) and " +
-            "((m.avgVote is null) or (m.avgVote BETWEEN :avgVoteMin AND :avgVoteMax)) and " +
-            "((m.votes is null) or (m.votes BETWEEN :votesMin AND :votesMax)) and " +
+    @Query("select m from MovieEntity m " +
+            "left join m.listOfMovieGenre mg " +
+            "left join m.listOfMovieLanguage ml " +
+            "left join m.listOfMovieCountry mc " +
+//            "left join m.rating mr" +
+            " where " +
+            "((:imdbId is null) or (m.imdbId like concat('%', :imdbId, '%'))) and " +
+            "((:title is null) or (m.title like concat('%', :title, '%'))) and " +
+            "((:yearMin is null) or (m.year  >= :yearMin)) and " +
+            "((:yearMax is null) or (m.year  >= :yearMax)) and " +
+            "((:productionCompany is null) or (m.productionCompany like concat('%', :productionCompany, '%'))) and " +
+//            "((:budgetMin is null) or (m.budget >= :budgetMin)) and " +
+//            "((:budgetMax is null) or (m.budget <= :budgetMax)) and " +
 //            "((NULLIF(regexp_replace(m.budget, '\\D','','g'), '')::double precision) BETWEEN :budgetMin AND :budgetMax) and " +
-//            "((NULLIF(regexp_replace(m.usaGrossIncome, '\\D','','g'), '')::double precision) BETWEEN :usaGrossIncomeMin AND :usaGrossIncomeMax) and " +
-//            "((NULLIF(regexp_replace(m.worldWideGrossIncome, '\\D','','g'), '')::double precision) BETWEEN :worldWideGrossIncomeMin AND :worldWideGrossIncomeMax) and " +
-            "((m.metasCore is null) or (m.metasCore BETWEEN :metasCoreMin AND :metasCoreMax)) and " +
-            "((m.reviewsFromUsers is null) or (m.reviewsFromUsers BETWEEN :reviewsFromUsersMin AND :reviewsFromUsersMax)) and " +
-            "((m.reviewsFromCritics is null) or (m.reviewsFromCritics BETWEEN :reviewsFromCriticsMin AND :reviewsFromCriticsMax))")
+            "((:genre is null) or (mg.genre.name = :genre)) and " +
+            "((:language is null) or (ml.language.name = :language)) and " +
+            "((:country is null) or (mc.country.name = :country))")
     Page<MovieEntity> findAllWithPagination(
             @Param("imdbId") String imdbId,
             @Param("title") String title,
             @Param("yearMin") Integer yearMin,
             @Param("yearMax") Integer yearMax,
-            @Param("durationMin") Integer durationMin,
-            @Param("durationMax") Integer durationMax,
             @Param("productionCompany") String productionCompany,
-            @Param("description") String description,
-            @Param("avgVoteMin") Double avgVoteMin,
-            @Param("avgVoteMax") Double avgVoteMax,
-            @Param("votesMin") Integer votesMin,
-            @Param("votesMax") Integer votesMax,
 //            @Param("budgetMin") Double budgetMin,
 //            @Param("budgetMax") Double budgetMax,
-//            @Param("usaGrossIncomeMin") Double usaGrossIncomeMin,
-//            @Param("usaGrossIncomeMax") Double usaGrossIncomeMax,
-//            @Param("worldWideGrossIncomeMin") Double worldWideGrossIncomeMin,
-//            @Param("worldWideGrossIncomeMax") Double worldWideGrossIncomeMax,
-            @Param("metasCoreMin") Double metasCoreMin,
-            @Param("metasCoreMax") Double metasCoreMax,
-            @Param("reviewsFromUsersMin") Double reviewsFromUsersMin,
-            @Param("reviewsFromUsersMax") Double reviewsFromUsersMax,
-            @Param("reviewsFromCriticsMin") Double reviewsFromCriticsMin,
-            @Param("reviewsFromCriticsMax") Double reviewsFromCriticsMax,
+            @Param("genre") String genre,
+            @Param("language") String language,
+            @Param("country") String country,
             Pageable composePageRequest);
 
 

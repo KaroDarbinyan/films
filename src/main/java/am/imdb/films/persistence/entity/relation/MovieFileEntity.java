@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -30,6 +31,11 @@ public class MovieFileEntity {
     private FileEntity file;
 
     @Column(name = "general")
-    private boolean general;
+    private Boolean general;
+
+    @PrePersist
+    public void onCreate() {
+        general = false;
+    }
 }
 

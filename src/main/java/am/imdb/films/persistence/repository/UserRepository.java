@@ -11,10 +11,10 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("SELECT u FROM UserEntity u where " +
-            "((:username is null or u.username like concat('%', :username, '%'))) and " +
-            "((:firstName is null or u.firstName like concat('%', :firstName, '%'))) and " +
-            "((:lastName is null or u.lastName like concat('%', :lastName, '%'))) and " +
-            "((:status is null or u.status = :status))")
+            "((:username is null) or (u.username like concat('%', :username, '%'))) and " +
+            "((:firstName is null) or (u.firstName like concat('%', :firstName, '%'))) and " +
+            "((:lastName is null) or (u.lastName like concat('%', :lastName, '%'))) and " +
+            "((:status is null) or (u.status = :status))")
     Page<UserEntity> findAllWithPagination(
             @Param("username") String username,
             @Param("firstName") String firstName,

@@ -1,6 +1,8 @@
 package am.imdb.films.service.dto;
 
+import am.imdb.films.persistence.entity.RoleEntity;
 import am.imdb.films.persistence.entity.UserEntity;
+import am.imdb.films.persistence.entity.relation.UserRoleEntity;
 import am.imdb.films.service.validation.model.Create;
 import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
@@ -29,9 +31,10 @@ public class UserDto {
     private String lastName;
     private String password;
     private String status;
-    private List<Map<String, String>> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Map<String, String>> images;
+    private String roles;
 
 
     public static UserDto toDto(UserEntity entity) {
@@ -45,6 +48,7 @@ public class UserDto {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .images(getImages(entity))
+                .roles(getRoles(entity))
                 .build();
     }
 
@@ -74,6 +78,8 @@ public class UserDto {
 
 
     private static List<Map<String, String>> getImages(UserEntity entity) {
+        if (Objects.isNull(entity.getListOfUserFile())) return List.of();
+
         return entity.getListOfUserFile().stream()
                 .map(userFileEntity -> {
                     String url = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -81,12 +87,21 @@ public class UserDto {
                             .path(userFileEntity.getFile().getId().toString())
                             .toUriString();
                     return Map.of(
-                            "id", userFileEntity.getFile().getId().toString(),
-                            "url", url,
+                            "general", Boolean.toString(userFileEntity.getGeneral()),
                             "fileType", userFileEntity.getFile().getContentType(),
-                            "general", Boolean.toString(userFileEntity.getGeneral())
+                            "url", url,
+                            "id", userFileEntity.getFile().getId().toString()
                     );
                 }).collect(Collectors.toList());
+    }
+
+    private static String getRoles(UserEntity entity) {
+        if (Objects.isNull(entity.getListOfUserFile())) return null;
+
+        return entity.getListOfUserRole().stream()
+                .map(UserRoleEntity::getRole)
+                .map(RoleEntity::getName)
+                .collect(Collectors.joining(", "));
     }
 
 }

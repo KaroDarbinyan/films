@@ -23,17 +23,21 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
     Set<String> findAllPersonsImdbId();
 
     @Query("select p from PersonEntity p where " +
-            "((:imdbId is null) or (:imdbId like concat('%', :imdbId, '%'))) and " +
-            "((:name is null) or (:name like concat('%', :name, '%'))) and " +
-            "((:birthName is null) or (:birthName like concat('%', :birthName, '%'))) and " +
-            "((:bio is null) or (:bio like concat('%', :bio, '%'))) and " +
-            "((:placeOfBirth is null) or (:placeOfBirth like concat('%', :placeOfBirth, '%'))) and " +
-            "((:deathDetails is null) or (:deathDetails like concat('%', :deathDetails, '%'))) and " +
-            "((:placeOfDeath is null) or (:placeOfDeath like concat('%', :placeOfDeath, '%'))) and " +
-            "((p.spouses is null) or (p.spouses BETWEEN :spousesMin AND :spousesMax)) and " +
-            "((p.divorces is null) or (p.divorces BETWEEN :divorcesMin AND :divorcesMax)) and " +
-            "((p.spousesWithChildren is null) or (p.spousesWithChildren BETWEEN :spousesWithChildrenMin AND :spousesWithChildrenMax)) and " +
-            "((p.children is null) or (p.children BETWEEN :childrenMin AND :childrenMax))")
+            "((:imdbId is null) or (p.imdbId like concat('%', :imdbId, '%'))) and " +
+            "((:name is null) or (p.name like concat('%', :name, '%'))) and " +
+            "((:birthName is null) or (p.birthName like concat('%', :birthName, '%'))) and " +
+            "((:bio is null) or (p.bio like concat('%', :bio, '%'))) and " +
+            "((:placeOfBirth is null) or (p.placeOfBirth like concat('%', :placeOfBirth, '%'))) and " +
+            "((:deathDetails is null) or (p.deathDetails like concat('%', :deathDetails, '%'))) and " +
+            "((:placeOfDeath is null) or (p.placeOfDeath like concat('%', :placeOfDeath, '%'))) and " +
+            "((:spousesMin is null) or (p.spouses >= :spousesMin)) and " +
+            "((:spousesMax is null) or (p.spouses <= :spousesMax)) and " +
+            "((:divorcesMin is null) or (p.divorces >= :divorcesMin)) and " +
+            "((:divorcesMax is null) or (p.divorces >= :divorcesMax)) and " +
+            "((:spousesWithChildrenMin is null) or (p.spousesWithChildren  >= :spousesWithChildrenMin)) and " +
+            "((:spousesWithChildrenMax is null) or (p.spousesWithChildren  <= :spousesWithChildrenMax)) and " +
+            "((:childrenMin is null) or (p.children  >= :childrenMin)) and " +
+            "((:childrenMax is null) or (p.children <= :childrenMax))")
     Page<PersonEntity> findAllWithPagination(
             @Param("imdbId") String imdbId,
             @Param("name") String name,

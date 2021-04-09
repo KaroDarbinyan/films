@@ -72,7 +72,7 @@ public class MovieController {
         movieService.deleteMovie(id);
     }
 
-    @PostMapping("/{id}/image")
+    @PostMapping("/{id}/images")
     public UploadFileResponseWrapper uploadImage(
             @RequestParam(value = "image")
             @UploadFileExtension(extensions = {JPEG, JPG, PNG, SVG, PNG}) MultipartFile image,

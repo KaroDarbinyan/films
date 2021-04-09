@@ -1,19 +1,27 @@
 package am.imdb.films.service.dto;
 
 
+import am.imdb.films.persistence.entity.CountryEntity;
+import am.imdb.films.persistence.entity.GenreEntity;
+import am.imdb.films.persistence.entity.LanguageEntity;
 import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.persistence.entity.relation.MovieCountryEntity;
+import am.imdb.films.persistence.entity.relation.MovieGenreEntity;
+import am.imdb.films.persistence.entity.relation.MovieLanguageEntity;
 import am.imdb.films.service.validation.model.Create;
 import am.imdb.films.service.validation.model.Update;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -44,6 +52,10 @@ public class MovieDto {
     private Double reviewsFromCritics;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Map<String, String>> images;
+    private String genres;
+    private String languages;
+    private String countries;
 
 
     public static MovieDto toDto(MovieEntity entity) {
@@ -68,6 +80,10 @@ public class MovieDto {
                 .reviewsFromCritics(entity.getReviewsFromCritics())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .images(getImages(entity))
+                .genres(getGenres(entity))
+                .languages(getLanguages(entity))
+                .countries(getCountries(entity))
                 .build();
     }
 
@@ -95,7 +111,6 @@ public class MovieDto {
         return entity;
     }
 
-
     public static List<MovieDto> toDtoList(Collection<MovieEntity> entityCollection) {
         return entityCollection.stream()
                 .map(MovieDto::toDto)
@@ -106,6 +121,56 @@ public class MovieDto {
         return dtoCollection.stream()
                 .map(movieDto -> MovieDto.toEntity(movieDto, new MovieEntity()))
                 .collect(Collectors.toList());
+    }
+
+    private static List<Map<String, String>> getImages(MovieEntity entity) {
+        if (Objects.isNull(entity.getListOfMovieFile())) return List.of();
+
+        return entity.getListOfMovieFile().stream()
+                .map(movieFileEntity -> {
+                    String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/files/")
+                            .path(movieFileEntity.getFile().getId().toString())
+                            .toUriString();
+                    return Map.of(
+                            "general", Boolean.toString(movieFileEntity.getGeneral()),
+                            "fileType", movieFileEntity.getFile().getContentType(),
+                            "url", url,
+                            "id", movieFileEntity.getFile().getId().toString()
+                            );
+                }).collect(Collectors.toList());
+    }
+
+
+
+    private static String getGenres(MovieEntity entity) {
+        if (entity.getListOfMovieGenre().isEmpty()) return null;
+
+        return entity.getListOfMovieGenre()
+                .stream()
+                .map(MovieGenreEntity::getGenre)
+                .map(GenreEntity::getName)
+                .collect(Collectors.joining(", "));
+    }
+
+    private static String getLanguages(MovieEntity entity) {
+        if (entity.getListOfMovieLanguage().isEmpty()) return null;
+
+        return entity.getListOfMovieLanguage()
+                .stream()
+                .map(MovieLanguageEntity::getLanguage)
+                .map(LanguageEntity::getName)
+                .collect(Collectors.joining(", "));
+    }
+
+    private static String getCountries(MovieEntity entity) {
+        if (entity.getListOfMovieCountry().isEmpty()) return null;
+
+        return entity.getListOfMovieCountry()
+                .stream()
+                .map(MovieCountryEntity::getCountry)
+                .map(CountryEntity::getName)
+                .collect(Collectors.joining(", "));
     }
 
 }
