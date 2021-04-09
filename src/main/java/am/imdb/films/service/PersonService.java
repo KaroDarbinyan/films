@@ -13,6 +13,7 @@ import am.imdb.films.service.model.csv.Person;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.util.helper.Multithreading;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -94,7 +94,7 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-    public Map<String, Integer> parseCsv(MultipartFile csvFile) {
+    public Map<String, Integer> parseCsv(MultipartFile csvFile) throws Exception {
         Set<String> allPersonsImdbId = personRepository.findAllPersonsImdbId();
         List<List<Person>> persons = csvControl.getEntitiesFromCsv(csvFile, Person.class);
         AtomicInteger existed = new AtomicInteger();
@@ -112,9 +112,15 @@ public class PersonService {
 
 
         int saved = 0;
+        Map<Long, String> entityKeys = new HashMap<>();
         for (List<PersonEntity> personEntities : personEntitiesList) {
-            saved += personRepository.saveAll(personEntities).size();
+            List<PersonEntity> personEntityList = personRepository.saveAll(personEntities);
+            saved += personEntityList.size();
+            entityKeys.putAll(personEntityList.stream().collect(Collectors.toMap(PersonEntity::getId, PersonEntity::getImdbId)));
         }
+
+        Multithreading downloader = new Multithreading(Path.of("person"), entityKeys);
+        downloader.parallelExec();
 
         return Map.of("saved", saved, "existed", existed.intValue());
     }
