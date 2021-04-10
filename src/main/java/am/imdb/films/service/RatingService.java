@@ -6,7 +6,7 @@ import am.imdb.films.persistence.repository.RatingRepository;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.RatingDto;
-import am.imdb.films.service.model.csv.Rating;
+import am.imdb.films.util.model.csv.Rating;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

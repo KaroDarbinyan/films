@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Data
@@ -45,6 +46,10 @@ public class SearchCriteria implements Serializable {
         if (Sort.Direction.ASC.name().equalsIgnoreCase(sortDirection)) return Sort.Direction.ASC;
         else if (Sort.Direction.DESC.name().equalsIgnoreCase(sortDirection)) return Sort.Direction.DESC;
         else return Sort.DEFAULT_DIRECTION;
+    }
+
+    public String getValueOrDefault(String str) {
+        return Optional.ofNullable(str).orElse(StringUtils.EMPTY);
     }
 
 }

@@ -8,7 +8,7 @@ import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
-import am.imdb.films.service.model.csv.Movie;
+import am.imdb.films.util.model.csv.Movie;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
@@ -93,18 +93,7 @@ public class MovieService {
     }
 
     public QueryResponseWrapper<MovieDto> getMovies(MovieSearchCriteria criteria) {
-        Page<MovieEntity> content = movieRepository.findAllWithPagination(
-                criteria.getImdbId(),
-                criteria.getTitle(),
-                criteria.getYearMin(),
-                criteria.getYearMax(),
-                criteria.getProductionCompany(),
-//                criteria.getBudgetMin(),
-//                criteria.getBudgetMax(),
-                criteria.getGenre(),
-                criteria.getLanguage(),
-                criteria.getCountry(),
-                criteria.composePageRequest());
+        Page<MovieEntity> content = movieRepository.findAllWithPagination(criteria, criteria.composePageRequest());
 
         return new QueryResponseWrapper<>(content.map(MovieDto::toDto));
     }

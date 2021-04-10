@@ -77,12 +77,7 @@ public class UserService {
     }
 
     public QueryResponseWrapper<UserDto> getUsers(UserSearchCriteria criteria) {
-        Page<UserEntity> content = userRepository.findAllWithPagination(
-                criteria.getUsername(),
-                criteria.getFirstName(),
-                criteria.getLastName(),
-                criteria.getStatus(),
-                criteria.composePageRequest());
+        Page<UserEntity> content = userRepository.findAllWithPagination(criteria, criteria.composePageRequest());
         return new QueryResponseWrapper<>(content.map(UserDto::toDto));
     }
 

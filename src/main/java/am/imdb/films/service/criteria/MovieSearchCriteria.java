@@ -3,13 +3,8 @@ package am.imdb.films.service.criteria;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class MovieSearchCriteria extends SearchCriteria {
@@ -27,6 +22,10 @@ public class MovieSearchCriteria extends SearchCriteria {
     private Integer ratingMin;
     private Integer ratingMax;
 
-
+    public MovieSearchCriteria() {
+        this.imdbId = getValueOrDefault(this.imdbId);
+        this.title = getValueOrDefault(this.title);
+        this.productionCompany = getValueOrDefault(this.productionCompany);
+    }
 
 }

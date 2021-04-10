@@ -1,7 +1,7 @@
 package am.imdb.films.service;
 
 import am.imdb.films.service.control.CsvControl;
-import am.imdb.films.service.model.csv.MoviePerson;
+import am.imdb.films.util.model.csv.MoviePerson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

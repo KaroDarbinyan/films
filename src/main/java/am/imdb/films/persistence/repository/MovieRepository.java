@@ -2,6 +2,7 @@ package am.imdb.films.persistence.repository;
 
 
 import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,29 +32,18 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
             "left join m.listOfMovieCountry mc " +
 //            "left join m.rating mr" +
             " where " +
-            "((:imdbId is null) or (m.imdbId like concat('%', :imdbId, '%'))) and " +
-            "((:title is null) or (m.title like concat('%', :title, '%'))) and " +
-            "((:yearMin is null) or (m.year  >= :yearMin)) and " +
-            "((:yearMax is null) or (m.year  >= :yearMax)) and " +
-            "((:productionCompany is null) or (m.productionCompany like concat('%', :productionCompany, '%'))) and " +
+            "((:#{#criteria.imdbId} = '') or (m.imdbId like concat('%', :#{#criteria.imdbId}, '%'))) and " +
+            "((:#{#criteria.title} = '') or (m.title like concat('%', :#{#criteria.title}, '%'))) and " +
+            "((:#{#criteria.yearMin} is null) or (m.year  >= :#{#criteria.yearMin})) and " +
+            "((:#{#criteria.yearMax} is null) or (m.year  >= :#{#criteria.yearMax})) and " +
+            "((:#{#criteria.productionCompany} = '') or (m.productionCompany like concat('%', :#{#criteria.productionCompany}, '%'))) and " +
 //            "((:budgetMin is null) or (m.budget >= :budgetMin)) and " +
 //            "((:budgetMax is null) or (m.budget <= :budgetMax)) and " +
 //            "((NULLIF(regexp_replace(m.budget, '\\D','','g'), '')::double precision) BETWEEN :budgetMin AND :budgetMax) and " +
-            "((:genre is null) or (mg.genre.name = :genre)) and " +
-            "((:language is null) or (ml.language.name = :language)) and " +
-            "((:country is null) or (mc.country.name = :country))")
-    Page<MovieEntity> findAllWithPagination(
-            @Param("imdbId") String imdbId,
-            @Param("title") String title,
-            @Param("yearMin") Integer yearMin,
-            @Param("yearMax") Integer yearMax,
-            @Param("productionCompany") String productionCompany,
-//            @Param("budgetMin") Double budgetMin,
-//            @Param("budgetMax") Double budgetMax,
-            @Param("genre") String genre,
-            @Param("language") String language,
-            @Param("country") String country,
-            Pageable composePageRequest);
+            "((:#{#criteria.genre} is null) or (mg.genre.name = :#{#criteria.genre})) and " +
+            "((:#{#criteria.language} is null) or (ml.language.name = :#{#criteria.language})) and " +
+            "((:#{#criteria.country} is null) or (mc.country.name = :#{#criteria.country}))")
+    Page<MovieEntity> findAllWithPagination(@Param("criteria") MovieSearchCriteria criteria, Pageable pageable);
 
 
     @Query(value = "SELECT imdb_id FROM movie", nativeQuery = true)
