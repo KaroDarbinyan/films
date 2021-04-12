@@ -72,8 +72,7 @@ public class MovieService {
         this.userFavoriteRepository = userFavoriteRepository;
         this.userRepository = userRepository;
     }
-
-
+    
     public MovieDto createMovie(MovieDto movieDto) {
         MovieEntity movieEntity = MovieDto.toEntity(movieDto, new MovieEntity());
         movieEntity = movieRepository.save(movieEntity);

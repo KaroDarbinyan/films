@@ -137,7 +137,6 @@ public class PersonService {
                 .build();
     }
 
-
     public Map<String, Long> getPersonsImdbIdsAndIds() {
         List<MapEntityKeys<Long, String>> list = personRepository.findAllPersonImdbIdsAndIds();
 
