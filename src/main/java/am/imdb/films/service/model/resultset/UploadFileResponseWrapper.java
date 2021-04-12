@@ -1,4 +1,4 @@
-package am.imdb.films.service.model.wrapper;
+package am.imdb.films.service.model.resultset;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -13,7 +13,7 @@ import am.imdb.films.service.criteria.UserSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,12 +77,7 @@ public class UserService {
     }
 
     public QueryResponseWrapper<UserDto> getUsers(UserSearchCriteria criteria) {
-        Page<UserEntity> content = userRepository.findAllWithPagination(
-                criteria.getUsername(),
-                criteria.getFirstName(),
-                criteria.getLastName(),
-                criteria.getStatus(),
-                criteria.composePageRequest());
+        Page<UserEntity> content = userRepository.findAllWithPagination(criteria, criteria.composePageRequest());
         return new QueryResponseWrapper<>(content.map(UserDto::toDto));
     }
 

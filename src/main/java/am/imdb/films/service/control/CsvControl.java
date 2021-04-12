@@ -1,20 +1,15 @@
 package am.imdb.films.service.control;
 
 import am.imdb.films.exception.FileNotExistException;
-import am.imdb.films.service.model.csv.Person;
 import am.imdb.films.util.helper.FileHelper;
 import am.imdb.films.util.parser.CsvParser;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

@@ -3,14 +3,10 @@ package am.imdb.films.service.criteria;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.aspectj.lang.annotation.Before;
-
-import java.util.Objects;
 
 
 @Data
-@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PersonSearchCriteria extends SearchCriteria {
 
@@ -29,4 +25,14 @@ public class PersonSearchCriteria extends SearchCriteria {
     private Integer spousesWithChildrenMax;
     private Integer childrenMin;
     private Integer childrenMax;
+
+    public PersonSearchCriteria() {
+        this.imdbId = getValueOrDefault(this.imdbId);
+        this.name = getValueOrDefault(this.name);
+        this.birthName = getValueOrDefault(this.birthName);
+        this.bio = getValueOrDefault(this.bio);
+        this.placeOfBirth = getValueOrDefault(this.placeOfBirth);
+        this.deathDetails = getValueOrDefault(this.deathDetails);
+        this.placeOfDeath = getValueOrDefault(this.placeOfDeath);
+    }
 }

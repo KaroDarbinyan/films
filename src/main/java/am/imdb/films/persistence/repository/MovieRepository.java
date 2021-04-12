@@ -2,7 +2,9 @@ package am.imdb.films.persistence.repository;
 
 
 import am.imdb.films.persistence.entity.MovieEntity;
+import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
+import am.imdb.films.service.model.wrapper.MovieWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,41 +24,27 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     List<MovieEntity> findByImdbIdIn(Collection<String> imdbIds);
 
+    @Query("select new am.imdb.films.service.model.wrapper.MovieWrapper(m.id,m.imdbId,m.title,m.year,m.datePublished," +
+            "m.duration,m.productionCompany,m.description,m.avgVote,m.votes,m.budget,m.usaGrossIncome,m.worldWideGrossIncome," +
+            "m.metasCore,m.reviewsFromUsers,m.reviewsFromCritics) from MovieEntity m " +
+            "left join m.listOfMoviePerson lomp left join lomp.person lp " +
+            "left join m.listOfMovieLanguage loml left join loml.language ll " +
+            "left join m.listOfMovieGenre lomg left join lomg.genre lg where " +
+            "((:#{#criteria.imdbId} = '') or (m.imdbId like concat('%', :#{#criteria.imdbId}, '%'))) and " +
+            "((:#{#criteria.title} = '') or (m.title like concat('%', :#{#criteria.title}, '%'))) and " +
+            "((:#{#criteria.yearMin} is null) or (m.year  >= :#{#criteria.yearMin})) and " +
+            "((:#{#criteria.yearMax} is null) or (m.year  >= :#{#criteria.yearMax})) and " +
+            "((:#{#criteria.productionCompany} = '') or (m.productionCompany like concat('%', :#{#criteria.productionCompany}, '%'))) and " +
+            "((:#{#criteria.genres.size()} = 0) or (lg.name in (:#{#criteria.genres}))) and " +
+            "((:#{#criteria.actors.size()} = 0) or ((lomp.category in ('actor', 'actress')) and (lp.name in (:#{#criteria.actors})))) and " +
+            "((:#{#criteria.producers.size()} = 0) or ((lomp.category = 'producer') and (lp.name in (:#{#criteria.producers})))) and " +
+            "(cast(coalesce(nullif(regexp_replace(m.budget, '[^0-9]', '', 'g'), ''), '0') double) between :#{#criteria.budgetMin} and :#{#criteria.budgetMax}) group by m.id")
+    Page<MovieWrapper> findAllWithPagination(@Param("criteria") MovieSearchCriteria criteria, Pageable pageable);
+
     @Query("SELECT new am.imdb.films.service.model.resultset.MapEntityKeys(m.id, m.imdbId) FROM MovieEntity m")
     List<MapEntityKeys<Long, String>> findAllMovieImdbIdsAndIds();
 
-    @Query("select m from MovieEntity m " +
-            "left join m.listOfMovieGenre mg " +
-            "left join m.listOfMovieLanguage ml " +
-            "left join m.listOfMovieCountry mc " +
-//            "left join m.rating mr" +
-            " where " +
-            "((:imdbId is null) or (m.imdbId like concat('%', :imdbId, '%'))) and " +
-            "((:title is null) or (m.title like concat('%', :title, '%'))) and " +
-            "((:yearMin is null) or (m.year  >= :yearMin)) and " +
-            "((:yearMax is null) or (m.year  >= :yearMax)) and " +
-            "((:productionCompany is null) or (m.productionCompany like concat('%', :productionCompany, '%'))) and " +
-//            "((:budgetMin is null) or (m.budget >= :budgetMin)) and " +
-//            "((:budgetMax is null) or (m.budget <= :budgetMax)) and " +
-//            "((NULLIF(regexp_replace(m.budget, '\\D','','g'), '')::double precision) BETWEEN :budgetMin AND :budgetMax) and " +
-            "((:genre is null) or (mg.genre.name = :genre)) and " +
-            "((:language is null) or (ml.language.name = :language)) and " +
-            "((:country is null) or (mc.country.name = :country))")
-    Page<MovieEntity> findAllWithPagination(
-            @Param("imdbId") String imdbId,
-            @Param("title") String title,
-            @Param("yearMin") Integer yearMin,
-            @Param("yearMax") Integer yearMax,
-            @Param("productionCompany") String productionCompany,
-//            @Param("budgetMin") Double budgetMin,
-//            @Param("budgetMax") Double budgetMax,
-            @Param("genre") String genre,
-            @Param("language") String language,
-            @Param("country") String country,
-            Pageable composePageRequest);
-
-
-    @Query(value = "SELECT imdb_id FROM movie", nativeQuery = true)
+    @Query("SELECT m.imdbId FROM MovieEntity m")
     Set<String> findAllMoviesImdbId();
 
     @Query("select m from MovieEntity m left join m.listOfUserFavorite louf where louf.user.id = :userId")

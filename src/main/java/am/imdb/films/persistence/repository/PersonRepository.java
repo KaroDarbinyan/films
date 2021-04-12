@@ -2,7 +2,9 @@ package am.imdb.films.persistence.repository;
 
 
 import am.imdb.films.persistence.entity.PersonEntity;
+import am.imdb.films.service.criteria.PersonSearchCriteria;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
+import am.imdb.films.service.model.wrapper.PersonWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,38 +24,24 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
     @Query("SELECT p.imdbId FROM PersonEntity p")
     Set<String> findAllPersonsImdbId();
 
-    @Query("select p from PersonEntity p where " +
-            "((:imdbId is null) or (p.imdbId like concat('%', :imdbId, '%'))) and " +
-            "((:name is null) or (p.name like concat('%', :name, '%'))) and " +
-            "((:birthName is null) or (p.birthName like concat('%', :birthName, '%'))) and " +
-            "((:bio is null) or (p.bio like concat('%', :bio, '%'))) and " +
-            "((:placeOfBirth is null) or (p.placeOfBirth like concat('%', :placeOfBirth, '%'))) and " +
-            "((:deathDetails is null) or (p.deathDetails like concat('%', :deathDetails, '%'))) and " +
-            "((:placeOfDeath is null) or (p.placeOfDeath like concat('%', :placeOfDeath, '%'))) and " +
-            "((:spousesMin is null) or (p.spouses >= :spousesMin)) and " +
-            "((:spousesMax is null) or (p.spouses <= :spousesMax)) and " +
-            "((:divorcesMin is null) or (p.divorces >= :divorcesMin)) and " +
-            "((:divorcesMax is null) or (p.divorces >= :divorcesMax)) and " +
-            "((:spousesWithChildrenMin is null) or (p.spousesWithChildren  >= :spousesWithChildrenMin)) and " +
-            "((:spousesWithChildrenMax is null) or (p.spousesWithChildren  <= :spousesWithChildrenMax)) and " +
-            "((:childrenMin is null) or (p.children  >= :childrenMin)) and " +
-            "((:childrenMax is null) or (p.children <= :childrenMax))")
-    Page<PersonEntity> findAllWithPagination(
-            @Param("imdbId") String imdbId,
-            @Param("name") String name,
-            @Param("birthName") String birthName,
-            @Param("bio") String bio,
-            @Param("placeOfBirth") String placeOfBirth,
-            @Param("deathDetails") String deathDetails,
-            @Param("placeOfDeath") String placeOfDeath,
-            @Param("spousesMin") Integer spousesMin,
-            @Param("spousesMax") Integer spousesMax,
-            @Param("divorcesMin") Integer divorcesMin,
-            @Param("divorcesMax") Integer divorcesMax,
-            @Param("spousesWithChildrenMin") Integer spousesWithChildrenMin,
-            @Param("spousesWithChildrenMax") Integer spousesWithChildrenMax,
-            @Param("childrenMin") Integer childrenMin,
-            @Param("childrenMax") Integer childrenMax,
-            Pageable composePageRequest);
+    @Query("select new am.imdb.films.service.model.wrapper.PersonWrapper(p.id, p.imdbId, p.name, p.birthName, p.height," +
+            " p.bio, p.birthDetails, p.dateOfBirth, p.placeOfBirth, p.deathDetails, p.dateOfDeath, p.placeOfDeath, " +
+            "p.reasonOfDeath, p.spousesString, p.spouses, p.divorces, p.spousesWithChildren, p.children) from PersonEntity p where " +
+            "((:#{#criteria.imdbId} = '') or (p.imdbId like concat('%', :#{#criteria.imdbId}, '%'))) and " +
+            "((:#{#criteria.name} = '') or (p.name like concat('%', :#{#criteria.name}, '%'))) and " +
+            "((:#{#criteria.birthName} = '') or (p.birthName like concat('%', :#{#criteria.birthName}, '%'))) and " +
+            "((:#{#criteria.bio} = '') or (p.bio like concat('%', :#{#criteria.bio}, '%'))) and " +
+            "((:#{#criteria.placeOfBirth} = '') or (p.placeOfBirth like concat('%', :#{#criteria.placeOfBirth}, '%'))) and " +
+            "((:#{#criteria.deathDetails} = '') or (p.deathDetails like concat('%', :#{#criteria.deathDetails}, '%'))) and " +
+            "((:#{#criteria.placeOfDeath} = '') or (p.placeOfDeath like concat('%', :#{#criteria.placeOfDeath}, '%'))) and " +
+            "((:#{#criteria.spousesMin} is null) or (p.spouses >= :#{#criteria.spousesMin})) and " +
+            "((:#{#criteria.spousesMax} is null) or (p.spouses <= :#{#criteria.spousesMax})) and " +
+            "((:#{#criteria.divorcesMin} is null) or (p.divorces >= :#{#criteria.divorcesMin})) and " +
+            "((:#{#criteria.divorcesMax} is null) or (p.divorces >= :#{#criteria.divorcesMax})) and " +
+            "((:#{#criteria.spousesWithChildrenMin} is null) or (p.spousesWithChildren  >= :#{#criteria.spousesWithChildrenMin})) and " +
+            "((:#{#criteria.spousesWithChildrenMax} is null) or (p.spousesWithChildren  <= :#{#criteria.spousesWithChildrenMax})) and " +
+            "((:#{#criteria.childrenMin} is null) or (p.children  >= :#{#criteria.childrenMin})) and " +
+            "((:#{#criteria.childrenMax} is null) or (p.children <= :#{#criteria.childrenMax}))")
+    Page<PersonWrapper> findAllWithPagination(@Param("criteria") PersonSearchCriteria criteria, Pageable pageable);
 }
 

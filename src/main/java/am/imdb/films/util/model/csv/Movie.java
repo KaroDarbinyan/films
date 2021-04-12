@@ -1,4 +1,4 @@
-package am.imdb.films.service.model.csv;
+package am.imdb.films.util.model.csv;
 
 
 import am.imdb.films.persistence.entity.*;

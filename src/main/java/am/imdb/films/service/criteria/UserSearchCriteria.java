@@ -1,13 +1,9 @@
 package am.imdb.films.service.criteria;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserSearchCriteria extends SearchCriteria {
@@ -17,4 +13,10 @@ public class UserSearchCriteria extends SearchCriteria {
     private String lastName;
     private String status;
 
+    public UserSearchCriteria() {
+        this.username = getValueOrDefault(this.username);
+        this.firstName = getValueOrDefault(this.firstName);
+        this.lastName = getValueOrDefault(this.lastName);
+        this.status = getValueOrDefault(this.status);
+    }
 }

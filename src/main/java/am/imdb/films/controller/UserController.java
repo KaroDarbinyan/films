@@ -9,7 +9,7 @@ import am.imdb.films.service.criteria.UserSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
 import am.imdb.films.service.dto.UserDto;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
 import am.imdb.films.service.validation.model.Create;
 import am.imdb.films.service.validation.model.Update;
 import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
