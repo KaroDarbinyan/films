@@ -8,11 +8,11 @@ import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
-import am.imdb.films.service.model.wrapper.MovieWrapper;
-import am.imdb.films.util.model.csv.Movie;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
-import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
 import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
+import am.imdb.films.service.model.wrapper.MovieWrapper;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.util.model.csv.Movie;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,6 @@ public class MovieService {
         this.userFavoriteRepository = userFavoriteRepository;
         this.userRepository = userRepository;
     }
-
 
     public MovieDto createMovie(MovieDto movieDto) {
         MovieEntity movieEntity = MovieDto.toEntity(movieDto, new MovieEntity());

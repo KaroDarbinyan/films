@@ -28,7 +28,6 @@ public class RatingService {
     private final JdbcTemplate jdbcTemplate;
     private final CsvControl<Rating> csvControl;
 
-
     @Autowired
     public RatingService(RatingRepository ratingRepository, MovieService movieService, JdbcTemplate jdbcTemplate, CsvControl<Rating> csvControl) {
         this.ratingRepository = ratingRepository;

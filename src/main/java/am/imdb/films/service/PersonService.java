@@ -9,13 +9,11 @@ import am.imdb.films.persistence.repository.PersonRepository;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.PersonSearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
-import am.imdb.films.service.model.wrapper.PersonWrapper;
-import am.imdb.films.util.model.csv.Person;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
-import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
-import am.imdb.films.util.helper.Multithreading;
 import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
+import am.imdb.films.service.model.wrapper.PersonWrapper;
+import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
+import am.imdb.films.util.model.csv.Person;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,25 +69,9 @@ public class PersonService {
         return PersonDto.toDto(personRepository.save(personEntity));
     }
 
-    public QueryResponseWrapper<PersonDto> getPersons(PersonSearchCriteria criteria) {
-        Page<PersonEntity> content = personRepository.findAllWithPagination(
-                criteria.getImdbId(),
-                criteria.getName(),
-                criteria.getBirthName(),
-                criteria.getBio(),
-                criteria.getPlaceOfBirth(),
-                criteria.getDeathDetails(),
-                criteria.getPlaceOfDeath(),
-                criteria.getSpousesMin(),
-                criteria.getSpousesMax(),
-                criteria.getDivorcesMin(),
-                criteria.getDivorcesMax(),
-                criteria.getSpousesWithChildrenMin(),
-                criteria.getSpousesWithChildrenMax(),
-                criteria.getChildrenMin(),
-                criteria.getChildrenMax(),
-                criteria.composePageRequest());
-        return new QueryResponseWrapper<>(content.map(PersonDto::toDto));
+    public QueryResponseWrapper<PersonWrapper> getPersons(PersonSearchCriteria criteria) {
+        Page<PersonWrapper> content = personRepository.findAllWithPagination(criteria, criteria.composePageRequest());
+        return new QueryResponseWrapper<>(content);
     }
 
     public void deletePerson(Long id) throws EntityNotFoundException {
