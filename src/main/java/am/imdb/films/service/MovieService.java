@@ -8,10 +8,11 @@ import am.imdb.films.persistence.repository.*;
 import am.imdb.films.service.control.CsvControl;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
+import am.imdb.films.service.model.wrapper.MovieWrapper;
 import am.imdb.films.util.model.csv.Movie;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,10 +93,10 @@ public class MovieService {
         return MovieDto.toDto(movieRepository.save(movieEntity));
     }
 
-    public QueryResponseWrapper<MovieDto> getMovies(MovieSearchCriteria criteria) {
-        Page<MovieEntity> content = movieRepository.findAllWithPagination(criteria, criteria.composePageRequest());
+    public QueryResponseWrapper<MovieWrapper> getMovies(MovieSearchCriteria criteria) {
+        Page<MovieWrapper> content = movieRepository.findAllWithPagination(criteria, criteria.composePageRequest());
 
-        return new QueryResponseWrapper<>(content.map(MovieDto::toDto));
+        return new QueryResponseWrapper<>(content);
     }
 
     public void deleteMovie(Long id) throws EntityNotFoundException {

@@ -5,10 +5,10 @@ import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.PersonService;
 import am.imdb.films.service.criteria.PersonSearchCriteria;
-import am.imdb.films.service.criteria.SearchCriteria;
 import am.imdb.films.service.dto.PersonDto;
+import am.imdb.films.service.model.wrapper.PersonWrapper;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
 import am.imdb.films.service.validation.model.Create;
 import am.imdb.films.service.validation.model.Update;
 import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
@@ -63,7 +63,7 @@ public class PersonController {
     }
 
     @GetMapping
-    public QueryResponseWrapper<PersonDto> getPersons(PersonSearchCriteria criteria) {
+    public QueryResponseWrapper<PersonWrapper> getPersons(PersonSearchCriteria criteria) {
         return personService.getPersons(criteria);
     }
 

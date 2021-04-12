@@ -7,8 +7,9 @@ import am.imdb.films.service.MoviePersonService;
 import am.imdb.films.service.MovieService;
 import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.dto.MovieDto;
+import am.imdb.films.service.model.wrapper.MovieWrapper;
 import am.imdb.films.service.model.wrapper.QueryResponseWrapper;
-import am.imdb.films.service.model.wrapper.UploadFileResponseWrapper;
+import am.imdb.films.service.model.resultset.UploadFileResponseWrapper;
 import am.imdb.films.service.validation.model.Create;
 import am.imdb.films.service.validation.model.Update;
 import am.imdb.films.service.validation.validator.fileextension.UploadFileExtension;
@@ -62,7 +63,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public QueryResponseWrapper<MovieDto> getMovies(MovieSearchCriteria criteria) {
+    public QueryResponseWrapper<MovieWrapper> getMovies(MovieSearchCriteria criteria) {
         return movieService.getMovies(criteria);
     }
 
