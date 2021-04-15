@@ -28,11 +28,8 @@ public class MovieEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "year")
-    private Integer year;
-
-    @Column(name = "date_published")
-    private String datePublished;
+    @Column(name = "release_date")
+    private Integer releaseDate;
 
     @Column(name = "duration")
     private Integer duration;
@@ -67,6 +64,13 @@ public class MovieEntity extends BaseEntity {
     @Column(name = "reviews_from_critics")
     private Double reviewsFromCritics;
 
+    @Column(name = "parse_error")
+    private boolean parseError;
+
+//    public void onCreate() {
+//        parseError = false;
+//    }
+
     @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
     private List<MovieGenreEntity> listOfMovieGenre;
 
@@ -82,7 +86,7 @@ public class MovieEntity extends BaseEntity {
     @OneToMany(mappedBy = "movie", targetEntity = MovieFileEntity.class)
     private List<MovieFileEntity> listOfMovieFile;
 
-    @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class)
     private RatingEntity rating;
 
     @OneToMany(mappedBy = "movie", targetEntity = UserFavoriteEntity.class)

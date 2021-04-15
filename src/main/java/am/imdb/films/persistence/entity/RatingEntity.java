@@ -12,18 +12,18 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rating")
+@Table(name = "movie_rating")
 @EqualsAndHashCode(callSuper = true)
 public class RatingEntity extends BaseEntity{
 
     @Column(name = "average_rating")
-    private String averageRating;
+    private Double averageRating;
 
     @Column(name = "num_votes")
-    private String numVotes;
+    private Integer numVotes;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JoinColumn(name = "movie_imdb_id", referencedColumnName = "imdb_id")
     private MovieEntity movie;
 
 

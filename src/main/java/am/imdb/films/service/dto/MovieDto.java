@@ -37,8 +37,7 @@ public class MovieDto {
     @NotNull(groups = {Create.class, Update.class})
     private String imdbId;
     private String title;
-    private Integer year;
-    private String datePublished;
+    private Integer releaseDate;
     private Integer duration;
     private String productionCompany;
     private String description;
@@ -65,8 +64,7 @@ public class MovieDto {
                 .id(entity.getId())
                 .imdbId(entity.getImdbId())
                 .title(entity.getTitle())
-                .year(entity.getYear())
-                .datePublished(entity.getDatePublished())
+                .releaseDate(entity.getReleaseDate())
                 .duration(entity.getDuration())
                 .productionCompany(entity.getProductionCompany())
                 .description(entity.getDescription())
@@ -91,8 +89,7 @@ public class MovieDto {
         if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
         entity.setImdbId(dto.getImdbId());
         entity.setTitle(dto.getTitle());
-        entity.setYear(dto.getYear());
-        entity.setDatePublished(dto.getDatePublished());
+        entity.setReleaseDate(dto.getReleaseDate());
         entity.setDuration(dto.getDuration());
         entity.setProductionCompany(dto.getProductionCompany());
         entity.setDescription(dto.getDescription());

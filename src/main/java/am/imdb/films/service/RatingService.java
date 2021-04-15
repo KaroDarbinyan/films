@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -68,21 +69,21 @@ public class RatingService {
 
     public Map<String, Integer> parseCsv(MultipartFile csvFile) {
 
-        String insertQuery = "INSERT INTO rating (movie_id, average_rating, num_votes) VALUES %s;";
+        String insertQuery = "INSERT INTO movie_rating (movie_imdb_id, average_rating, num_votes) VALUES %s;";
         List<List<Rating>> ratings = csvControl.getEntitiesFromCsv(csvFile, Rating.class);
-        Map<String, Long> moviesImdbIdsAndIds = movieService.getMoviesImdbIdsAndIds();
+        Set<String> allMoviesImdbIds = movieService.getAllMoviesImdbIds();
         AtomicInteger existed = new AtomicInteger();
 
 
         List<List<String>> valuesList = ratings.stream()
                 .map(ratingList -> ratingList.stream()
                         .filter(rating -> {
-                            boolean contains = Objects.nonNull(rating.getMovieId()) && moviesImdbIdsAndIds.containsKey(rating.getMovieId());
+                            boolean contains = Objects.nonNull(rating.getMovieImdbId()) && allMoviesImdbIds.contains(rating.getMovieImdbId());
                             if (contains) existed.getAndIncrement();
                             return contains;
                         })
-                        .map(rating -> String.format("(%s, '%s', '%s')",
-                                moviesImdbIdsAndIds.get(rating.getMovieId()),
+                        .map(rating -> String.format("('%s', %s, %s)",
+                                rating.getMovieImdbId(),
                                 rating.getAverageRating(),
                                 rating.getNumVotes()
                         ))

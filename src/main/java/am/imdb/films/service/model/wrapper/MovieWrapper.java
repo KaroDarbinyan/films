@@ -10,8 +10,7 @@ public class MovieWrapper {
     private Long id;
     private String imdbId;
     private String title;
-    private Integer year;
-    private String datePublished;
+    private Integer releaseDate;
     private Integer duration;
     private String productionCompany;
     private String description;

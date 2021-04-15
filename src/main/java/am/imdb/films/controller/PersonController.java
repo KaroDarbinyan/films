@@ -87,7 +87,7 @@ public class PersonController {
     public ResponseEntity<?> importPersonFromCsv(
             @RequestParam(value = "file")
             @NotNull(message = "Required request part 'file' is not present")
-            @UploadFileExtension(extensions = CSV) MultipartFile file
+            @UploadFileExtension(extensions = {CSV, TSV}) MultipartFile file
     ) throws Exception {
         Map<String, Integer> result = personService.parseCsv(file);
         return ResponseEntity.ok().body(result);
@@ -98,7 +98,7 @@ public class PersonController {
     public ResponseEntity<Map<String, Integer>> importMovieFromCsv(
             @RequestParam(value = "file")
             @NotNull(message = "Required request part 'file' is not present")
-            @UploadFileExtension(extensions = CSV) MultipartFile file
+            @UploadFileExtension(extensions = {CSV, TSV}) MultipartFile file
     ) throws Exception {
         Map<String, Integer> result = moviePersonService.parseCsv(file);
         return ResponseEntity.ok().body(result);

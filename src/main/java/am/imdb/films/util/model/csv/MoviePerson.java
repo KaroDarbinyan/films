@@ -21,20 +21,17 @@ public class MoviePerson {
 
     private Long id;
 
-    @CsvBindByName(column = "movie_id")
+    @CsvBindByName(column = "movie_imdb_id")
     private String movieId;
 
     @CsvBindByName(column = "ordering")
-    private String ordering;
+    private Integer ordering;
 
-    @CsvBindByName(column = "person_id")
+    @CsvBindByName(column = "person_imdb_id")
     private String personId;
 
     @CsvBindByName(column = "category")
     private String category;
-
-    @CsvBindByName(column = "job")
-    private String job;
 
     @CsvBindByName(column = "characters")
     private String characters;
@@ -46,8 +43,7 @@ public class MoviePerson {
         if (Objects.nonNull(entity.getId())) entity.setId(moviePerson.getId());
         entity.setOrdering(moviePerson.getOrdering());
         entity.setCategory(moviePerson.getCategory());
-        entity.setJob(moviePerson.getJob());
-//        entity.setCharacters(moviePerson.getCharacters());
+        entity.setCharacters(moviePerson.getCharacters());
         return entity;
     }
 

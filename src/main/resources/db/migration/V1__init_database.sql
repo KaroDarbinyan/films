@@ -6,7 +6,7 @@ create table "user"
     first_name    varchar   not null,
     last_name     varchar   not null,
     password_hash varchar   not null,
-    status        varchar   default null,
+    status        varchar            default null,
     created_at    timestamp not null default current_timestamp,
     updated_at    timestamp not null default current_timestamp,
     primary key (id),
@@ -19,8 +19,7 @@ create table movie
     id                     bigserial,
     imdb_id                varchar   not null,
     title                  varchar            default null,
-    year                   int                default 0,
-    date_published         varchar            default null,
+    release_date           int4               default null,
     duration               int                default 0,
     production_company     varchar            default null,
     description            text               default null,
@@ -32,6 +31,8 @@ create table movie
     metas_core             double precision   default 0.0,
     reviews_from_users     double precision   default 0.0,
     reviews_from_critics   double precision   default 0.0,
+    parse_error            boolean            default false,
+    parse_success          boolean            default false,
     created_at             timestamp not null default current_timestamp,
     updated_at             timestamp not null default current_timestamp,
     primary key (id),
@@ -44,14 +45,13 @@ create table person
     id                    bigserial,
     imdb_id               varchar   not null,
     name                  varchar            default null,
-    birth_name            varchar            default null,
     height                int                default 0,
     bio                   text               default null,
     birth_details         varchar            default null,
-    date_of_birth         varchar            default null,
+    birth_date            int4               default null,
     place_of_birth        varchar            default null,
     death_details         varchar            default null,
-    date_of_death         varchar            default null,
+    death_date            int4               default null,
     place_of_death        varchar            default null,
     reason_of_death       varchar            default null,
     spouses_string        text               default null,
@@ -59,6 +59,8 @@ create table person
     divorces              int                default 0,
     spouses_with_children int                default 0,
     children              int                default 0,
+    parse_error           boolean            default false,
+    parse_success         boolean            default false,
     created_at            timestamp not null default current_timestamp,
     updated_at            timestamp not null default current_timestamp,
     primary key (id),
@@ -68,16 +70,15 @@ create table person
 drop table if exists movie_person;
 create table movie_person
 (
-    id         bigserial,
-    movie_id   bigint not null,
-    ordering   int    not null,
-    person_id  bigint not null,
-    category   varchar default null,
-    job        varchar default null,
-    characters varchar default null,
+    id             bigserial,
+    movie_imdb_id  varchar not null,
+    ordering       int4    not null,
+    person_imdb_id varchar not null,
+    category       varchar default null,
+    characters     varchar default null,
     primary key (id),
-    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
-    foreign key (person_id) references person (id) on update cascade on delete cascade
+    foreign key (movie_imdb_id) references movie (imdb_id) on update cascade on delete cascade,
+    foreign key (person_imdb_id) references person (imdb_id) on update cascade on delete cascade
 );
 
 drop table if exists genre;
@@ -98,18 +99,18 @@ create table language
     unique (name)
 );
 
-drop table if exists rating;
-create table rating
+drop table if exists movie_rating;
+create table movie_rating
 (
     id             bigserial,
-    movie_id       bigint    not null,
-    average_rating varchar            default null,
-    num_votes      varchar            default null,
+    movie_imdb_id  varchar   not null,
+    average_rating double precision            default null,
+    num_votes      int            default null,
     created_at     timestamp not null default current_timestamp,
     updated_at     timestamp not null default current_timestamp,
-    foreign key (movie_id) references movie (id) on update cascade on delete cascade,
+    foreign key (movie_imdb_id) references movie (imdb_id) on update cascade on delete cascade,
     primary key (id),
-    unique (movie_id)
+    unique (movie_imdb_id)
 );
 
 drop table if exists country;

@@ -105,24 +105,18 @@ public class MovieService {
 
     public Map<String, Integer> parseCsv(MultipartFile csvFile) {
         AtomicInteger existed = new AtomicInteger();
-        Set<String> allMoviesImdbId = movieRepository.findAllMoviesImdbId();
+        Set<String> allMoviesImdbId = movieRepository.findAllMoviesImdbIds();
         List<List<Movie>> movies = csvControl.getEntitiesFromCsv(csvFile, Movie.class);
-        Set<LanguageEntity> languages = new HashSet<>(languageRepository.findAll());
         Set<GenreEntity> genres = new HashSet<>(genreRepository.findAll());
-        Set<CountryEntity> countries = new HashSet<>(countryRepository.findAll());
 
         movies.forEach(movieList -> movieList.forEach(movie -> {
-            movie.setLanguageNames(normalizeList(movie.getLanguageNames()));
-            movie.setGenreNames(normalizeList(movie.getGenreNames()));
-            movie.setCountryNames(normalizeList(movie.getCountryNames()));
-            languages.addAll(movie.getLanguageNames().stream().map(LanguageEntity::new).collect(Collectors.toSet()));
-            genres.addAll(movie.getGenreNames().stream().map(GenreEntity::new).collect(Collectors.toSet()));
-            countries.addAll(movie.getCountryNames().stream().map(CountryEntity::new).collect(Collectors.toSet()));
+            if (movie.getGenreNames() != null) {
+                movie.setGenreNames(normalizeList(movie.getGenreNames()));
+                genres.addAll(movie.getGenreNames().stream().map(GenreEntity::new).collect(Collectors.toSet()));
+            }
         }));
 
-        List<LanguageEntity> languageEntities = languageRepository.saveAll(languages);
         List<GenreEntity> genreEntities = genreRepository.saveAll(genres);
-        List<CountryEntity> countryEntities = countryRepository.saveAll(countries);
 
         List<List<MovieEntity>> movieEntitiesList = movies.stream()
                 .map(movieList -> movieList.stream()
@@ -133,17 +127,9 @@ public class MovieService {
                         })
                         .map(movie -> {
                             MovieEntity movieEntity = Movie.toEntity(movie);
-                            List<MovieLanguageEntity> movieLanguageEntityList = languageEntities.stream().filter(entity -> movie.getLanguageNames().contains(entity.getName()))
-                                    .map(languageEntity -> new MovieLanguageEntity(movieEntity, languageEntity)).collect(Collectors.toList());
                             List<MovieGenreEntity> movieGenreEntityList = genreEntities.stream().filter(entity -> movie.getGenreNames().contains(entity.getName()))
                                     .map(genreEntity -> new MovieGenreEntity(movieEntity, genreEntity)).collect(Collectors.toList());
-                            List<MovieCountryEntity> movieCountryEntityList = countryEntities.stream().filter(entity -> movie.getCountryNames().contains(entity.getName()))
-                                    .map(countryEntity -> new MovieCountryEntity(movieEntity, countryEntity)).collect(Collectors.toList());
-
-                            movieEntity.setListOfMovieLanguage(movieLanguageEntityList);
                             movieEntity.setListOfMovieGenre(movieGenreEntityList);
-                            movieEntity.setListOfMovieCountry(movieCountryEntityList);
-
                             return movieEntity;
                         })
                         .collect(Collectors.toList()))
@@ -162,18 +148,10 @@ public class MovieService {
 
     private void saveRelations(List<MovieEntity> movieEntities) {
         List<MovieGenreEntity> movieGenreEntityList = new ArrayList<>();
-        List<MovieLanguageEntity> movieLanguageEntityList = new ArrayList<>();
-        List<MovieCountryEntity> movieCountryEntityList = new ArrayList<>();
         movieEntities.forEach(entity -> {
             movieGenreEntityList.addAll(entity.getListOfMovieGenre().stream().peek(movieGenreEntity -> movieGenreEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
-            movieLanguageEntityList.addAll(entity.getListOfMovieLanguage().stream().peek(movieLanguageEntity -> movieLanguageEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
-            movieCountryEntityList.addAll(entity.getListOfMovieCountry().stream().peek(movieCountryEntity -> movieCountryEntity.getMovie().setId(entity.getId())).collect(Collectors.toList()));
         });
-
         movieGenreRepository.saveAll(movieGenreEntityList);
-        movieCountryRepository.saveAll(movieCountryEntityList);
-        movieLanguageRepository.saveAll(movieLanguageEntityList);
-
     }
 
     public UploadFileResponseWrapper addFile(MultipartFile file, Long id) {
@@ -221,10 +199,8 @@ public class MovieService {
         return movieRepository.findByImdbIdIn(imdbIds);
     }
 
-    public Map<String, Long> getMoviesImdbIdsAndIds() {
-        List<MapEntityKeys<Long, String>> list = movieRepository.findAllMovieImdbIdsAndIds();
-
-        return new MapEntityKeys<Long, String>().toReverseMap(list);
+    public Set<String> getAllMoviesImdbIds() {
+        return movieRepository.findAllMoviesImdbIds();
     }
 
     public void addFavorite(Long userId, Long movieId) {

@@ -22,23 +22,20 @@ public class MoviePersonEntity {
     private Long id;
 
     @Column(name = "ordering")
-    private String ordering;
+    private Integer ordering;
 
     @Column(name = "category")
     private String category;
-
-    @Column(name = "job")
-    private String job;
 
     @Column(name = "characters")
     private String characters;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JoinColumn(name = "movie_imdb_id", referencedColumnName = "imdb_id")
     private MovieEntity movie;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    @JoinColumn(name = "person_imdb_id", referencedColumnName = "imdb_id")
     private PersonEntity person;
 }
 

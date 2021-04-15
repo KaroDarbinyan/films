@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 import static am.imdb.films.service.validation.model.FileExtension.CSV;
+import static am.imdb.films.service.validation.model.FileExtension.TSV;
 
 @RestController
 @RequestMapping("ratings")
@@ -69,7 +70,7 @@ public class RatingController {
     public ResponseEntity<?> importPersonFromCsv(
             @RequestParam(value = "file")
             @NotNull(message = "Required request part 'file' is not present")
-            @UploadFileExtension(extensions = CSV) MultipartFile file
+            @UploadFileExtension(extensions = {CSV, TSV}) MultipartFile file
     ) throws Exception {
         Map<String, Integer> result = ratingService.parseCsv(file);
         return ResponseEntity.ok().body(result);

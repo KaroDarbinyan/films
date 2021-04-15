@@ -27,15 +27,13 @@ public class RatingDto {
     @Null(groups = Create.class)
     @NotNull(groups = Update.class)
     private Long id;
-    @CsvBindByName(column = "movie_id")
-    private String movieId;
-    @CsvBindByName(column = "average_rating")
-    private String averageRating;
-    @CsvBindByName(column = "num_votes")
-    private String numVotes;
+    private String movieImdbId;
+    private Double averageRating;
+    private Integer numVotes;
 
-    public RatingDto(Long id, String averageRating, String numVotes) {
+    public RatingDto(Long id, Double averageRating, Integer numVotes) {
         this.id = id;
+        this.movieImdbId = movieImdbId;
         this.averageRating = averageRating;
         this.numVotes = numVotes;
     }

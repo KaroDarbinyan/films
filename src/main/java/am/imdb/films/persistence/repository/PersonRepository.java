@@ -22,14 +22,13 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
     List<MapEntityKeys<Long, String>> findAllPersonImdbIdsAndIds();
 
     @Query("SELECT p.imdbId FROM PersonEntity p")
-    Set<String> findAllPersonsImdbId();
+    Set<String> findAllPersonsImdbIds();
 
-    @Query("select new am.imdb.films.service.model.wrapper.PersonWrapper(p.id, p.imdbId, p.name, p.birthName, p.height," +
-            " p.bio, p.birthDetails, p.dateOfBirth, p.placeOfBirth, p.deathDetails, p.dateOfDeath, p.placeOfDeath, " +
+    @Query("select new am.imdb.films.service.model.wrapper.PersonWrapper(p.id, p.imdbId, p.name, p.height," +
+            " p.bio, p.birthDetails, p.birthDate, p.placeOfBirth, p.deathDetails, p.deathDate, p.placeOfDeath, " +
             "p.reasonOfDeath, p.spousesString, p.spouses, p.divorces, p.spousesWithChildren, p.children) from PersonEntity p where " +
             "((:#{#criteria.imdbId} = '') or (p.imdbId like concat('%', :#{#criteria.imdbId}, '%'))) and " +
             "((:#{#criteria.name} = '') or (p.name like concat('%', :#{#criteria.name}, '%'))) and " +
-            "((:#{#criteria.birthName} = '') or (p.birthName like concat('%', :#{#criteria.birthName}, '%'))) and " +
             "((:#{#criteria.bio} = '') or (p.bio like concat('%', :#{#criteria.bio}, '%'))) and " +
             "((:#{#criteria.placeOfBirth} = '') or (p.placeOfBirth like concat('%', :#{#criteria.placeOfBirth}, '%'))) and " +
             "((:#{#criteria.deathDetails} = '') or (p.deathDetails like concat('%', :#{#criteria.deathDetails}, '%'))) and " +

@@ -24,7 +24,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     List<MovieEntity> findByImdbIdIn(Collection<String> imdbIds);
 
-    @Query("select new am.imdb.films.service.model.wrapper.MovieWrapper(m.id,m.imdbId,m.title,m.year,m.datePublished," +
+    @Query("select new am.imdb.films.service.model.wrapper.MovieWrapper(m.id,m.imdbId,m.title,m.releaseDate," +
             "m.duration,m.productionCompany,m.description,m.avgVote,m.votes,m.budget,m.usaGrossIncome,m.worldWideGrossIncome," +
             "m.metasCore,m.reviewsFromUsers,m.reviewsFromCritics) from MovieEntity m " +
             "left join m.listOfMoviePerson lomp left join lomp.person lp " +
@@ -32,8 +32,8 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
             "left join m.listOfMovieGenre lomg left join lomg.genre lg where " +
             "((:#{#criteria.imdbId} = '') or (m.imdbId like concat('%', :#{#criteria.imdbId}, '%'))) and " +
             "((:#{#criteria.title} = '') or (m.title like concat('%', :#{#criteria.title}, '%'))) and " +
-            "((:#{#criteria.yearMin} is null) or (m.year  >= :#{#criteria.yearMin})) and " +
-            "((:#{#criteria.yearMax} is null) or (m.year  >= :#{#criteria.yearMax})) and " +
+//            "((:#{#criteria.yearMin} is null) or (m.year  >= :#{#criteria.yearMin})) and " +
+//            "((:#{#criteria.yearMax} is null) or (m.year  >= :#{#criteria.yearMax})) and " +
             "((:#{#criteria.productionCompany} = '') or (m.productionCompany like concat('%', :#{#criteria.productionCompany}, '%'))) and " +
             "((:#{#criteria.genres.size()} = 0) or (lg.name in (:#{#criteria.genres}))) and " +
             "((:#{#criteria.actors.size()} = 0) or ((lomp.category in ('actor', 'actress')) and (lp.name in (:#{#criteria.actors})))) and " +
@@ -45,7 +45,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     List<MapEntityKeys<Long, String>> findAllMovieImdbIdsAndIds();
 
     @Query("SELECT m.imdbId FROM MovieEntity m")
-    Set<String> findAllMoviesImdbId();
+    Set<String> findAllMoviesImdbIds();
 
     @Query("select m from MovieEntity m left join m.listOfUserFavorite louf where louf.user.id = :userId")
     Page<MovieEntity> findUserFavorites(@Param("userId") Long userId, Pageable pageable);

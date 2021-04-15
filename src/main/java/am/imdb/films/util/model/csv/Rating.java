@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
 public class Rating {
 
     private Long id;
-    @CsvBindByName(column = "movie_id")
-    private String movieId;
+    @CsvBindByName(column = "movie_imdb_id")
+    private String movieImdbId;
     @CsvBindByName(column = "average_rating")
-    private String averageRating;
+    private Double averageRating;
     @CsvBindByName(column = "num_votes")
-    private String numVotes;
+    private Integer numVotes;
 
 
     public static RatingEntity toEntity(Rating rating) {

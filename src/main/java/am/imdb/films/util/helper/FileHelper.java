@@ -7,15 +7,15 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Slf4j
 public class FileHelper {
 
-
-    public Set<File> splitFile(File file, int sizeOfFileInMB) throws FileNotFoundException, IOException {
+    public static Set<File> splitFile(File file, int sizeOfFileInMB) throws FileNotFoundException, IOException {
         int counter = 0;
         long errorRows = 0;
-        Set<File> files = new HashSet<>();
+        Set<File> files = new TreeSet<>();
         int sizeOfChunk = 1024 * 1024 * sizeOfFileInMB;
         String eof = System.lineSeparator();
 
@@ -32,11 +32,6 @@ public class FileHelper {
                     while (Objects.nonNull(line)) {
                         byte[] bytes = (line + eof).getBytes(Charset.defaultCharset());
                         if (fileSize + bytes.length > sizeOfChunk) {
-                            try {
-                                out.write(builder.toString().getBytes(Charset.defaultCharset()));
-                            } catch (IOException e) {
-                                log.info(String.format("Failed to write %s lines", errorRows));
-                            }
                             break;
                         } else {
                             builder.append(line).append(eof);
@@ -47,6 +42,11 @@ public class FileHelper {
                                 errorRows++;
                             }
                         }
+                    }
+                    try {
+                        out.write(builder.toString().getBytes(Charset.defaultCharset()));
+                    } catch (IOException e) {
+                        log.info(String.format("Failed to write %s lines", errorRows));
                     }
                     files.add(newFile);
                 } catch (FileNotFoundException e) {

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -34,10 +35,10 @@ public class MoviePersonService {
 
     public Map<String, Integer> parseCsv(MultipartFile csvFile) {
 
-        String insertQuery = "INSERT INTO movie_person (movie_id, ordering, person_id, category, job, characters) VALUES %s;";
+        String insertQuery = "INSERT INTO movie_person (movie_imdb_id, ordering, person_imdb_id, category, characters) VALUES %s;";
         List<List<MoviePerson>> ratings = csvControl.getEntitiesFromCsv(csvFile, MoviePerson.class);
-        Map<String, Long> moviesImdbIdsAndIds = movieService.getMoviesImdbIdsAndIds();
-        Map<String, Long> personsImdbIdsAndIds = personService.getPersonsImdbIdsAndIds();
+        Set<String> allMoviesImdbIds = movieService.getAllMoviesImdbIds();
+        Set<String> allPersonImdbIds = personService.getAllPersonImdbIds();
         AtomicInteger size = new AtomicInteger();
         AtomicInteger notPersonOrMovie = new AtomicInteger();
 
@@ -47,17 +48,16 @@ public class MoviePersonService {
                         .filter(moviePerson -> {
                             size.getAndIncrement();
                             boolean contains = Objects.nonNull(moviePerson.getMovieId()) && Objects.nonNull(moviePerson.getPersonId())
-                                    && moviesImdbIdsAndIds.containsKey(moviePerson.getMovieId())
-                                    && personsImdbIdsAndIds.containsKey(moviePerson.getPersonId());
+                                    && allMoviesImdbIds.contains(moviePerson.getMovieId())
+                                    && allPersonImdbIds.contains(moviePerson.getPersonId());
                             if (!contains) notPersonOrMovie.getAndIncrement();
                             return contains;
                         })
-                        .map(moviePerson -> String.format("(%s, %s, %s, '%s', '%s', '%s')",
-                                moviesImdbIdsAndIds.get(moviePerson.getMovieId()),
+                        .map(moviePerson -> String.format("('%s', %s, '%s', '%s', '%s')",
+                                moviePerson.getMovieId(),
                                 moviePerson.getOrdering(),
-                                personsImdbIdsAndIds.get(moviePerson.getPersonId()),
+                                moviePerson.getPersonId(),
                                 moviePerson.getCategory(),
-                                moviePerson.getJob().replaceAll("'", "''"),
                                 moviePerson.getCharacters().replaceAll("'", "''")
                         ))
                         .collect(Collectors.toList()))

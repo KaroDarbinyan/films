@@ -21,14 +21,11 @@ public class Person{
 
     private Long id;
 
-    @CsvBindByName(column = "imdb_name_id")
+    @CsvBindByName(column = "imdb_id")
     private String imdbId;
 
     @CsvBindByName(column = "name")
     private String name;
-
-    @CsvBindByName(column = "birth_name")
-    private String birthName;
 
     @CsvBindByName(column = "height")
     private Integer height;
@@ -39,8 +36,8 @@ public class Person{
     @CsvBindByName(column = "birth_details")
     private String birthDetails;
 
-    @CsvBindByName(column = "date_of_birth")
-    private String dateOfBirth;
+    @CsvBindByName(column = "birth_date")
+    private Integer birthDate;
 
     @CsvBindByName(column = "place_of_birth")
     private String placeOfBirth;
@@ -48,8 +45,8 @@ public class Person{
     @CsvBindByName(column = "death_details")
     private String deathDetails;
 
-    @CsvBindByName(column = "date_of_death")
-    private String dateOfDeath;
+    @CsvBindByName(column = "death_date")
+    private Integer deathDate;
 
     @CsvBindByName(column = "place_of_death")
     private String placeOfDeath;
@@ -79,14 +76,13 @@ public class Person{
         if (Objects.nonNull(person.getId())) entity.setId(person.getId());
         entity.setImdbId(person.getImdbId());
         entity.setName(person.getName());
-        entity.setBirthName(person.getBirthName());
         entity.setHeight(person.getHeight());
         entity.setBio(person.getBio());
         entity.setBirthDetails(person.getBirthDetails());
-        entity.setDateOfBirth(person.getDateOfBirth());
+        entity.setBirthDate(person.getBirthDate());
         entity.setPlaceOfBirth(person.getPlaceOfBirth());
         entity.setDeathDetails(person.getDeathDetails());
-        entity.setDateOfDeath(person.getDateOfDeath());
+        entity.setDeathDate(person.getDeathDate());
         entity.setPlaceOfDeath(person.getPlaceOfDeath());
         entity.setReasonOfDeath(person.getReasonOfDeath());
         entity.setSpousesString(person.getSpousesString());

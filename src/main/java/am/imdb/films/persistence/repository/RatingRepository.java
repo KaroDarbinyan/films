@@ -1,9 +1,7 @@
 package am.imdb.films.persistence.repository;
 
 
-import am.imdb.films.persistence.entity.PersonEntity;
 import am.imdb.films.persistence.entity.RatingEntity;
-import am.imdb.films.service.dto.GenreDto;
 import am.imdb.films.service.dto.RatingDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,7 @@ public interface RatingRepository extends JpaRepository<RatingEntity, Long> {
     RatingEntity findRatingByMovieId(String movieId);
 
 
-    @Query("SELECT new am.imdb.films.service.dto.RatingDto(r.id, r.numVotes, r.averageRating) FROM RatingEntity r")
-    Page<RatingDto> findAllWithPagination(Pageable composePageRequest);
+    @Query("SELECT new am.imdb.films.service.dto.RatingDto(r.id, r.averageRating, r.numVotes) FROM RatingEntity r")
+    Page<RatingDto> findAllWithPagination(Pageable pageable);
 }
 

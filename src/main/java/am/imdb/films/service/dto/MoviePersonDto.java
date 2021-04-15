@@ -21,25 +21,11 @@ public class MoviePersonDto {
     private Long id;
 
     private Long movieId;
-
-    @CsvBindByName(column = "movie_id")
     private String movieCSVId;
-
-    @CsvBindByName(column = "ordering")
-    private String ordering;
-
+    private Integer ordering;
     private Long personId;
-
-    @CsvBindByName(column = "person_id")
     private String personCSVId;
-
-    @CsvBindByName(column = "category")
     private String category;
-
-    @CsvBindByName(column = "job")
-    private String job;
-
-    @CsvBindByName(column = "characters")
     private String characters;
 
     public static MoviePersonDto toDto(MoviePersonEntity entity) {
@@ -50,7 +36,6 @@ public class MoviePersonDto {
                 .ordering(entity.getOrdering())
 //                .personId(entity.getPersonId())
                 .category(entity.getCategory())
-                .job(entity.getJob())
                 .characters(entity.getCharacters())
                 .build();
     }
@@ -62,7 +47,6 @@ public class MoviePersonDto {
         entity.setOrdering(dto.getOrdering());
 //        entity.setPersonId(dto.getPersonId());
         entity.setCategory(dto.getCategory());
-        entity.setJob(dto.getJob());
         entity.setCharacters(dto.getCharacters());
         return entity;
     }

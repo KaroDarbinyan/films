@@ -32,9 +32,6 @@ public class PersonEntity extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @Column(name = "birth_name")
-    private String birthName;
-
     @Column(name = "height")
     private Integer height;
 
@@ -44,8 +41,8 @@ public class PersonEntity extends BaseEntity{
     @Column(name = "birth_details")
     private String birthDetails;
 
-    @Column(name = "date_of_birth")
-    private String dateOfBirth;
+    @Column(name = "birth_date")
+    private Integer birthDate;
 
     @Column(name = "place_of_birth")
     private String placeOfBirth;
@@ -53,8 +50,8 @@ public class PersonEntity extends BaseEntity{
     @Column(name = "death_details")
     private String deathDetails;
 
-    @Column(name = "date_of_death")
-    private String dateOfDeath;
+    @Column(name = "death_date")
+    private Integer deathDate;
 
     @Column(name = "place_of_death")
     private String placeOfDeath;

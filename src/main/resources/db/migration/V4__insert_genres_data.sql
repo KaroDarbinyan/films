@@ -23,4 +23,7 @@ values ('Romance'),
        ('Adult'),
        ('Documentary'),
        ('Reality-TV'),
-       ('News');
+       ('News'),
+       ('Game-Show'),
+       ('Short'),
+       ('Talk-Show');

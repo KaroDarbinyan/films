@@ -25,14 +25,12 @@ public class CsvControl<T> {
         String pathname = String.join(File.separator, uploadDir, UUID.randomUUID().toString(), csvFile.getOriginalFilename());
         File parentCsv = new File(pathname);
         List<List<T>> list = List.of();
-        FileHelper fileHelper = new FileHelper();
-        CsvParser<T> csvParser = new CsvParser<>();
         if (parentCsv.mkdirs()) {
             try {
                 csvFile.transferTo(parentCsv);
-                list = fileHelper.splitFile(parentCsv, SIZE_OF_FILE_IN_MB)
+                list = FileHelper.splitFile(parentCsv, SIZE_OF_FILE_IN_MB)
                         .stream()
-                        .map(file -> csvParser.parse(file, type))
+                        .map(file -> CsvParser.parse(file, type))
                         .filter(ts -> !ts.isEmpty())
                         .collect(Collectors.toList());
                 FileUtils.deleteDirectory(parentCsv.getParentFile());

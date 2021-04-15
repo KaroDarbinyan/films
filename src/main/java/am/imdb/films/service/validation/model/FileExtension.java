@@ -4,6 +4,6 @@ public enum FileExtension {
 
     MP4, WEBM, MPEG,
     PNG, JPEG, JPG, SVG,
-    CSV
+    CSV, TSV
 
 }

@@ -12,14 +12,13 @@ public class PersonWrapper {
     private Long id;
     private String imdbId;
     private String name;
-    private String birthName;
     private Integer height;
     private String bio;
     private String birthDetails;
-    private String dateOfBirth;
+    private Integer birthDate;
     private String placeOfBirth;
     private String deathDetails;
-    private String dateOfDeath;
+    private Integer deathDate;
     private String placeOfDeath;
     private String reasonOfDeath;
     private String spousesString;

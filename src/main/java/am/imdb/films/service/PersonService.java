@@ -80,7 +80,7 @@ public class PersonService {
     }
 
     public Map<String, Integer> parseCsv(MultipartFile csvFile) {
-        Set<String> allPersonsImdbId = personRepository.findAllPersonsImdbId();
+        Set<String> allPersonsImdbId = personRepository.findAllPersonsImdbIds();
         List<List<Person>> persons = csvControl.getEntitiesFromCsv(csvFile, Person.class);
         AtomicInteger existed = new AtomicInteger();
 
@@ -138,9 +138,7 @@ public class PersonService {
     }
 
 
-    public Map<String, Long> getPersonsImdbIdsAndIds() {
-        List<MapEntityKeys<Long, String>> list = personRepository.findAllPersonImdbIdsAndIds();
-
-        return new MapEntityKeys<Long, String>().toReverseMap(list);
+    public Set<String> getAllPersonImdbIds() {
+        return personRepository.findAllPersonsImdbIds();
     }
 }

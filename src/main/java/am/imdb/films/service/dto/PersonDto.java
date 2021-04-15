@@ -30,14 +30,13 @@ public class PersonDto {
     @NotNull(groups = {Create.class, Update.class})
     protected String imdbId;
     protected String name;
-    protected String birthName;
     protected Integer height;
     protected String bio;
     protected String birthDetails;
-    protected String dateOfBirth;
+    protected Integer birthDate;
     protected String placeOfBirth;
     protected String deathDetails;
-    protected String dateOfDeath;
+    protected Integer deathDate;
     protected String placeOfDeath;
     protected String reasonOfDeath;
     protected String spousesString;
@@ -55,14 +54,13 @@ public class PersonDto {
                 .id(entity.getId())
                 .imdbId(entity.getImdbId())
                 .name(entity.getName())
-                .birthName(entity.getBirthName())
                 .height(entity.getHeight())
                 .bio(entity.getBio())
                 .birthDetails(entity.getBirthDetails())
-                .dateOfBirth(entity.getDateOfBirth())
+                .birthDate(entity.getBirthDate())
                 .placeOfBirth(entity.getPlaceOfBirth())
                 .deathDetails(entity.getDeathDetails())
-                .dateOfDeath(entity.getDateOfDeath())
+                .deathDate(entity.getDeathDate())
                 .placeOfDeath(entity.getPlaceOfDeath())
                 .reasonOfDeath(entity.getReasonOfDeath())
                 .spousesString(entity.getSpousesString())
@@ -79,14 +77,13 @@ public class PersonDto {
         if (Objects.isNull(entity.getId())) entity.setId(dto.getId());
         entity.setImdbId(dto.getImdbId());
         entity.setName(dto.getName());
-        entity.setBirthName(dto.getBirthName());
         entity.setHeight(dto.getHeight());
         entity.setBio(dto.getBio());
         entity.setBirthDetails(dto.getBirthDetails());
-        entity.setDateOfBirth(dto.getDateOfBirth());
+        entity.setBirthDate(dto.getBirthDate());
         entity.setPlaceOfBirth(dto.getPlaceOfBirth());
         entity.setDeathDetails(dto.getDeathDetails());
-        entity.setDateOfDeath(dto.getDateOfDeath());
+        entity.setDeathDate(dto.getDeathDate());
         entity.setPlaceOfDeath(dto.getPlaceOfDeath());
         entity.setReasonOfDeath(dto.getReasonOfDeath());
         entity.setSpousesString(dto.getSpousesString());

@@ -1,7 +1,7 @@
 package am.imdb.films.util.model.csv;
 
 
-import am.imdb.films.persistence.entity.*;
+import am.imdb.films.persistence.entity.MovieEntity;
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
@@ -23,17 +23,14 @@ public class Movie {
 
     private Long id;
 
-    @CsvBindByName(column = "imdb_title_id")
+    @CsvBindByName(column = "imdb_id")
     private String imdbId;
 
-    @CsvBindByName(column = "original_title")
+    @CsvBindByName(column = "title")
     private String title;
 
-    @CsvBindByName(column = "year")
-    private Integer year;
-
-    @CsvBindByName(column = "date_published")
-    private String datePublished;
+    @CsvBindByName(column = "release_date")
+    private Integer releaseDate;
 
     @CsvBindByName(column = "duration")
     private Integer duration;
@@ -68,7 +65,7 @@ public class Movie {
     @CsvBindByName(column = "reviews_from_critics")
     private Double reviewsFromCritics;
 
-    @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "genre")
+    @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "genres")
     private Set<String> genreNames;
 
     @CsvBindAndSplitByName(elementType = String.class, splitOn = ",", column = "country")
@@ -83,8 +80,7 @@ public class Movie {
         if (Objects.nonNull(entity.getId())) entity.setId(movie.getId());
         entity.setImdbId(movie.getImdbId());
         entity.setTitle(movie.getTitle());
-        entity.setYear(movie.getYear());
-        entity.setDatePublished(movie.getDatePublished());
+        entity.setReleaseDate(movie.getReleaseDate());
         entity.setDuration(movie.getDuration());
         entity.setProductionCompany(movie.getProductionCompany());
         entity.setDescription(movie.getDescription());
