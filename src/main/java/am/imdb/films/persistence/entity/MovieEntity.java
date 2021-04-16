@@ -67,9 +67,8 @@ public class MovieEntity extends BaseEntity {
     @Column(name = "parse_error")
     private boolean parseError;
 
-//    public void onCreate() {
-//        parseError = false;
-//    }
+    @Column(name = "parse_success")
+    private boolean parsSuccess;
 
     @OneToMany(mappedBy = "movie", targetEntity = MovieGenreEntity.class)
     private List<MovieGenreEntity> listOfMovieGenre;
@@ -86,8 +85,8 @@ public class MovieEntity extends BaseEntity {
     @OneToMany(mappedBy = "movie", targetEntity = MovieFileEntity.class)
     private List<MovieFileEntity> listOfMovieFile;
 
-    @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class)
-    private RatingEntity rating;
+//    @OneToOne(mappedBy = "movie", targetEntity = RatingEntity.class, optional = false)
+//    private RatingEntity rating;
 
     @OneToMany(mappedBy = "movie", targetEntity = UserFavoriteEntity.class)
     private Set<UserFavoriteEntity> listOfUserFavorite;

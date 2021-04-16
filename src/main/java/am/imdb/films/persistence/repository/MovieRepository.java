@@ -6,6 +6,7 @@ import am.imdb.films.service.criteria.MovieSearchCriteria;
 import am.imdb.films.service.model.resultset.MapEntityKeys;
 import am.imdb.films.service.model.wrapper.MovieWrapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -49,5 +50,8 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     @Query("select m from MovieEntity m left join m.listOfUserFavorite louf where louf.user.id = :userId")
     Page<MovieEntity> findUserFavorites(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT m FROM MovieEntity m where m.parseError = :error and m.parsSuccess = :success")
+    Page<MovieEntity> findPersonByParseErrorAndParseSuccess(boolean error, boolean success, Pageable pageable);
 }
 

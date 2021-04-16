@@ -5,6 +5,7 @@ import am.imdb.films.exception.FileNotExistException;
 import am.imdb.films.exception.EntityNotFoundException;
 import am.imdb.films.persistence.entity.FileEntity;
 import am.imdb.films.persistence.repository.FileRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,11 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
+@Slf4j
 @Service
 public class FileService {
 
@@ -56,6 +61,18 @@ public class FileService {
         } catch (IOException ex) {
             throw new FileNotCreateException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
         }
+    }
+
+    public boolean downloadFile(URI uri, String uploadPath) {
+        try (InputStream inputStream = uri.toURL().openStream()) {
+            File file = new File(uploadPath);
+            file.getParentFile().mkdirs();
+            Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            log.warn(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public Resource loadFileAsResource(String path, String fileName) throws FileNotExistException {

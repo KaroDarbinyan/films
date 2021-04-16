@@ -42,5 +42,9 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
             "((:#{#criteria.childrenMin} is null) or (p.children  >= :#{#criteria.childrenMin})) and " +
             "((:#{#criteria.childrenMax} is null) or (p.children <= :#{#criteria.childrenMax}))")
     Page<PersonWrapper> findAllWithPagination(@Param("criteria") PersonSearchCriteria criteria, Pageable pageable);
+
+    @Query("SELECT p FROM PersonEntity p where p.parseError = :error and p.parsSuccess = :success")
+    Page<PersonEntity> findPersonByParseErrorAndParseSuccess(boolean error, boolean success, Pageable pageable);
+
 }
 

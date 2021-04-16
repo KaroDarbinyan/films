@@ -74,8 +74,17 @@ public class PersonEntity extends BaseEntity{
     @Column(name = "children")
     private Integer children;
 
+    @Column(name = "parse_error")
+    private boolean parseError;
+
+    @Column(name = "parse_success")
+    private boolean parsSuccess;
+
     @OneToMany(mappedBy = "person", targetEntity = PersonFileEntity.class)
     private List<PersonFileEntity> listOfPersonFile;
+
+    @OneToMany(mappedBy = "person", targetEntity = MoviePersonEntity.class)
+    private List<MoviePersonEntity> listOfMoviePerson;
 
 
 }

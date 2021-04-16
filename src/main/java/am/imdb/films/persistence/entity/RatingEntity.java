@@ -22,7 +22,7 @@ public class RatingEntity extends BaseEntity{
     @Column(name = "num_votes")
     private Integer numVotes;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "movie_imdb_id", referencedColumnName = "imdb_id")
     private MovieEntity movie;
 
